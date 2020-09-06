@@ -1,6 +1,13 @@
 ---
 title: "Vignette"
-output: github_document
+output: 
+  github_document: 
+    toc: true
 ---
 
-test test
+## Required Packages  
+
+## Functions  
+
+## Exploratory Data Analysis  
+
