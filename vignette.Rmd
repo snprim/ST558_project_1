@@ -7,7 +7,91 @@ output:
 
 ## Required Packages  
 
+To be able to access data from APIs, you should install and load the `httr`, `jsonlite`, and `tidyverse` packages.  
+    ```{r}
+library(httr)
+library(jsonlite)
+library(tidyverse)
+```
+
 ## Functions  
+
+### NHL records API
+```{r}
+baseurl_records <- "https://records.nhl.com/site/api"
+```
+/franchise (Returns id, ﬁrstSeasonId and lastSeasonId and name of every team in the history
+of the NHL)  
+
+```{r}
+getfran <- function(){
+  fullurl <- paste0(baseurl_records, "/", "franchise")
+  fran <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
+  return(fran)
+}
+getfran()
+```
+/franchise-team-totals (Returns Total stats for every franchise (ex roadTies, roadWins, etc))  
+```{r}
+getFranTeamTot <- function() {
+  fullurl <- paste0(baseurl_records, "/", "franchise-team-totals")
+  franTeamTot <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
+  return(franTeamTot)
+}
+getFranTeamTot()
+```
+/site/api/franchise-season-records?cayenneExp=franchiseId=ID (Drill-down into season
+records for a speciﬁc franchise)  
+```{r}
+getFranSeaRec <- function(franID) {
+  fullurl <- paste0(baseurl_records, "/", "franchise-season-records?cayenneExp=franchiseId=", franID)
+  franSeaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
+  return(franSeaRec)
+}
+getFranSeaRec("5")
+```
+/franchise-goalie-records?cayenneExp=franchiseId=ID (Goalie records for the speciﬁed
+franchise)  
+```{r}
+getFranGoaRec <- function(franID) {
+  fullurl <- paste0(baseurl_records, "/", "franchise-goalie-records?cayenneExp=franchiseId=", franID)
+  franGoaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
+  return(franGoaRec)
+}
+getFranGoaRec("5")
+```
+/franchise-skater-records?cayenneExp=franchiseId=ID (Skater records, same interaction as
+goalie endpoint)  
+```{r}
+getFranSkaRec <- function(franID) {
+  fullurl <- paste0(baseurl_records, "/", "franchise-skater-records?cayenneExp=franchiseId=", franID)
+  franSkaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
+  return(franSkaRec)
+}
+getFranSkaRec("5")
+```
+
+### NHL stats API  
+
+
+```{r}
+baseurl_stats <- "https://statsapi.web.nhl.com/api/v1/teams"
+getStats <- function(expand = "", teamID = "", stats = ""){
+  if (expand != ""){
+    fullurl <- paste0(baseurl_stats, "?expand=", expand)
+  } else if (teamID != ""){
+    fullurl <- paste0(baseurl_stats, "?teamID=", teamID)
+  } else if (stats != ""){
+    fullurl <- paste0(baseurl_stats, "?stats=", stats)
+  }
+  stats <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
+  return(stats)
+}
+getStats(expand = "person.names")
+getStats(stats = "statsSingleSeasonPlayoffs")
+
+```
+
 
 ## Exploratory Data Analysis  
 
