@@ -610,7 +610,7 @@ body {
 </ul></li>
 <li><a href="#exploratory-data-analysis">Exploratory Data Analysis</a></li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># rmarkdown::render(&quot;vignette.Rmd&quot;, output_format = &quot;github_document&quot;, output_file = &quot;README.md&quot;)</span></span></code></pre></div>
+<p>In this vignette, we want to show how to access APIs to retrieve data. We use two NHL repositories as examples: <a href="https://gitlab.com/dword4/nhlapi/-/tree/master">NHL records</a> and <a href="https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md">NHL stats</a>.</p>
 <h2 id="required-packages">Required Packages</h2>
 <p>To be able to access data from APIs, you should install and load the <code>httr</code>, <code>jsonlite</code>, and <code>tidyverse</code> packages.</p>
 <pre><code>```r
@@ -621,14 +621,14 @@ library(tidyverse)
 </code></pre>
 <h2 id="functions">Functions</h2>
 <h3 id="nhl-records-api">NHL records API</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>baseurl_records &lt;-<span class="st"> &quot;https://records.nhl.com/site/api&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>baseurl_records &lt;-<span class="st"> &quot;https://records.nhl.com/site/api&quot;</span></span></code></pre></div>
 <p>/franchise (Returns id, ﬁrstSeasonId and lastSeasonId and name of every team in the history of the NHL)</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>getfran &lt;-<span class="st"> </span><span class="cf">function</span>(){</span>
-<span id="cb4-2"><a href="#cb4-2"></a>  fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_records, <span class="st">&quot;/&quot;</span>, <span class="st">&quot;franchise&quot;</span>)</span>
-<span id="cb4-3"><a href="#cb4-3"></a>  fran &lt;-<span class="st"> </span><span class="kw">GET</span>(fullurl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fromJSON</span>(<span class="dt">flatten =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb4-4"><a href="#cb4-4"></a>  <span class="kw">return</span>(fran)</span>
-<span id="cb4-5"><a href="#cb4-5"></a>}</span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="kw">getfran</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>getfran &lt;-<span class="st"> </span><span class="cf">function</span>(){</span>
+<span id="cb3-2"><a href="#cb3-2"></a>  fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_records, <span class="st">&quot;/&quot;</span>, <span class="st">&quot;franchise&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>  fran &lt;-<span class="st"> </span><span class="kw">GET</span>(fullurl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fromJSON</span>(<span class="dt">flatten =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb3-4"><a href="#cb3-4"></a>  <span class="kw">return</span>(fran)</span>
+<span id="cb3-5"><a href="#cb3-5"></a>}</span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="kw">getfran</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</span></code></pre></div>
 <pre><code>## No encoding supplied: defaulting to UTF-8.
 
 ## $data
@@ -715,12 +715,12 @@ library(tidyverse)
 ## [1] 38
 </code></pre>
 <p>/franchise-team-totals (Returns Total stats for every franchise (ex roadTies, roadWins, etc))</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>getFranTeamTot &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
-<span id="cb6-2"><a href="#cb6-2"></a>  fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_records, <span class="st">&quot;/&quot;</span>, <span class="st">&quot;franchise-team-totals&quot;</span>)</span>
-<span id="cb6-3"><a href="#cb6-3"></a>  franTeamTot &lt;-<span class="st"> </span><span class="kw">GET</span>(fullurl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fromJSON</span>(<span class="dt">flatten =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb6-4"><a href="#cb6-4"></a>  <span class="kw">return</span>(franTeamTot)</span>
-<span id="cb6-5"><a href="#cb6-5"></a>}</span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="kw">getFranTeamTot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>getFranTeamTot &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb5-2"><a href="#cb5-2"></a>  fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_records, <span class="st">&quot;/&quot;</span>, <span class="st">&quot;franchise-team-totals&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>  franTeamTot &lt;-<span class="st"> </span><span class="kw">GET</span>(fullurl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fromJSON</span>(<span class="dt">flatten =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a>  <span class="kw">return</span>(franTeamTot)</span>
+<span id="cb5-5"><a href="#cb5-5"></a>}</span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="kw">getFranTeamTot</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</span></code></pre></div>
 <pre><code>## No encoding supplied: defaulting to UTF-8.
 
 ## $data
@@ -968,12 +968,12 @@ library(tidyverse)
 ## [1] 105
 </code></pre>
 <p>/site/api/franchise-season-records?cayenneExp=franchiseId=ID (Drill-down into season records for a speciﬁc franchise)</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>getFranSeaRec &lt;-<span class="st"> </span><span class="cf">function</span>(franID) {</span>
-<span id="cb8-2"><a href="#cb8-2"></a>  fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_records, <span class="st">&quot;/&quot;</span>, <span class="st">&quot;franchise-season-records?cayenneExp=franchiseId=&quot;</span>, franID)</span>
-<span id="cb8-3"><a href="#cb8-3"></a>  franSeaRec &lt;-<span class="st"> </span><span class="kw">GET</span>(fullurl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fromJSON</span>(<span class="dt">flatten =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb8-4"><a href="#cb8-4"></a>  <span class="kw">return</span>(franSeaRec)</span>
-<span id="cb8-5"><a href="#cb8-5"></a>}</span>
-<span id="cb8-6"><a href="#cb8-6"></a><span class="kw">getFranSeaRec</span>(<span class="st">&quot;20&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>getFranSeaRec &lt;-<span class="st"> </span><span class="cf">function</span>(franID) {</span>
+<span id="cb7-2"><a href="#cb7-2"></a>  fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_records, <span class="st">&quot;/&quot;</span>, <span class="st">&quot;franchise-season-records?cayenneExp=franchiseId=&quot;</span>, franID)</span>
+<span id="cb7-3"><a href="#cb7-3"></a>  franSeaRec &lt;-<span class="st"> </span><span class="kw">GET</span>(fullurl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fromJSON</span>(<span class="dt">flatten =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb7-4"><a href="#cb7-4"></a>  <span class="kw">return</span>(franSeaRec)</span>
+<span id="cb7-5"><a href="#cb7-5"></a>}</span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="kw">getFranSeaRec</span>(<span class="st">&quot;20&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</span></code></pre></div>
 <pre><code>## No encoding supplied: defaulting to UTF-8.
 
 ## $data
@@ -1028,12 +1028,12 @@ library(tidyverse)
 ## [1] 1
 </code></pre>
 <p>/franchise-goalie-records?cayenneExp=franchiseId=ID (Goalie records for the speciﬁed franchise)</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>getFranGoaRec &lt;-<span class="st"> </span><span class="cf">function</span>(franID) {</span>
-<span id="cb10-2"><a href="#cb10-2"></a>  fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_records, <span class="st">&quot;/&quot;</span>, <span class="st">&quot;franchise-goalie-records?cayenneExp=franchiseId=&quot;</span>, franID)</span>
-<span id="cb10-3"><a href="#cb10-3"></a>  franGoaRec &lt;-<span class="st"> </span><span class="kw">GET</span>(fullurl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fromJSON</span>(<span class="dt">flatten =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb10-4"><a href="#cb10-4"></a>  <span class="kw">return</span>(franGoaRec)</span>
-<span id="cb10-5"><a href="#cb10-5"></a>}</span>
-<span id="cb10-6"><a href="#cb10-6"></a><span class="kw">getFranGoaRec</span>(<span class="st">&quot;20&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>getFranGoaRec &lt;-<span class="st"> </span><span class="cf">function</span>(franID) {</span>
+<span id="cb9-2"><a href="#cb9-2"></a>  fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_records, <span class="st">&quot;/&quot;</span>, <span class="st">&quot;franchise-goalie-records?cayenneExp=franchiseId=&quot;</span>, franID)</span>
+<span id="cb9-3"><a href="#cb9-3"></a>  franGoaRec &lt;-<span class="st"> </span><span class="kw">GET</span>(fullurl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fromJSON</span>(<span class="dt">flatten =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb9-4"><a href="#cb9-4"></a>  <span class="kw">return</span>(franGoaRec)</span>
+<span id="cb9-5"><a href="#cb9-5"></a>}</span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="kw">getFranGoaRec</span>(<span class="st">&quot;20&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</span></code></pre></div>
 <pre><code>## No encoding supplied: defaulting to UTF-8.
 
 ## $data
@@ -1463,12 +1463,12 @@ library(tidyverse)
 ## [1] 39
 </code></pre>
 <p>/franchise-skater-records?cayenneExp=franchiseId=ID (Skater records, same interaction as goalie endpoint)</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>getFranSkaRec &lt;-<span class="st"> </span><span class="cf">function</span>(franID) {</span>
-<span id="cb12-2"><a href="#cb12-2"></a>  fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_records, <span class="st">&quot;/&quot;</span>, <span class="st">&quot;franchise-skater-records?cayenneExp=franchiseId=&quot;</span>, franID)</span>
-<span id="cb12-3"><a href="#cb12-3"></a>  franSkaRec &lt;-<span class="st"> </span><span class="kw">GET</span>(fullurl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fromJSON</span>(<span class="dt">flatten =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb12-4"><a href="#cb12-4"></a>  <span class="kw">return</span>(franSkaRec)</span>
-<span id="cb12-5"><a href="#cb12-5"></a>}</span>
-<span id="cb12-6"><a href="#cb12-6"></a><span class="kw">getFranSkaRec</span>(<span class="st">&quot;20&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>getFranSkaRec &lt;-<span class="st"> </span><span class="cf">function</span>(franID) {</span>
+<span id="cb11-2"><a href="#cb11-2"></a>  fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_records, <span class="st">&quot;/&quot;</span>, <span class="st">&quot;franchise-skater-records?cayenneExp=franchiseId=&quot;</span>, franID)</span>
+<span id="cb11-3"><a href="#cb11-3"></a>  franSkaRec &lt;-<span class="st"> </span><span class="kw">GET</span>(fullurl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fromJSON</span>(<span class="dt">flatten =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb11-4"><a href="#cb11-4"></a>  <span class="kw">return</span>(franSkaRec)</span>
+<span id="cb11-5"><a href="#cb11-5"></a>}</span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="kw">getFranSkaRec</span>(<span class="st">&quot;20&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</span></code></pre></div>
 <pre><code>## No encoding supplied: defaulting to UTF-8.
 
 ## $data
@@ -1954,19 +1954,19 @@ library(tidyverse)
 ## [1] 561
 </code></pre>
 <h3 id="nhl-stats-api">NHL stats API</h3>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>baseurl_stats &lt;-<span class="st"> &quot;https://statsapi.web.nhl.com/api/v1/teams&quot;</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a>getStats &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">expand =</span> <span class="st">&quot;&quot;</span>, <span class="dt">teamID =</span> <span class="st">&quot;&quot;</span>, <span class="dt">stats =</span> <span class="st">&quot;&quot;</span>){</span>
-<span id="cb14-3"><a href="#cb14-3"></a>  <span class="cf">if</span> (expand <span class="op">!=</span><span class="st"> &quot;&quot;</span>){</span>
-<span id="cb14-4"><a href="#cb14-4"></a>    fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_stats, <span class="st">&quot;?expand=&quot;</span>, expand)</span>
-<span id="cb14-5"><a href="#cb14-5"></a>  } <span class="cf">else</span> <span class="cf">if</span> (teamID <span class="op">!=</span><span class="st"> &quot;&quot;</span>){</span>
-<span id="cb14-6"><a href="#cb14-6"></a>    fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_stats, <span class="st">&quot;?teamID=&quot;</span>, teamID)</span>
-<span id="cb14-7"><a href="#cb14-7"></a>  } <span class="cf">else</span> <span class="cf">if</span> (stats <span class="op">!=</span><span class="st"> &quot;&quot;</span>){</span>
-<span id="cb14-8"><a href="#cb14-8"></a>    fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_stats, <span class="st">&quot;?stats=&quot;</span>, stats)</span>
-<span id="cb14-9"><a href="#cb14-9"></a>  }</span>
-<span id="cb14-10"><a href="#cb14-10"></a>  stats &lt;-<span class="st"> </span><span class="kw">GET</span>(fullurl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fromJSON</span>(<span class="dt">flatten =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb14-11"><a href="#cb14-11"></a>  <span class="kw">return</span>(stats)</span>
-<span id="cb14-12"><a href="#cb14-12"></a>}</span>
-<span id="cb14-13"><a href="#cb14-13"></a><span class="kw">getStats</span>(<span class="dt">expand =</span> <span class="st">&quot;person.names&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>baseurl_stats &lt;-<span class="st"> &quot;https://statsapi.web.nhl.com/api/v1/teams&quot;</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>getStats &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">expand =</span> <span class="st">&quot;&quot;</span>, <span class="dt">teamID =</span> <span class="st">&quot;&quot;</span>, <span class="dt">stats =</span> <span class="st">&quot;&quot;</span>){</span>
+<span id="cb13-3"><a href="#cb13-3"></a>  <span class="cf">if</span> (expand <span class="op">!=</span><span class="st"> &quot;&quot;</span>){</span>
+<span id="cb13-4"><a href="#cb13-4"></a>    fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_stats, <span class="st">&quot;?expand=&quot;</span>, expand)</span>
+<span id="cb13-5"><a href="#cb13-5"></a>  } <span class="cf">else</span> <span class="cf">if</span> (teamID <span class="op">!=</span><span class="st"> &quot;&quot;</span>){</span>
+<span id="cb13-6"><a href="#cb13-6"></a>    fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_stats, <span class="st">&quot;?teamID=&quot;</span>, teamID)</span>
+<span id="cb13-7"><a href="#cb13-7"></a>  } <span class="cf">else</span> <span class="cf">if</span> (stats <span class="op">!=</span><span class="st"> &quot;&quot;</span>){</span>
+<span id="cb13-8"><a href="#cb13-8"></a>    fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_stats, <span class="st">&quot;?stats=&quot;</span>, stats)</span>
+<span id="cb13-9"><a href="#cb13-9"></a>  }</span>
+<span id="cb13-10"><a href="#cb13-10"></a>  stats &lt;-<span class="st"> </span><span class="kw">GET</span>(fullurl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fromJSON</span>(<span class="dt">flatten =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb13-11"><a href="#cb13-11"></a>  <span class="kw">return</span>(stats)</span>
+<span id="cb13-12"><a href="#cb13-12"></a>}</span>
+<span id="cb13-13"><a href="#cb13-13"></a><span class="kw">getStats</span>(<span class="dt">expand =</span> <span class="st">&quot;person.names&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</span></code></pre></div>
 <pre><code>## $copyright
 ## [1] &quot;NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2020. All Rights Reserved.&quot;
 ## 
@@ -2292,7 +2292,7 @@ library(tidyverse)
 ## 30            Coyotes /api/v1/franchises/28
 ## 31     Golden Knights /api/v1/franchises/38
 </code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">getStats</span>(<span class="dt">stats =</span> <span class="st">&quot;statsSingleSeasonPlayoffs&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">getStats</span>(<span class="dt">stats =</span> <span class="st">&quot;statsSingleSeasonPlayoffs&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</span></code></pre></div>
 <pre><code>## $copyright
 ## [1] &quot;NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2020. All Rights Reserved.&quot;
 ## 
@@ -2619,14 +2619,72 @@ library(tidyverse)
 ## 31     Golden Knights /api/v1/franchises/38
 </code></pre>
 <h2 id="exploratory-data-analysis">Exploratory Data Analysis</h2>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>franTot &lt;-<span class="st"> </span><span class="kw">getFranTeamTot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>franTot &lt;-<span class="st"> </span><span class="kw">getFranTeamTot</span>()</span></code></pre></div>
 <pre><code>## No encoding supplied: defaulting to UTF-8.
 </code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>franTot &lt;-<span class="st"> </span>franTot<span class="op">$</span>data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;activeFranchise&quot;</span>, <span class="st">&quot;firstSeasonId&quot;</span>, <span class="st">&quot;gameTypeId&quot;</span>, <span class="st">&quot;lastSeasonId&quot;</span>))</span>
-<span id="cb20-2"><a href="#cb20-2"></a>franStats &lt;-<span class="st"> </span><span class="kw">getStats</span>(<span class="dt">expand =</span> <span class="st">&quot;person.names&quot;</span>) </span>
-<span id="cb20-3"><a href="#cb20-3"></a>franStats &lt;-<span class="st"> </span>franStats<span class="op">$</span>teams <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(<span class="st">&quot;locationName&quot;</span>, <span class="st">&quot;firstYearOfPlay&quot;</span>, <span class="st">&quot;franchiseId&quot;</span>, <span class="st">&quot;venue.city&quot;</span>, <span class="st">&quot;venue.timeZone.id&quot;</span>, <span class="st">&quot;venue.timeZone.tz&quot;</span>, <span class="st">&quot;division.name&quot;</span>, <span class="st">&quot;conference.name&quot;</span>))</span>
-<span id="cb20-4"><a href="#cb20-4"></a>combined &lt;-<span class="st"> </span><span class="kw">full_join</span>(franTot, franStats, <span class="dt">by =</span> <span class="st">&quot;franchiseId&quot;</span>) </span>
-<span id="cb20-5"><a href="#cb20-5"></a><span class="kw">ggplot</span>(combined, <span class="kw">aes</span>(<span class="dt">x =</span> homeWins, <span class="dt">y =</span> homeLosses)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> division.name))</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>franTot &lt;-<span class="st"> </span>franTot<span class="op">$</span>data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;activeFranchise&quot;</span>, <span class="st">&quot;firstSeasonId&quot;</span>, <span class="st">&quot;gameTypeId&quot;</span>, <span class="st">&quot;lastSeasonId&quot;</span>))</span>
+<span id="cb19-2"><a href="#cb19-2"></a>franStats &lt;-<span class="st"> </span><span class="kw">getStats</span>(<span class="dt">expand =</span> <span class="st">&quot;person.names&quot;</span>) </span>
+<span id="cb19-3"><a href="#cb19-3"></a>franStats &lt;-<span class="st"> </span>franStats<span class="op">$</span>teams <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(<span class="st">&quot;locationName&quot;</span>, <span class="st">&quot;firstYearOfPlay&quot;</span>, <span class="st">&quot;franchiseId&quot;</span>, <span class="st">&quot;venue.city&quot;</span>, <span class="st">&quot;venue.timeZone.id&quot;</span>, <span class="st">&quot;venue.timeZone.tz&quot;</span>, <span class="st">&quot;division.name&quot;</span>, <span class="st">&quot;conference.name&quot;</span>))</span>
+<span id="cb19-4"><a href="#cb19-4"></a>combined &lt;-<span class="st"> </span><span class="kw">full_join</span>(franTot, franStats, <span class="dt">by =</span> <span class="st">&quot;franchiseId&quot;</span>) </span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="kw">head</span>(combined)</span></code></pre></div>
+<pre><code>##   franchiseId gamesPlayed goalsAgainst goalsFor homeLosses
+## 1          23        2937         8708     8647        507
+## 2          23         257          634      697         53
+## 3          22        3732        11779    11889        674
+## 4          22         288          837      923         48
+## 5          10        6504        19863    19864       1132
+## 6          10         518         1447     1404        104
+##   homeOvertimeLosses homeTies homeWins losses
+## 1                 82       96      783   1181
+## 2                  0       NA       74    120
+## 3                 81      170      942   1570
+## 4                  1       NA       89    129
+## 5                 73      448     1600   2693
+## 6                  0        1      137    266
+##   overtimeLosses penaltyMinutes pointPctg points roadLosses
+## 1            162          44397    0.5330   3131        674
+## 2              0           4266    0.0039      2         67
+## 3            159          57422    0.5115   3818        896
+## 4              0           5474    0.0139      8         81
+## 5            147          85564    0.5125   6667       1561
+## 6              0           8181    0.0000      0        162
+##   roadOvertimeLosses roadTies roadWins shootoutLosses
+## 1                 80      123      592             79
+## 2                  0       NA       63              0
+## 3                 78      177      714             67
+## 4                  0       NA       70              0
+## 5                 74      360     1256             66
+## 6                  0        7      107              0
+##   shootoutWins shutouts teamId           teamName ties
+## 1           78      193      1  New Jersey Devils  219
+## 2            0       25      1  New Jersey Devils   NA
+## 3           82      167      2 New York Islanders  347
+## 4            0       12      2 New York Islanders   NA
+## 5           78      403      3   New York Rangers  808
+## 6            0       44      3   New York Rangers    8
+##   triCode wins locationName firstYearOfPlay venue.city
+## 1     NJD 1375   New Jersey            1982     Newark
+## 2     NJD  137   New Jersey            1982     Newark
+## 3     NYI 1656     New York            1972   Brooklyn
+## 4     NYI  159     New York            1972   Brooklyn
+## 5     NYR 2856     New York            1926   New York
+## 6     NYR  244     New York            1926   New York
+##   venue.timeZone.id venue.timeZone.tz division.name
+## 1  America/New_York               EDT  Metropolitan
+## 2  America/New_York               EDT  Metropolitan
+## 3  America/New_York               EDT  Metropolitan
+## 4  America/New_York               EDT  Metropolitan
+## 5  America/New_York               EDT  Metropolitan
+## 6  America/New_York               EDT  Metropolitan
+##   conference.name
+## 1         Eastern
+## 2         Eastern
+## 3         Eastern
+## 4         Eastern
+## 5         Eastern
+## 6         Eastern
+</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">ggplot</span>(combined, <span class="kw">aes</span>(<span class="dt">x =</span> homeWins, <span class="dt">y =</span> homeLosses)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> division.name))</span></code></pre></div>
 <p><img src="data:image/png;base64,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" /><!-- --></p>
 
 </body>

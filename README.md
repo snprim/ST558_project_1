@@ -7,9 +7,10 @@ Vignette
       - [NHL stats API](#nhl-stats-api)
   - [Exploratory Data Analysis](#exploratory-data-analysis)
 
-``` r
-# rmarkdown::render("vignette.Rmd", output_format = "github_document", output_file = "README.md")
-```
+In this vignette, we want to show how to access APIs to retrieve data.
+We use two NHL repositories as examples: [NHL
+records](https://gitlab.com/dword4/nhlapi/-/tree/master) and [NHL
+stats](https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md).
 
 ## Required Packages
 
@@ -39,7 +40,7 @@ getfran <- function(){
   fran <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(fran)
 }
-getfran()
+getfran() %>% head()
 ```
 
     ## No encoding supplied: defaulting to UTF-8.
@@ -136,7 +137,7 @@ getFranTeamTot <- function() {
   franTeamTot <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franTeamTot)
 }
-getFranTeamTot()
+getFranTeamTot() %>% head()
 ```
 
     ## No encoding supplied: defaulting to UTF-8.
@@ -394,7 +395,7 @@ getFranSeaRec <- function(franID) {
   franSeaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franSeaRec)
 }
-getFranSeaRec("20")
+getFranSeaRec("20") %>% head()
 ```
 
     ## No encoding supplied: defaulting to UTF-8.
@@ -459,7 +460,7 @@ getFranGoaRec <- function(franID) {
   franGoaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franGoaRec)
 }
-getFranGoaRec("20")
+getFranGoaRec("20") %>% head()
 ```
 
     ## No encoding supplied: defaulting to UTF-8.
@@ -899,7 +900,7 @@ getFranSkaRec <- function(franID) {
   franSkaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franSkaRec)
 }
-getFranSkaRec("20")
+getFranSkaRec("20") %>% head()
 ```
 
     ## No encoding supplied: defaulting to UTF-8.
@@ -1401,7 +1402,7 @@ getStats <- function(expand = "", teamID = "", stats = ""){
   stats <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(stats)
 }
-getStats(expand = "person.names")
+getStats(expand = "person.names") %>% head()
 ```
 
     ## $copyright
@@ -1730,7 +1731,7 @@ getStats(expand = "person.names")
     ## 31     Golden Knights /api/v1/franchises/38
 
 ``` r
-getStats(stats = "statsSingleSeasonPlayoffs")
+getStats(stats = "statsSingleSeasonPlayoffs") %>% head()
 ```
 
     ## $copyright
@@ -2071,7 +2072,68 @@ franTot <- franTot$data %>% select(-c("id", "activeFranchise", "firstSeasonId", 
 franStats <- getStats(expand = "person.names") 
 franStats <- franStats$teams %>% select(c("locationName", "firstYearOfPlay", "franchiseId", "venue.city", "venue.timeZone.id", "venue.timeZone.tz", "division.name", "conference.name"))
 combined <- full_join(franTot, franStats, by = "franchiseId") 
+head(combined)
+```
+
+    ##   franchiseId gamesPlayed goalsAgainst goalsFor homeLosses
+    ## 1          23        2937         8708     8647        507
+    ## 2          23         257          634      697         53
+    ## 3          22        3732        11779    11889        674
+    ## 4          22         288          837      923         48
+    ## 5          10        6504        19863    19864       1132
+    ## 6          10         518         1447     1404        104
+    ##   homeOvertimeLosses homeTies homeWins losses
+    ## 1                 82       96      783   1181
+    ## 2                  0       NA       74    120
+    ## 3                 81      170      942   1570
+    ## 4                  1       NA       89    129
+    ## 5                 73      448     1600   2693
+    ## 6                  0        1      137    266
+    ##   overtimeLosses penaltyMinutes pointPctg points roadLosses
+    ## 1            162          44397    0.5330   3131        674
+    ## 2              0           4266    0.0039      2         67
+    ## 3            159          57422    0.5115   3818        896
+    ## 4              0           5474    0.0139      8         81
+    ## 5            147          85564    0.5125   6667       1561
+    ## 6              0           8181    0.0000      0        162
+    ##   roadOvertimeLosses roadTies roadWins shootoutLosses
+    ## 1                 80      123      592             79
+    ## 2                  0       NA       63              0
+    ## 3                 78      177      714             67
+    ## 4                  0       NA       70              0
+    ## 5                 74      360     1256             66
+    ## 6                  0        7      107              0
+    ##   shootoutWins shutouts teamId           teamName ties
+    ## 1           78      193      1  New Jersey Devils  219
+    ## 2            0       25      1  New Jersey Devils   NA
+    ## 3           82      167      2 New York Islanders  347
+    ## 4            0       12      2 New York Islanders   NA
+    ## 5           78      403      3   New York Rangers  808
+    ## 6            0       44      3   New York Rangers    8
+    ##   triCode wins locationName firstYearOfPlay venue.city
+    ## 1     NJD 1375   New Jersey            1982     Newark
+    ## 2     NJD  137   New Jersey            1982     Newark
+    ## 3     NYI 1656     New York            1972   Brooklyn
+    ## 4     NYI  159     New York            1972   Brooklyn
+    ## 5     NYR 2856     New York            1926   New York
+    ## 6     NYR  244     New York            1926   New York
+    ##   venue.timeZone.id venue.timeZone.tz division.name
+    ## 1  America/New_York               EDT  Metropolitan
+    ## 2  America/New_York               EDT  Metropolitan
+    ## 3  America/New_York               EDT  Metropolitan
+    ## 4  America/New_York               EDT  Metropolitan
+    ## 5  America/New_York               EDT  Metropolitan
+    ## 6  America/New_York               EDT  Metropolitan
+    ##   conference.name
+    ## 1         Eastern
+    ## 2         Eastern
+    ## 3         Eastern
+    ## 4         Eastern
+    ## 5         Eastern
+    ## 6         Eastern
+
+``` r
 ggplot(combined, aes(x = homeWins, y = homeLosses)) + geom_point(aes(color = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->

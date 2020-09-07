@@ -5,9 +5,10 @@ output:
     toc: true
 ---
 
-```{r}
+```{r, echo = FALSE}
 # rmarkdown::render("vignette.Rmd", output_format = "github_document", output_file = "README.md")
 ```
+In this vignette, we want to show how to access APIs to retrieve data. We use two NHL repositories as examples: [NHL records](https://gitlab.com/dword4/nhlapi/-/tree/master) and [NHL stats](https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md).  
 
 ## Required Packages  
 
@@ -33,7 +34,7 @@ getfran <- function(){
   fran <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(fran)
 }
-getfran()
+getfran() %>% head()
 ```
 /franchise-team-totals (Returns Total stats for every franchise (ex roadTies, roadWins, etc))  
 ```{r}
@@ -42,7 +43,7 @@ getFranTeamTot <- function() {
   franTeamTot <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franTeamTot)
 }
-getFranTeamTot()
+getFranTeamTot() %>% head()
 ```
 /site/api/franchise-season-records?cayenneExp=franchiseId=ID (Drill-down into season
 records for a speciﬁc franchise)  
@@ -52,7 +53,7 @@ getFranSeaRec <- function(franID) {
   franSeaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franSeaRec)
 }
-getFranSeaRec("20")
+getFranSeaRec("20") %>% head()
 ```
 /franchise-goalie-records?cayenneExp=franchiseId=ID (Goalie records for the speciﬁed
 franchise)  
@@ -62,7 +63,7 @@ getFranGoaRec <- function(franID) {
   franGoaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franGoaRec)
 }
-getFranGoaRec("20")
+getFranGoaRec("20") %>% head()
 ```
 /franchise-skater-records?cayenneExp=franchiseId=ID (Skater records, same interaction as
 goalie endpoint)  
@@ -72,7 +73,7 @@ getFranSkaRec <- function(franID) {
   franSkaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franSkaRec)
 }
-getFranSkaRec("20")
+getFranSkaRec("20") %>% head()
 ```
 
 ### NHL stats API  
@@ -91,8 +92,8 @@ getStats <- function(expand = "", teamID = "", stats = ""){
   stats <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(stats)
 }
-getStats(expand = "person.names")
-getStats(stats = "statsSingleSeasonPlayoffs")
+getStats(expand = "person.names") %>% head()
+getStats(stats = "statsSingleSeasonPlayoffs") %>% head()
 
 ```
 
@@ -105,6 +106,7 @@ franTot <- franTot$data %>% select(-c("id", "activeFranchise", "firstSeasonId", 
 franStats <- getStats(expand = "person.names") 
 franStats <- franStats$teams %>% select(c("locationName", "firstYearOfPlay", "franchiseId", "venue.city", "venue.timeZone.id", "venue.timeZone.tz", "division.name", "conference.name"))
 combined <- full_join(franTot, franStats, by = "franchiseId") 
+head(combined)
 ggplot(combined, aes(x = homeWins, y = homeLosses)) + geom_point(aes(color = division.name))
 ```
 
