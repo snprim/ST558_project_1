@@ -5,6 +5,10 @@ output:
     toc: true
 ---
 
+```{r}
+# rmarkdown::render("vignette.Rmd", output_format = "github_document", output_file = "README.md")
+```
+
 ## Required Packages  
 
 To be able to access data from APIs, you should install and load the `httr`, `jsonlite`, and `tidyverse` packages.  
@@ -48,7 +52,7 @@ getFranSeaRec <- function(franID) {
   franSeaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franSeaRec)
 }
-getFranSeaRec("5")
+getFranSeaRec("20")
 ```
 /franchise-goalie-records?cayenneExp=franchiseId=ID (Goalie records for the speciﬁed
 franchise)  
@@ -58,7 +62,7 @@ getFranGoaRec <- function(franID) {
   franGoaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franGoaRec)
 }
-getFranGoaRec("5")
+getFranGoaRec("20")
 ```
 /franchise-skater-records?cayenneExp=franchiseId=ID (Skater records, same interaction as
 goalie endpoint)  
@@ -68,7 +72,7 @@ getFranSkaRec <- function(franID) {
   franSkaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franSkaRec)
 }
-getFranSkaRec("5")
+getFranSkaRec("20")
 ```
 
 ### NHL stats API  
@@ -94,4 +98,13 @@ getStats(stats = "statsSingleSeasonPlayoffs")
 
 
 ## Exploratory Data Analysis  
+
+```{r}
+franTot <- getFranTeamTot()
+franTot <- franTot$data %>% select(-c("id", "activeFranchise", "firstSeasonId", "gameTypeId", "lastSeasonId"))
+franStats <- getStats(expand = "person.names") 
+franStats <- franStats$teams %>% select(c("locationName", "firstYearOfPlay", "franchiseId", "venue.city", "venue.timeZone.id", "venue.timeZone.tz", "division.name", "conference.name"))
+combined <- full_join(franTot, franStats, by = "franchiseId") 
+ggplot(combined, aes(x = homeWins, y = homeLosses)) + geom_point(aes(color = division.name))
+```
 

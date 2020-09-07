@@ -7,6 +7,10 @@ Vignette
       - [NHL stats API](#nhl-stats-api)
   - [Exploratory Data Analysis](#exploratory-data-analysis)
 
+``` r
+# rmarkdown::render("vignette.Rmd", output_format = "github_document", output_file = "README.md")
+```
+
 ## Required Packages
 
 To be able to access data from APIs, you should install and load the
@@ -390,60 +394,58 @@ getFranSeaRec <- function(franID) {
   franSeaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franSeaRec)
 }
-getFranSeaRec("5")
+getFranSeaRec("20")
 ```
 
     ## No encoding supplied: defaulting to UTF-8.
 
     ## $data
     ##   id fewestGoals fewestGoalsAgainst
-    ## 1 10         147                131
+    ## 1 23         182                185
     ##   fewestGoalsAgainstSeasons fewestGoalsSeasons fewestLosses
-    ## 1              1953-54 (70)       1954-55 (70)           16
+    ## 1              2010-11 (82)       2016-17 (82)           19
     ##   fewestLossesSeasons fewestPoints fewestPointsSeasons
-    ## 1        1950-51 (70)           48        1984-85 (80)
+    ## 1        2010-11 (82)           48        1971-72 (78)
     ##   fewestTies fewestTiesSeasons fewestWins
-    ## 1          4      1989-90 (80)         20
-    ##            fewestWinsSeasons franchiseId
-    ## 1 1981-82 (80), 1984-85 (80)           5
-    ##         franchiseName homeLossStreak
-    ## 1 Toronto Maple Leafs              7
-    ##         homeLossStreakDates homePointStreak
-    ## 1 Nov 11 1984 - Dec 05 1984              18
-    ##                                   homePointStreakDates
-    ## 1 Nov 28 1933 - Mar 10 1934, Oct 31 1953 - Jan 23 1954
-    ##   homeWinStreak        homeWinStreakDates homeWinlessStreak
-    ## 1            13 Jan 31 2018 - Mar 24 2018                11
-    ##                                 homeWinlessStreakDates
-    ## 1 Dec 19 1987 - Jan 25 1988, Feb 11 2012 - Mar 29 2012
-    ##   lossStreak           lossStreakDates mostGameGoals
-    ## 1         10 Jan 15 1967 - Feb 08 1967            14
-    ##             mostGameGoalsDates mostGoals mostGoalsAgainst
-    ## 1 Mar 16 1957 - NYR 1 @ TOR 14       337              387
-    ##   mostGoalsAgainstSeasons mostGoalsSeasons mostLosses
-    ## 1            1983-84 (80)     1989-90 (80)         52
-    ##   mostLossesSeasons mostPenaltyMinutes
-    ## 1      1984-85 (80)               2419
-    ##   mostPenaltyMinutesSeasons mostPoints mostPointsSeasons
-    ## 1              1989-90 (80)        105      2017-18 (82)
-    ##   mostShutouts mostShutoutsSeasons mostTies mostTiesSeasons
-    ## 1           13        1953-54 (70)       22    1954-55 (70)
-    ##   mostWins mostWinsSeasons pointStreak
-    ## 1       49    2017-18 (82)          16
-    ##            pointStreakDates roadLossStreak
-    ## 1 Nov 22 2003 - Dec 26 2003             11
+    ## 1          3      1993-94 (84)         20
+    ##            fewestWinsSeasons franchiseId     franchiseName
+    ## 1 1971-72 (78), 1977-78 (80)          20 Vancouver Canucks
+    ##   homeLossStreak       homeLossStreakDates homePointStreak
+    ## 1              7 Mar 11 2017 - Apr 08 2017              18
+    ##        homePointStreakDates homeWinStreak
+    ## 1 Nov 04 1992 - Jan 16 1993            11
+    ##          homeWinStreakDates homeWinlessStreak
+    ## 1 Feb 03 2009 - Mar 19 2009                12
+    ##      homeWinlessStreakDates lossStreak
+    ## 1 Feb 19 2017 - Apr 08 2017         10
+    ##             lossStreakDates mostGameGoals
+    ## 1 Oct 23 1997 - Nov 11 1997            11
+    ##                                                                         mostGameGoalsDates
+    ## 1 Mar 28 1971 - CGS 5 @ VAN 11, Nov 25 1986 - LAK 5 @ VAN 11, Mar 01 1992 - CGY 0 @ VAN 11
+    ##   mostGoals mostGoalsAgainst mostGoalsAgainstSeasons
+    ## 1       346              401            1984-85 (80)
+    ##   mostGoalsSeasons mostLosses mostLossesSeasons
+    ## 1     1992-93 (84)         50      1971-72 (78)
+    ##   mostPenaltyMinutes mostPenaltyMinutesSeasons mostPoints
+    ## 1               2326              1992-93 (84)        117
+    ##   mostPointsSeasons mostShutouts mostShutoutsSeasons
+    ## 1      2010-11 (82)           10        2008-09 (82)
+    ##   mostTies mostTiesSeasons mostWins mostWinsSeasons
+    ## 1       20    1980-81 (80)       54    2010-11 (82)
+    ##   pointStreak          pointStreakDates roadLossStreak
+    ## 1          17 Dec 08 2010 - Jan 11 2011             12
     ##         roadLossStreakDates roadPointStreak
-    ## 1 Feb 20 1988 - Apr 01 1988              11
+    ## 1 Nov 28 1981 - Feb 06 1982              10
     ##        roadPointStreakDates roadWinStreak
-    ## 1 Dec 03 2016 - Jan 25 2017             7
-    ##                                                                roadWinStreakDates
-    ## 1 Nov 14 1940 - Dec 15 1940, Dec 04 1960 - Jan 05 1961, Jan 29 2003 - Feb 22 2003
-    ##   roadWinlessStreak    roadWinlessStreakDates winStreak
-    ## 1                18 Oct 06 1982 - Jan 05 1983        10
+    ## 1 Dec 01 2010 - Jan 11 2011             9
+    ##          roadWinStreakDates roadWinlessStreak
+    ## 1 Mar 05 2011 - Mar 29 2011                20
+    ##      roadWinlessStreakDates winStreak
+    ## 1 Jan 02 1986 - Apr 02 1986        10
     ##              winStreakDates winlessStreak
-    ## 1 Oct 07 1993 - Oct 28 1993             6
-    ##          winlessStreakDates
-    ## 1 Nov 09 2019 - Nov 19 2019
+    ## 1 Nov 09 2002 - Nov 30 2002            NA
+    ##   winlessStreakDates
+    ## 1                 NA
     ## 
     ## $total
     ## [1] 1
@@ -457,471 +459,436 @@ getFranGoaRec <- function(franID) {
   franGoaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franGoaRec)
 }
-getFranGoaRec("5")
+getFranGoaRec("20")
 ```
 
     ## No encoding supplied: defaulting to UTF-8.
 
     ## $data
-    ##     id activePlayer firstName franchiseId
-    ## 1  246        FALSE      Turk           5
-    ## 2  324         TRUE     James           5
-    ## 3  334        FALSE       Tom           5
-    ## 4  338        FALSE       Don           5
-    ## 5  342        FALSE        Ed           5
-    ## 6  395        FALSE       Don           5
-    ## 7  408        FALSE      Doug           5
-    ## 8  418        FALSE     Grant           5
-    ## 9  445        FALSE      Paul           5
-    ## 10 453        FALSE     Glenn           5
-    ## 11 474        FALSE    Curtis           5
-    ## 12 481        FALSE      Mark           5
-    ## 13 484        FALSE    Michel           5
-    ## 14 541        FALSE      Paul           5
-    ## 15 545        FALSE    Johnny           5
-    ## 16 550        FALSE     Lorne           5
-    ## 17 554        FALSE        Ed           5
-    ## 18 583        FALSE     Bruce           5
-    ## 19 596        FALSE    George           5
-    ## 20 606        FALSE       Joe           5
-    ## 21 609        FALSE     Eddie           5
-    ## 22 616        FALSE      Bert           5
-    ## 23 618        FALSE     Harry           5
-    ## 24 627        FALSE   Jacques           5
-    ## 25 638        FALSE     Terry           5
-    ## 26 642        FALSE       Don           5
-    ## 27 651        FALSE      Dunc           5
-    ## 28 657        FALSE    Bernie           5
-    ## 29 666        FALSE     Daren           5
-    ## 30 680        FALSE      Curt           5
-    ## 31 690        FALSE       Jim           5
-    ## 32 712        FALSE      Rick           5
-    ## 33 735        FALSE     Wayne           5
-    ## 34 752        FALSE      Rick           5
-    ##          franchiseName gameTypeId gamesPlayed   lastName
-    ## 1  Toronto Maple Leafs          2         629      Broda
-    ## 2  Toronto Maple Leafs          2         207     Reimer
-    ## 3  Toronto Maple Leafs          2           4   Barrasso
-    ## 4  Toronto Maple Leafs          2          11    Beaupre
-    ## 5  Toronto Maple Leafs          2         170    Belfour
-    ## 6  Toronto Maple Leafs          2          38    Edwards
-    ## 7  Toronto Maple Leafs          2          74     Favell
-    ## 8  Toronto Maple Leafs          2          95       Fuhr
-    ## 9  Toronto Maple Leafs          2          55   Harrison
-    ## 10 Toronto Maple Leafs          2          65      Healy
-    ## 11 Toronto Maple Leafs          2         270     Joseph
-    ## 12 Toronto Maple Leafs          2          27   Laforest
-    ## 13 Toronto Maple Leafs          2          74   Larocque
-    ## 14 Toronto Maple Leafs          2          29   Bibeault
-    ## 15 Toronto Maple Leafs          2         475      Bower
-    ## 16 Toronto Maple Leafs          2         214     Chabot
-    ## 17 Toronto Maple Leafs          2         180   Chadwick
-    ## 18 Toronto Maple Leafs          2         210     Gamble
-    ## 19 Toronto Maple Leafs          2         147 Hainsworth
-    ## 20 Toronto Maple Leafs          2           1  Ironstone
-    ## 21 Toronto Maple Leafs          2          26   Johnston
-    ## 22 Toronto Maple Leafs          2          16    Lindsay
-    ## 23 Toronto Maple Leafs          2         267     Lumley
-    ## 24 Toronto Maple Leafs          2         106     Plante
-    ## 25 Toronto Maple Leafs          2          91    Sawchuk
-    ## 26 Toronto Maple Leafs          2          58    Simmons
-    ## 27 Toronto Maple Leafs          2          49     Wilson
-    ## 28 Toronto Maple Leafs          2          65     Parent
-    ## 29 Toronto Maple Leafs          2           8      Puppa
-    ## 30 Toronto Maple Leafs          2           6     Ridley
-    ## 31 Toronto Maple Leafs          2          18 Rutherford
-    ## 32 Toronto Maple Leafs          2          49  St. Croix
-    ## 33 Toronto Maple Leafs          2          97     Thomas
-    ## 34 Toronto Maple Leafs          2          11    Wamsley
+    ##      id activePlayer firstName franchiseId
+    ## 1   243        FALSE      Kirk          20
+    ## 2   297        FALSE   Roberto          20
+    ## 3   304        FALSE   Richard          20
+    ## 4   364        FALSE      Gary          20
+    ## 5   367        FALSE      Sean          20
+    ## 6   373        FALSE   Jacques          20
+    ## 7   406        FALSE       Bob          20
+    ## 8   423        FALSE      Troy          20
+    ## 9   424        FALSE      John          20
+    ## 10  500        FALSE       Bob          20
+    ## 11  588        FALSE    George          20
+    ## 12  604        FALSE   Charlie          20
+    ## 13  622        FALSE    Cesare          20
+    ## 14  707        FALSE      Gary          20
+    ## 15  756        FALSE     Steve          20
+    ## 16  761        FALSE       Kay          20
+    ## 17  787        FALSE    Arturs          20
+    ## 18  798        FALSE     Felix          20
+    ## 19  805        FALSE     Corey          20
+    ## 20  809        FALSE     Garth          20
+    ## 21  854        FALSE    Martin          20
+    ## 22  867        FALSE     Tyler          20
+    ## 23  884        FALSE       Dan          20
+    ## 24  899        FALSE     Johan          20
+    ## 25  941        FALSE     Peter          20
+    ## 26  952        FALSE      Mika          20
+    ## 27  961        FALSE     Jason          20
+    ## 28  965        FALSE      Dany          20
+    ## 29  968        FALSE    Andrew          20
+    ## 30  989         TRUE      Ryan          20
+    ## 31  995        FALSE    Curtis          20
+    ## 32 1117         TRUE   Richard          20
+    ## 33 1129         TRUE     Jacob          20
+    ## 34 1142         TRUE    Anders          20
+    ##        franchiseName gameTypeId gamesPlayed  lastName
+    ## 1  Vancouver Canucks          2         516    McLean
+    ## 2  Vancouver Canucks          2         448    Luongo
+    ## 3  Vancouver Canucks          2         377   Brodeur
+    ## 4  Vancouver Canucks          2          73   Bromley
+    ## 5  Vancouver Canucks          2          16     Burke
+    ## 6  Vancouver Canucks          2          10     Caron
+    ## 7  Vancouver Canucks          2          39   Essensa
+    ## 8  Vancouver Canucks          2          72    Gamble
+    ## 9  Vancouver Canucks          2          56   Garrett
+    ## 10 Vancouver Canucks          2           6     Mason
+    ## 11 Vancouver Canucks          2          42   Gardner
+    ## 12 Vancouver Canucks          2          35     Hodge
+    ## 13 Vancouver Canucks          2          93   Maniago
+    ## 14 Vancouver Canucks          2         188     Smith
+    ## 15 Vancouver Canucks          2          66     Weeks
+    ## 16 Vancouver Canucks          2          74  Whitmore
+    ## 17 Vancouver Canucks          2          41      Irbe
+    ## 18 Vancouver Canucks          2          69    Potvin
+    ## 19 Vancouver Canucks          2           6    Schwab
+    ## 20 Vancouver Canucks          2         109      Snow
+    ## 21 Vancouver Canucks          2           6    Brochu
+    ## 22 Vancouver Canucks          2           1      Moss
+    ## 23 Vancouver Canucks          2         208  Cloutier
+    ## 24 Vancouver Canucks          2          21   Hedberg
+    ## 25 Vancouver Canucks          2          46    Skudra
+    ## 26 Vancouver Canucks          2           4   Noronen
+    ## 27 Vancouver Canucks          2           9 LaBarbera
+    ## 28 Vancouver Canucks          2           9  Sabourin
+    ## 29 Vancouver Canucks          2          21  Raycroft
+    ## 30 Vancouver Canucks          2         150    Miller
+    ## 31 Vancouver Canucks          2          35   Sanford
+    ## 32 Vancouver Canucks          2           7   Bachman
+    ## 33 Vancouver Canucks          2         229 Markstrom
+    ## 34 Vancouver Canucks          2          39   Nilsson
     ##    losses
-    ## 1     222
-    ## 2      76
-    ## 3       2
-    ## 4       8
-    ## 5      61
-    ## 6      23
-    ## 7      26
-    ## 8      42
-    ## 9      29
-    ## 10     30
-    ## 11     97
-    ## 12     14
-    ## 13     35
-    ## 14     14
-    ## 15    157
-    ## 16     78
-    ## 17     89
-    ## 18     84
-    ## 19     48
-    ## 20      0
-    ## 21      9
-    ## 22     11
-    ## 23    106
-    ## 24     38
-    ## 25     30
-    ## 26     21
-    ## 27     22
-    ## 28     25
-    ## 29      2
-    ## 30      2
-    ## 31     10
-    ## 32     28
-    ## 33     37
-    ## 34      6
+    ## 1     228
+    ## 2     137
+    ## 3     173
+    ## 4      27
+    ## 5       9
+    ## 6       5
+    ## 7      12
+    ## 8      29
+    ## 9      21
+    ## 10      4
+    ## 11     22
+    ## 12     13
+    ## 13     45
+    ## 14     81
+    ## 15     34
+    ## 16     28
+    ## 17     11
+    ## 18     30
+    ## 19      1
+    ## 20     52
+    ## 21      3
+    ## 22      0
+    ## 23     68
+    ## 24      6
+    ## 25     13
+    ## 26      1
+    ## 27      2
+    ## 28      4
+    ## 29      5
+    ## 30     68
+    ## 31     11
+    ## 32      4
+    ## 33     93
+    ## 34     22
     ##                                         mostGoalsAgainstDates
-    ## 1                                                  1938-01-22
-    ## 2                                                  2016-02-15
-    ## 3                                                  2002-03-21
-    ## 4                                                  1996-03-08
-    ## 5                                                  2005-12-17
-    ## 6                                                  1986-02-06
-    ## 7                                                  1975-01-23
-    ## 8                                                  1991-12-26
-    ## 9                          1980-01-19, 1979-12-26, 1978-12-03
-    ## 10                                                 1999-03-24
-    ## 11 2008-11-25, 2000-12-16, 2000-11-29, 2000-01-01, 1999-02-13
-    ## 12                                                 1989-11-04
-    ## 13                                     1982-03-13, 1981-03-19
-    ## 14                                                 1944-03-05
-    ## 15                                                 1960-03-09
-    ## 16                                                 1929-11-19
-    ## 17                                                 1957-10-17
-    ## 18                                                 1971-01-17
-    ## 19             1936-01-11, 1935-03-09, 1935-01-29, 1934-03-06
-    ## 20                                                 1928-03-03
-    ## 21                                                 1974-02-26
-    ## 22                                                 1919-01-11
-    ## 23                                                 1956-02-16
-    ## 24                                                 1971-11-07
-    ## 25                                                 1965-11-07
-    ## 26                                                 1964-01-18
-    ## 27                                                 1974-12-30
-    ## 28                                                 1971-04-03
-    ## 29                                                 1993-02-14
-    ## 30                                                 1980-11-28
-    ## 31                                                 1981-02-18
-    ## 32                                                 1985-04-03
-    ## 33                                     1977-02-20, 1975-10-12
-    ## 34                                                 1992-02-18
+    ## 1                                                  1996-10-19
+    ## 2                                      2013-02-24, 2010-04-01
+    ## 3                                                  1981-10-17
+    ## 4                                      1981-02-20, 1979-03-08
+    ## 5                          1998-01-28, 1998-01-21, 1998-01-15
+    ## 6                                                  1973-12-20
+    ## 7                                      2001-02-17, 2000-12-29
+    ## 8                                                  1991-02-02
+    ## 9                                      1984-11-29, 1984-03-11
+    ## 10                                                 1991-03-03
+    ## 11                                                 1972-02-10
+    ## 12                                                 1971-02-27
+    ## 13                         1978-03-28, 1978-03-08, 1976-12-29
+    ## 14 1976-03-27, 1976-01-08, 1975-03-21, 1974-11-24, 1973-12-16
+    ## 15                                                 1990-02-28
+    ## 16             1995-01-21, 1994-02-10, 1993-12-15, 1993-03-20
+    ## 17             1998-03-26, 1997-12-29, 1997-12-20, 1997-11-03
+    ## 18 2001-01-10, 2000-12-21, 2000-11-11, 2000-10-12, 2000-10-05
+    ## 19                                                 1999-11-07
+    ## 20                                                 1999-02-04
+    ## 21                                     2001-11-03, 2001-10-09
+    ## 22                                                 2002-12-23
+    ## 23                         2005-10-12, 2001-12-20, 2001-10-18
+    ## 24                         2004-03-21, 2004-03-08, 2004-02-03
+    ## 25                                     2002-01-09, 2001-12-08
+    ## 26                                                 2006-03-14
+    ## 27                                                 2009-01-09
+    ## 28                                                 2006-11-23
+    ## 29 2010-04-08, 2010-04-02, 2009-12-05, 2009-11-10, 2009-10-30
+    ## 30                                                 2016-04-07
+    ## 31                                                 2008-12-04
+    ## 32                                                 2018-11-15
+    ## 33                                                 2016-11-15
+    ## 34                                                 2017-12-13
     ##    mostGoalsAgainstOneGame
     ## 1                        9
-    ## 2                        7
-    ## 3                        4
-    ## 4                        7
-    ## 5                        8
-    ## 6                        8
-    ## 7                        8
-    ## 8                       12
-    ## 9                        7
-    ## 10                       7
-    ## 11                       6
-    ## 12                       7
-    ## 13                      10
-    ## 14                       8
-    ## 15                       9
-    ## 16                      10
-    ## 17                       9
-    ## 18                       9
-    ## 19                       7
-    ## 20                       0
-    ## 21                       7
-    ## 22                      13
-    ## 23                       8
-    ## 24                       8
-    ## 25                       9
-    ## 26                      11
-    ## 27                       7
-    ## 28                       8
-    ## 29                       5
-    ## 30                       6
-    ## 31                       8
-    ## 32                       9
-    ## 33                       8
+    ## 2                        8
+    ## 3                       10
+    ## 4                        9
+    ## 5                        6
+    ## 6                        9
+    ## 7                        5
+    ## 8                        9
+    ## 9                       12
+    ## 10                       8
+    ## 11                       9
+    ## 12                       8
+    ## 13                       8
+    ## 14                       7
+    ## 15                       7
+    ## 16                       7
+    ## 17                       5
+    ## 18                       5
+    ## 19                       5
+    ## 20                       8
+    ## 21                       5
+    ## 22                       1
+    ## 23                       6
+    ## 24                       5
+    ## 25                       5
+    ## 26                       5
+    ## 27                       6
+    ## 28                       5
+    ## 29                       4
+    ## 30                       7
+    ## 31                       6
+    ## 32                       6
+    ## 33                       7
     ## 34                       7
-    ##                                    mostSavesDates
-    ## 1                                            <NA>
-    ## 2  2015-04-04, 2013-11-23, 2013-04-20, 2012-02-04
-    ## 3                                      2002-03-21
-    ## 4                                      1996-01-30
-    ## 5                                      2003-01-04
-    ## 6                                      1986-03-06
-    ## 7                                      1974-11-27
-    ## 8                                      1991-10-05
-    ## 9                                      1980-01-12
-    ## 10                                     1998-02-07
-    ## 11                                     1999-10-09
-    ## 12                                     1989-11-22
-    ## 13                                     1982-04-04
-    ## 14                                           <NA>
-    ## 15                                     1962-03-25
-    ## 16                                           <NA>
-    ## 17                         1959-12-20, 1958-12-25
-    ## 18                                     1968-02-29
-    ## 19                                           <NA>
-    ## 20                                           <NA>
-    ## 21                                     1974-03-16
-    ## 22                                           <NA>
-    ## 23                                     1955-10-09
-    ## 24                                     1970-11-21
-    ## 25                                     1965-03-07
-    ## 26                         1963-01-17, 1962-03-22
-    ## 27                                     1974-12-30
-    ## 28                                     1972-01-15
-    ## 29                                     1993-04-11
-    ## 30                                     1980-11-28
-    ## 31                         1981-03-04, 1981-02-03
-    ## 32                                     1984-12-26
-    ## 33                                     1976-12-18
-    ## 34                                     1992-12-06
-    ##    mostSavesOneGame
-    ## 1                NA
-    ## 2                49
-    ## 3                27
-    ## 4                33
-    ## 5                50
-    ## 6                46
-    ## 7                48
-    ## 8                45
-    ## 9                44
-    ## 10               38
-    ## 11               46
-    ## 12               48
-    ## 13               52
-    ## 14               NA
-    ## 15               50
-    ## 16               NA
-    ## 17               44
-    ## 18               50
-    ## 19               NA
-    ## 20               NA
-    ## 21               38
-    ## 22               NA
-    ## 23               48
-    ## 24               46
-    ## 25               43
-    ## 26               36
-    ## 27               40
-    ## 28               42
-    ## 29               35
-    ## 30               37
-    ## 31               42
-    ## 32               41
-    ## 33               51
-    ## 34               42
-    ##                             mostShotsAgainstDates
-    ## 1                                            <NA>
-    ## 2  2015-04-04, 2013-12-07, 2013-11-23, 2013-04-20
-    ## 3                                      2002-03-21
-    ## 4                                      1996-01-30
-    ## 5                                      2005-10-24
-    ## 6                                      1986-03-06
-    ## 7                                      1974-11-27
-    ## 8                                      1991-10-05
-    ## 9                                      1980-01-12
-    ## 10                                     1998-02-07
-    ## 11                                     1999-10-09
-    ## 12                                     1989-11-22
-    ## 13                                     1982-04-04
-    ## 14                                           <NA>
-    ## 15                                     1962-03-25
-    ## 16                                           <NA>
-    ## 17                                     1959-12-20
-    ## 18                         1971-01-17, 1968-02-29
-    ## 19                                           <NA>
-    ## 20                                           <NA>
-    ## 21                                     1974-03-16
-    ## 22                                           <NA>
-    ## 23                                     1955-10-09
-    ## 24                         1970-11-21, 1970-10-17
-    ## 25                                     1965-03-07
-    ## 26                                     1963-01-17
-    ## 27                                     1974-12-30
-    ## 28                                     1972-01-15
-    ## 29                                     1993-04-11
-    ## 30                                     1980-11-28
-    ## 31                         1981-03-04, 1981-02-03
-    ## 32                                     1984-12-26
-    ## 33                                     1976-12-18
-    ## 34                                     1992-12-06
+    ##                        mostSavesDates mostSavesOneGame
+    ## 1              1997-04-05, 1987-12-17               48
+    ## 2                          2010-03-20               50
+    ## 3                          1985-02-10               51
+    ## 4                          1979-03-15               41
+    ## 5                          1998-01-26               33
+    ## 6                          1973-11-27               33
+    ## 7                          2001-03-13               37
+    ## 8                          1990-10-27               40
+    ## 9                          1983-02-15               43
+    ## 10                         1991-02-27               35
+    ## 11             1971-10-20, 1970-12-23               50
+    ## 12                         1971-03-13               40
+    ## 13                         1978-01-07               51
+    ## 14 1974-12-15, 1974-04-03, 1974-01-15               41
+    ## 15                         1989-10-27               46
+    ## 16                         1995-01-25               38
+    ## 17                         1998-04-01               42
+    ## 18                         2000-02-29               40
+    ## 19                         1999-11-09               24
+    ## 20                         2000-01-13               48
+    ## 21                         2001-11-03               30
+    ## 22                         2002-12-23               13
+    ## 23                         2004-01-09               44
+    ## 24                         2004-03-06               32
+    ## 25                         2002-01-09               43
+    ## 26                         2006-04-15               31
+    ## 27             2009-01-04, 2009-01-02               34
+    ## 28                         2007-02-20               38
+    ## 29                         2010-02-12               32
+    ## 30             2016-03-19, 2016-01-17               47
+    ## 31                         2007-10-21               35
+    ## 32                         2017-03-05               43
+    ## 33             2020-02-12, 2019-12-28               49
+    ## 34                         2018-02-17               44
+    ##                 mostShotsAgainstDates
+    ## 1                          1988-11-17
+    ## 2                          2010-03-20
+    ## 3                          1985-02-10
+    ## 4                          1979-03-15
+    ## 5              1998-01-28, 1998-01-26
+    ## 6                          1973-12-20
+    ## 7                          2001-03-13
+    ## 8              1991-02-08, 1990-10-27
+    ## 9                          1983-02-15
+    ## 10                         1991-02-27
+    ## 11             1971-10-20, 1970-12-23
+    ## 12                         1971-03-13
+    ## 13                         1978-01-07
+    ## 14                         1974-11-24
+    ## 15                         1989-10-27
+    ## 16                         1995-01-25
+    ## 17                         1998-04-01
+    ## 18                         2000-02-29
+    ## 19                         1999-11-09
+    ## 20                         2000-01-13
+    ## 21                         2001-11-03
+    ## 22                         2002-12-23
+    ## 23                         2004-01-09
+    ## 24 2004-02-14, 2004-01-29, 2003-11-24
+    ## 25                         2002-01-09
+    ## 26                         2006-04-15
+    ## 27                         2009-01-02
+    ## 28                         2007-02-20
+    ## 29                         2010-02-12
+    ## 30             2016-03-19, 2016-01-19
+    ## 31                         2008-01-11
+    ## 32             2017-04-09, 2017-03-05
+    ## 33                         2019-12-28
+    ## 34                         2017-12-13
     ##    mostShotsAgainstOneGame mostShutoutsOneSeason
-    ## 1                       NA                     9
-    ## 2                       50                     4
-    ## 3                       31                     0
-    ## 4                       36                     0
-    ## 5                       53                    10
-    ## 6                       52                     0
-    ## 7                       52                     1
-    ## 8                       50                     2
-    ## 9                       48                     1
-    ## 10                      40                     2
-    ## 11                      50                     6
-    ## 12                      53                     0
-    ## 13                      59                     0
-    ## 14                      NA                     5
-    ## 15                      55                     5
-    ## 16                      NA                    10
-    ## 17                      51                     5
-    ## 18                      54                     5
-    ## 19                      NA                     8
-    ## 20                      NA                     1
-    ## 21                      43                     1
-    ## 22                      NA                     0
-    ## 23                      51                    13
-    ## 24                      49                     4
-    ## 25                      46                     2
-    ## 26                      42                     3
-    ## 27                      47                     1
-    ## 28                      45                     3
-    ## 29                      37                     2
-    ## 30                      43                     0
-    ## 31                      47                     0
-    ## 32                      47                     0
-    ## 33                      53                     2
-    ## 34                      48                     0
-    ##           mostShutoutsSeasonIds mostWinsOneSeason
-    ## 1                      19491950                32
-    ## 2                      20122013                20
-    ## 3                      20012002                 2
-    ## 4            19951996, 19961997                 0
-    ## 5                      20032004                37
-    ## 6                      19851986                12
-    ## 7                      19741975                14
-    ## 8                      19911992                25
-    ## 9                      19781979                 9
-    ## 10                     19992000                 9
-    ## 11                     20002001                36
-    ## 12                     19891990                 9
-    ## 13 19801981, 19811982, 19821983                10
-    ## 14                     19431944                13
-    ## 15           19591960, 19631964                34
-    ## 16                     19281929                24
-    ## 17                     19561957                21
-    ## 18           19671968, 19691970                28
-    ## 19           19341935, 19351936                30
-    ## 20                     19271928                 0
-    ## 21                     19731974                12
-    ## 22                     19181919                 5
-    ## 23                     19531954                32
-    ## 24                     19701971                24
-    ## 25                     19661967                16
-    ## 26                     19631964                15
-    ## 27                     19731974                 9
-    ## 28                     19711972                17
-    ## 29                     19921993                 6
-    ## 30           19791980, 19801981                 1
-    ## 31                     19801981                 4
-    ## 32 19821983, 19831984, 19841985                 5
-    ## 33                     19751976                28
-    ## 34           19911992, 19921993                 4
+    ## 1                       52                     5
+    ## 2                       54                     9
+    ## 3                       54                     2
+    ## 4                       45                     2
+    ## 5                       36                     0
+    ## 6                       39                     0
+    ## 7                       39                     1
+    ## 8                       42                     1
+    ## 9                       49                     1
+    ## 10                      38                     0
+    ## 11                      57                     0
+    ## 12                      46                     0
+    ## 13                      57                     1
+    ## 14                      46                     6
+    ## 15                      51                     0
+    ## 16                      44                     1
+    ## 17                      44                     2
+    ## 18                      41                     1
+    ## 19                      28                     0
+    ## 20                      51                     6
+    ## 21                      35                     0
+    ## 22                      14                     0
+    ## 23                      46                     7
+    ## 24                      33                     3
+    ## 25                      48                     1
+    ## 26                      34                     0
+    ## 27                      37                     0
+    ## 28                      40                     0
+    ## 29                      35                     1
+    ## 30                      49                     6
+    ## 31                      38                     1
+    ## 32                      44                     0
+    ## 33                      51                     2
+    ## 34                      48                     2
+    ##                     mostShutoutsSeasonIds mostWinsOneSeason
+    ## 1                                19911992                38
+    ## 2                                20082009                47
+    ## 3                      19811982, 19851986                21
+    ## 4                                19781979                11
+    ## 5                                19971998                 2
+    ## 6                                19731974                 2
+    ## 7                                20002001                18
+    ## 8                                19901991                16
+    ## 9                                19821983                14
+    ## 10                               19901991                 2
+    ## 11                     19701971, 19711972                 6
+    ## 12                               19701971                15
+    ## 13                     19761977, 19771978                17
+    ## 14                               19741975                32
+    ## 15 19871988, 19881989, 19891990, 19901991                11
+    ## 16                               19921993                18
+    ## 17                               19971998                14
+    ## 18                               20002001                14
+    ## 19                               19992000                 2
+    ## 20                               19981999                20
+    ## 21                               20012002                 0
+    ## 22                               20022003                 0
+    ## 23                               20012002                33
+    ## 24                               20032004                 8
+    ## 25                     20012002, 20022003                10
+    ## 26                               20052006                 1
+    ## 27                               20082009                 3
+    ## 28                               20062007                 2
+    ## 29                               20092010                 9
+    ## 30                               20142015                29
+    ## 31                               20082009                 7
+    ## 32           20152016, 20162017, 20182019                 2
+    ## 33                     20172018, 20192020                28
+    ## 34                               20172018                 7
     ##     mostWinsSeasonIds overtimeLosses playerId positionCode
-    ## 1            19471948             NA  8449837            G
-    ## 2            20102011             23  8473503            G
-    ## 3            20012002             NA  8445275            G
-    ## 4  19951996, 19961997             NA  8445381            G
-    ## 5            20022003              4  8445386            G
-    ## 6            19851986             NA  8446597            G
-    ## 7            19731974             NA  8446794            G
-    ## 8            19911992             NA  8446991            G
-    ## 9            19791980             NA  8447663            G
-    ## 10           19992000             NA  8447709            G
-    ## 11           19992000              1  8448382            G
-    ## 12           19891990             NA  8448628            G
-    ## 13           19811982             NA  8448700            G
-    ## 14           19431944             NA  8449823            G
-    ## 15           19591960             NA  8449835            G
-    ## 16           19321933             NA  8449850            G
-    ## 17 19561957, 19571958             NA  8449851            G
-    ## 18           19681969             NA  8449959            G
-    ## 19           19341935             NA  8449987            G
-    ## 20           19271928             NA  8450000            G
-    ## 21           19731974             NA  8450005            G
-    ## 22           19181919             NA  8450014            G
-    ## 23           19531954             NA  8450019            G
-    ## 24           19701971             NA  8450066            G
-    ## 25 19641965, 19661967             NA  8450111            G
-    ## 26           19621963             NA  8450113            G
-    ## 27           19731974             NA  8450148            G
-    ## 28           19711972             NA  8450178            G
-    ## 29           19921993             NA  8450627            G
-    ## 30           19801981             NA  8450830            G
-    ## 31           19801981             NA  8451076            G
-    ## 32           19831984             NA  8451626            G
-    ## 33           19751976             NA  8451891            G
-    ## 34           19911992             NA  8452287            G
+    ## 1            19911992             NA  8449474            G
+    ## 2            20062007             50  8466141            G
+    ## 3            19821983             NA  8445694            G
+    ## 4            19781979             NA  8445695            G
+    ## 5            19971998             NA  8445769            G
+    ## 6            19731974             NA  8445966            G
+    ## 7            20002001             NA  8446719            G
+    ## 8            19901991             NA  8447029            G
+    ## 9            19831984             NA  8447066            G
+    ## 10           19901991             NA  8449286            G
+    ## 11           19701971             NA  8449967            G
+    ## 12           19701971             NA  8449995            G
+    ## 13           19761977             NA  8450020            G
+    ## 14           19741975             NA  8451528            G
+    ## 15           19881989             NA  8452355            G
+    ## 16 19921993, 19931994             NA  8452440            G
+    ## 17           19971998             NA  8456692            G
+    ## 18           20002001             NA  8457714            G
+    ## 19           19992000             NA  8457969            G
+    ## 20           19981999             NA  8458075            G
+    ## 21           20012002             NA  8459289            G
+    ## 22           20022003             NA  8459451            G
+    ## 23 20022003, 20032004              1  8460516            G
+    ## 24           20032004             NA  8460704            G
+    ## 25           20012002             NA  8464715            G
+    ## 26           20052006              0  8466156            G
+    ## 27           20082009              2  8467391            G
+    ## 28           20062007              1  8467430            G
+    ## 29           20092010              1  8467453            G
+    ## 30           20142015             16  8468011            G
+    ## 31           20082009              1  8468166            G
+    ## 32           20162017              0  8473614            G
+    ## 33           20182019             27  8474593            G
+    ## 34           20172018              5  8475195            G
     ##    rookieGamesPlayed rookieShutouts rookieWins seasons
-    ## 1                 45              3         22      14
-    ## 2                 37              3         20       6
-    ## 3                 NA             NA         NA       1
-    ## 4                 NA             NA         NA       2
-    ## 5                 NA             NA         NA       3
+    ## 1                 41              1         11      11
+    ## 2                 NA             NA         NA       8
+    ## 3                 NA             NA         NA       8
+    ## 4                 NA             NA         NA       3
+    ## 5                 NA             NA         NA       1
     ## 6                 NA             NA         NA       1
-    ## 7                 NA             NA         NA       3
-    ## 8                 NA             NA         NA       2
-    ## 9                 NA             NA         NA       2
-    ## 10                NA             NA         NA       4
-    ## 11                NA             NA         NA       5
+    ## 7                 NA             NA         NA       1
+    ## 8                 47              1         16       4
+    ## 9                 NA             NA         NA       3
+    ## 10                NA             NA         NA       1
+    ## 11                NA             NA         NA       2
     ## 12                NA             NA         NA       1
-    ## 13                NA             NA         NA       3
-    ## 14                NA             NA         NA       1
-    ## 15                NA             NA         NA      12
-    ## 16                NA             NA         NA       5
-    ## 17                70              5         21       5
-    ## 18                NA             NA         NA       6
-    ## 19                NA             NA         NA       4
-    ## 20                NA             NA         NA       1
+    ## 13                NA             NA         NA       2
+    ## 14                NA             NA         NA       3
+    ## 15                NA             NA         NA       4
+    ## 16                NA             NA         NA       3
+    ## 17                NA             NA         NA       1
+    ## 18                NA             NA         NA       2
+    ## 19                NA             NA         NA       1
+    ## 20                NA             NA         NA       3
     ## 21                NA             NA         NA       1
     ## 22                NA             NA         NA       1
-    ## 23                NA             NA         NA       4
-    ## 24                NA             NA         NA       3
-    ## 25                NA             NA         NA       3
-    ## 26                NA             NA         NA       3
-    ## 27                NA             NA         NA       2
-    ## 28                NA             NA         NA       2
+    ## 23                NA             NA         NA       5
+    ## 24                NA             NA         NA       1
+    ## 25                NA             NA         NA       2
+    ## 26                NA             NA         NA       1
+    ## 27                NA             NA         NA       1
+    ## 28                NA             NA         NA       1
     ## 29                NA             NA         NA       1
-    ## 30                NA             NA         NA       2
-    ## 31                NA             NA         NA       1
+    ## 30                NA             NA         NA       3
+    ## 31                NA             NA         NA       2
     ## 32                NA             NA         NA       3
-    ## 33                NA             NA         NA       2
+    ## 33                NA             NA         NA       7
     ## 34                NA             NA         NA       2
     ##    shutouts ties wins
-    ## 1        61  102  304
-    ## 2        11   NA   85
-    ## 3         0    0    2
-    ## 4         0    0    0
-    ## 5        17   11   93
-    ## 6         0    0   12
-    ## 7         1   16   26
-    ## 8         3    9   38
-    ## 9         1    5   17
-    ## 10        2    5   23
-    ## 11       17   27  138
-    ## 12        0    0    9
-    ## 13        0   13   16
-    ## 14        5    2   13
-    ## 15       32   79  219
-    ## 16       31   31  102
-    ## 17       14   34   57
-    ## 18       19   31   83
-    ## 19       19   20   79
-    ## 20        1    1    0
-    ## 21        1    4   12
-    ## 22        0    0    5
-    ## 23       34   58  103
-    ## 24        7   15   48
-    ## 25        4   13   42
-    ## 26        5    7   29
-    ## 27        1    7   17
-    ## 28        3   12   24
-    ## 29        2    0    6
-    ## 30        0    0    1
-    ## 31        0    2    4
-    ## 32        0    2   11
-    ## 33        3   18   38
-    ## 34        0    0    4
-    ##  [ reached 'max' / getOption("max.print") -- omitted 19 rows ]
+    ## 1        20   62  211
+    ## 2        38   NA  252
+    ## 3         6   62  126
+    ## 4         3   14   25
+    ## 5         0    4    2
+    ## 6         0    1    2
+    ## 7         1    3   18
+    ## 8         1    9   22
+    ## 9         1    5   22
+    ## 10        0    0    2
+    ## 11        0    4    9
+    ## 12        0    5   15
+    ## 13        2   17   27
+    ## 14       11   23   72
+    ## 15        0   11   19
+    ## 16        1    6   36
+    ## 17        2    6   14
+    ## 18        1   10   26
+    ## 19        0    1    2
+    ## 20        6   11   33
+    ## 21        0    0    0
+    ## 22        0    0    0
+    ## 23       14   23  109
+    ## 24        3    2    8
+    ## 25        2    8   19
+    ## 26        0   NA    1
+    ## 27        0   NA    3
+    ## 28        0   NA    2
+    ## 29        1   NA    9
+    ## 30       10   NA   64
+    ## 31        1   NA   11
+    ## 32        0    0    3
+    ## 33        5    0   99
+    ## 34        2    0   10
+    ##  [ reached 'max' / getOption("max.print") -- omitted 5 rows ]
     ## 
     ## $total
-    ## [1] 53
+    ## [1] 39
 
 /franchise-skater-records?cayenneExp=franchiseId=ID (Skater records,
 same interaction as goalie endpoint)
@@ -932,458 +899,492 @@ getFranSkaRec <- function(franID) {
   franSkaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franSkaRec)
 }
-getFranSkaRec("5")
+getFranSkaRec("20")
 ```
 
     ## No encoding supplied: defaulting to UTF-8.
 
     ## $data
     ##       id activePlayer assists firstName franchiseId
-    ## 1  16888        FALSE     417    George           5
-    ## 2  16994        FALSE     567      Mats           5
-    ## 3  17005        FALSE     620     Borje           5
-    ## 4  17019        FALSE     112       Tie           5
-    ## 5  17056        FALSE     238      Rick           5
-    ## 6  17070        FALSE     321      Doug           5
-    ## 7  17125        FALSE      99      Dave           5
-    ## 8  17152        FALSE     125      Wilf           5
-    ## 9  17184        FALSE     302       Ian           5
-    ## 10 17195        FALSE       0    Gordon           5
-    ## 11 17207        FALSE       1      Doug           5
-    ## 12 17210        FALSE      43      Jack           5
-    ## 13 17212        FALSE       2      Stew           5
-    ## 14 17218        FALSE      18      Gary           5
-    ## 15 17221        FALSE      29    Claire           5
-    ## 16 17245        FALSE       2      Russ           5
-    ## 17 17269        FALSE      19      Mike           5
-    ## 18 17292        FALSE       5     Lloyd           5
-    ## 19 17295        FALSE     204      John           5
-    ## 20 17298        FALSE      94     Glenn           5
-    ## 21 17311        FALSE     231       Syl           5
-    ## 22 17312        FALSE       7        Al           5
-    ## 23 17318        FALSE       3      Amos           5
-    ## 24 17333        FALSE       0      Jack           5
-    ## 25 17343        FALSE       1    Murray           5
-    ## 26 17346        FALSE       1      Norm           5
-    ## 27 17347        FALSE       0      John           5
-    ## 28 17380        FALSE       5      Pete           5
-    ## 29 17388        FALSE      81       Ace           5
-    ## 30 17396        FALSE       9       Bob           5
-    ## 31 17400        FALSE       1      Doug           5
-    ## 32 17403        FALSE       6      Earl           5
-    ## 33 17423        FALSE       0      Andy           5
-    ##          franchiseName gameTypeId gamesPlayed goals
-    ## 1  Toronto Maple Leafs          2        1188   296
-    ## 2  Toronto Maple Leafs          2         981   420
-    ## 3  Toronto Maple Leafs          2        1099   148
-    ## 4  Toronto Maple Leafs          2         777    84
-    ## 5  Toronto Maple Leafs          2         534   299
-    ## 6  Toronto Maple Leafs          2         393   131
-    ## 7  Toronto Maple Leafs          2         223   120
-    ## 8  Toronto Maple Leafs          2         187    78
-    ## 9  Toronto Maple Leafs          2         580   112
-    ## 10 Toronto Maple Leafs          2           3     0
-    ## 11 Toronto Maple Leafs          2           2     0
-    ## 12 Toronto Maple Leafs          2         133    76
-    ## 13 Toronto Maple Leafs          2           8     0
-    ## 14 Toronto Maple Leafs          2          86    15
-    ## 15 Toronto Maple Leafs          2         123    10
-    ## 16 Toronto Maple Leafs          2           8     1
-    ## 17 Toronto Maple Leafs          2          86     7
-    ## 18 Toronto Maple Leafs          2          54     8
-    ## 19 Toronto Maple Leafs          2         534   189
-    ## 20 Toronto Maple Leafs          2         221    63
-    ## 21 Toronto Maple Leafs          2         423   201
-    ## 22 Toronto Maple Leafs          2          66     2
-    ## 23 Toronto Maple Leafs          2          21     1
-    ## 24 Toronto Maple Leafs          2          10     1
-    ## 25 Toronto Maple Leafs          2          12     0
-    ## 26 Toronto Maple Leafs          2           7     1
-    ## 27 Toronto Maple Leafs          2           3     0
-    ## 28 Toronto Maple Leafs          2          36     4
-    ## 29 Toronto Maple Leafs          2         316   111
-    ## 30 Toronto Maple Leafs          2          86     6
-    ## 31 Toronto Maple Leafs          2          15     0
-    ## 32 Toronto Maple Leafs          2          80    14
-    ## 33 Toronto Maple Leafs          2           1     0
+    ## 1  16941        FALSE     648    Daniel          20
+    ## 2  16942        FALSE     830    Henrik          20
+    ## 3  17026        FALSE      52      Gino          20
+    ## 4  17057        FALSE     224     Pavel          20
+    ## 5  17115        FALSE      53    Donald          20
+    ## 6  17141        FALSE     410    Markus          20
+    ## 7  17178        FALSE     242      Doug          20
+    ## 8  17222        FALSE      18    Claire          20
+    ## 9  17238        FALSE       1       Jim          20
+    ## 10 17241        FALSE     190      Greg          20
+    ## 11 17254        FALSE       2      Greg          20
+    ## 12 17262        FALSE       1     Bruce          20
+    ## 13 17338        FALSE       0      John          20
+    ## 14 17413        FALSE      21      Dave          20
+    ## 15 17421        FALSE       2     Shawn          20
+    ## 16 17556        FALSE       0       Ken          20
+    ## 17 17562        FALSE      44     Gregg          20
+    ## 18 17579        FALSE       0     Larry          20
+    ## 19 17589        FALSE      25     Brent          20
+    ## 20 17621        FALSE     267     Andre          20
+    ## 21 17722        FALSE     131      Dave          20
+    ## 22 17736        FALSE       0     Peter          20
+    ## 23 17775        FALSE      34    Murray          20
+    ## 24 17794        FALSE       1     Robin          20
+    ## 25 17892        FALSE       0     Robin          20
+    ## 26 17962        FALSE       3     Drake          20
+    ## 27 17969        FALSE      31      Neil          20
+    ## 28 17971        FALSE      55       Jim          20
+    ## 29 18006        FALSE       2      Marc          20
+    ## 30 18036        FALSE       4       Ken          20
+    ## 31 18124        FALSE      20     Wayne          20
+    ## 32 18136        FALSE       0       Bob          20
+    ## 33 18163        FALSE     125      Rick          20
+    ##        franchiseName gameTypeId gamesPlayed goals
+    ## 1  Vancouver Canucks          2        1306   393
+    ## 2  Vancouver Canucks          2        1330   240
+    ## 3  Vancouver Canucks          2         444    46
+    ## 4  Vancouver Canucks          2         428   254
+    ## 5  Vancouver Canucks          2         388    50
+    ## 6  Vancouver Canucks          2         884   346
+    ## 7  Vancouver Canucks          2         666    65
+    ## 8  Vancouver Canucks          2          32     8
+    ## 9  Vancouver Canucks          2          65     0
+    ## 10 Vancouver Canucks          2         489   179
+    ## 11 Vancouver Canucks          2          12     4
+    ## 12 Vancouver Canucks          2           5     0
+    ## 13 Vancouver Canucks          2          13     0
+    ## 14 Vancouver Canucks          2         116    22
+    ## 15 Vancouver Canucks          2          70     1
+    ## 16 Vancouver Canucks          2           1     0
+    ## 17 Vancouver Canucks          2         273    23
+    ## 18 Vancouver Canucks          2          15     0
+    ## 19 Vancouver Canucks          2         124    23
+    ## 20 Vancouver Canucks          2         458   121
+    ## 21 Vancouver Canucks          2         409    23
+    ## 22 Vancouver Canucks          2          10     2
+    ## 23 Vancouver Canucks          2         383    10
+    ## 24 Vancouver Canucks          2          40     0
+    ## 25 Vancouver Canucks          2           2     0
+    ## 26 Vancouver Canucks          2          39     2
+    ## 27 Vancouver Canucks          2         106    13
+    ## 28 Vancouver Canucks          2         241    15
+    ## 29 Vancouver Canucks          2           9     0
+    ## 30 Vancouver Canucks          2          27     4
+    ## 31 Vancouver Canucks          2          53    14
+    ## 32 Vancouver Canucks          2           2     0
+    ## 33 Vancouver Canucks          2         324    96
     ##      lastName
-    ## 1   Armstrong
-    ## 2      Sundin
-    ## 3     Salming
-    ## 4        Domi
-    ## 5       Vaive
-    ## 6     Gilmour
-    ## 7  Andreychuk
-    ## 8    Paiement
-    ## 9    Turnbull
-    ## 10     Spence
-    ## 11      Acomb
-    ## 12      Adams
-    ## 13      Adams
-    ## 14    Aldcorn
-    ## 15  Alexander
-    ## 16       Adam
-    ## 17    Allison
-    ## 18    Andrews
-    ## 19   Anderson
-    ## 20   Anderson
-    ## 21       Apps
-    ## 22     Arbour
-    ## 23     Arbour
-    ## 24     Arbour
-    ## 25  Armstrong
-    ## 26  Armstrong
-    ## 27    Arundel
-    ## 28     Backor
-    ## 29     Bailey
-    ## 30     Bailey
-    ## 31    Baldwin
-    ## 32    Balfour
-    ## 33      Barbe
-    ##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      mostAssistsGameDates
-    ## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              1956-01-07, 1957-03-16, 1957-11-24, 1961-01-15, 1961-12-02, 1962-02-25, 1964-02-23, 1965-12-18, 1969-01-31
-    ## 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  1995-10-17, 1995-11-10, 1996-03-09, 1996-11-21, 1998-10-24, 1998-12-02, 2000-01-17, 2000-03-29, 2002-04-13, 2006-01-30, 2006-10-30, 2006-12-16, 2007-04-07, 2007-10-06
-    ## 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  1977-12-16, 1978-10-14
-    ## 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  1996-12-28, 1997-02-22, 1998-03-09, 1998-11-12, 2002-11-05, 2003-02-20
-    ## 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              1984-03-12
-    ## 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              1993-02-13
-    ## 7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              1994-04-14
-    ## 8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              1981-12-19
-    ## 9                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      1977-02-12, 1977-02-20, 1979-11-10
-    ## 10                                                                                                                                                                                                                                                                                                                                                                                                                         1925-11-28, 1925-12-01, 1925-12-05, 1925-12-09, 1925-12-12, 1925-12-19, 1925-12-23, 1925-12-26, 1925-12-29, 1925-12-30, 1926-01-01, 1926-01-05, 1926-01-09, 1926-01-12, 1926-01-15, 1926-01-21, 1926-01-23, 1926-01-26, 1926-01-29, 1926-02-02, 1926-02-03, 1926-02-06, 1926-02-09, 1926-02-11, 1926-02-13, 1926-02-16, 1926-02-18, 1926-02-20, 1926-02-22, 1926-02-27, 1926-03-04, 1926-03-06, 1926-03-11, 1926-03-13, 1926-03-16, 1926-03-17
-    ## 11                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1970-03-07
-    ## 12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1923-02-03, 1923-02-10, 1923-02-14, 1924-01-02, 1924-12-10, 1924-12-22, 1925-02-07
-    ## 13                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1933-01-03, 1933-01-05
-    ## 14                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1957-12-25
-    ## 15                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1975-01-29, 1977-01-02, 1977-01-31, 1977-02-02, 1977-02-05
-    ## 16                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1982-10-13, 1982-10-30
-    ## 17                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1986-11-05
-    ## 18                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1922-12-16, 1922-12-23, 1923-02-14, 1923-02-17, 1923-12-19
-    ## 19                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1979-11-10, 1981-02-28, 1981-10-10, 1983-12-21, 1984-03-24, 1984-10-24, 1985-01-19
-    ## 20                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1992-01-25, 1993-01-08, 1993-01-11
-    ## 21                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1937-01-30
-    ## 22                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1961-10-28
-    ## 23                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1923-12-26, 1924-01-05, 1924-01-19
-    ## 24                                                                                                                                                                                                                                                                                                                         1928-11-15, 1928-11-17, 1928-11-20, 1928-11-22, 1928-11-24, 1928-11-27, 1928-12-01, 1928-12-04, 1928-12-08, 1928-12-11, 1928-12-15, 1928-12-20, 1928-12-22, 1928-12-25, 1928-12-27, 1928-12-29, 1929-01-01, 1929-01-03, 1929-01-05, 1929-01-08, 1929-01-10, 1929-01-12, 1929-01-17, 1929-01-20, 1929-01-22, 1929-01-24, 1929-01-26, 1929-01-29, 1929-01-31, 1929-02-02, 1929-02-03, 1929-02-05, 1929-02-09, 1929-02-14, 1929-02-16, 1929-02-17, 1929-02-23, 1929-02-28, 1929-03-02, 1929-03-07, 1929-03-09, 1929-03-12, 1929-03-14, 1929-03-16
-    ## 25                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1938-11-24
-    ## 26                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1962-12-16
-    ## 27 1949-10-15, 1949-10-16, 1949-10-19, 1949-10-22, 1949-10-27, 1949-10-29, 1949-10-30, 1949-11-02, 1949-11-05, 1949-11-06, 1949-11-10, 1949-11-12, 1949-11-13, 1949-11-16, 1949-11-19, 1949-11-20, 1949-11-23, 1949-11-24, 1949-11-26, 1949-11-27, 1949-12-01, 1949-12-03, 1949-12-04, 1949-12-08, 1949-12-10, 1949-12-11, 1949-12-14, 1949-12-15, 1949-12-17, 1949-12-18, 1949-12-21, 1949-12-24, 1949-12-25, 1949-12-28, 1949-12-31, 1950-01-01, 1950-01-04, 1950-01-07, 1950-01-11, 1950-01-14, 1950-01-18, 1950-01-19, 1950-01-21, 1950-01-22, 1950-01-25, 1950-01-28, 1950-01-29, 1950-02-01, 1950-02-04, 1950-02-05, 1950-02-08, 1950-02-11, 1950-02-12, 1950-02-16, 1950-02-18, 1950-02-19, 1950-02-22, 1950-02-25, 1950-03-01, 1950-03-04, 1950-03-05, 1950-03-09, 1950-03-11, 1950-03-12, 1950-03-15, 1950-03-18, 1950-03-19, 1950-03-22, 1950-03-25, 1950-03-26
-    ## 28                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1944-10-29, 1944-11-02, 1944-11-04, 1944-11-18, 1945-02-06
-    ## 29                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1927-01-08, 1929-11-19, 1931-02-28, 1933-01-14
-    ## 30                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1953-10-24, 1954-01-30, 1954-02-06, 1954-02-13, 1954-02-14, 1954-02-28, 1954-03-07, 1954-10-23, 1955-01-05
-    ## 31                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1945-11-08
-    ## 32                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1954-02-28, 1955-12-07, 1955-12-11, 1955-12-24, 1955-12-31, 1956-01-14
-    ## 33 1950-10-14, 1950-10-15, 1950-10-18, 1950-10-21, 1950-10-22, 1950-10-25, 1950-10-28, 1950-10-29, 1950-11-01, 1950-11-02, 1950-11-04, 1950-11-08, 1950-11-11, 1950-11-12, 1950-11-16, 1950-11-18, 1950-11-19, 1950-11-22, 1950-11-23, 1950-11-25, 1950-11-26, 1950-11-30, 1950-12-02, 1950-12-03, 1950-12-06, 1950-12-09, 1950-12-10, 1950-12-13, 1950-12-14, 1950-12-16, 1950-12-17, 1950-12-20, 1950-12-23, 1950-12-27, 1950-12-30, 1950-12-31, 1951-01-06, 1951-01-09, 1951-01-13, 1951-01-14, 1951-01-18, 1951-01-20, 1951-01-21, 1951-01-24, 1951-01-27, 1951-01-28, 1951-02-01, 1951-02-03, 1951-02-04, 1951-02-07, 1951-02-10, 1951-02-11, 1951-02-15, 1951-02-17, 1951-02-18, 1951-02-21, 1951-02-24, 1951-03-01, 1951-03-03, 1951-03-05, 1951-03-07, 1951-03-10, 1951-03-11, 1951-03-14, 1951-03-15, 1951-03-17, 1951-03-18, 1951-03-21, 1951-03-24, 1951-03-25
+    ## 1       Sedin
+    ## 2       Sedin
+    ## 3      Odjick
+    ## 4        Bure
+    ## 5    Brashear
+    ## 6     Naslund
+    ## 7     Lidster
+    ## 8   Alexander
+    ## 9       Agnew
+    ## 10      Adams
+    ## 11      Adams
+    ## 12    Affleck
+    ## 13     Arbour
+    ## 14      Balon
+    ## 15    Antoski
+    ## 16      Block
+    ## 17      Boddy
+    ## 18  Bolonchuk
+    ## 19     Ashton
+    ## 20   Boudrias
+    ## 21     Babych
+    ## 22    Bakovic
+    ## 23      Baron
+    ## 24     Bartel
+    ## 25       Bawa
+    ## 26 Berehowsky
+    ## 27    Belland
+    ## 28    Benning
+    ## 29   Bergevin
+    ## 30      Berry
+    ## 31   Connelly
+    ## 32       Cook
+    ## 33     Blight
+    ##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      mostAssistsGameDates
+    ## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  2006-02-03, 2006-10-25, 2007-01-13, 2008-03-06, 2008-10-09, 2009-10-07, 2010-01-05, 2010-03-03, 2011-03-08, 2011-12-19, 2012-02-18, 2013-04-06, 2014-10-11, 2014-11-19, 2015-01-03, 2015-11-10, 2016-02-21, 2017-12-15
+    ## 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              2007-02-06, 2010-04-10, 2012-02-18, 2015-11-21, 2016-02-21
+    ## 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      1992-10-16, 1992-12-29, 1993-10-23
+    ## 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      1992-12-18, 1995-04-22, 1997-02-06
+    ## 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              2000-12-08
+    ## 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              2003-02-25
+    ## 7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          1986-01-31, 1986-12-23, 1991-03-16, 1992-11-26
+    ## 8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              1978-03-15
+    ## 9                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              1987-12-15
+    ## 10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1988-02-14, 1992-01-21, 1992-11-10
+    ## 11                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1989-03-10, 1989-04-01
+    ## 12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1979-12-19
+    ## 13                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1970-11-04, 1970-11-05, 1970-11-07, 1970-11-10, 1970-11-11, 1970-11-14, 1970-11-15, 1970-11-17, 1970-11-20, 1970-11-21, 1970-11-24, 1970-11-26, 1970-11-28, 1970-11-29, 1970-12-01
+    ## 14                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1972-01-19
+    ## 15                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1993-11-03, 1994-01-09
+    ## 16 1970-10-09, 1970-10-11, 1970-10-12, 1970-10-14, 1970-10-15, 1970-10-18, 1970-10-20, 1970-10-23, 1970-10-25, 1970-10-27, 1970-10-31, 1970-11-04, 1970-11-05, 1970-11-07, 1970-11-10, 1970-11-11, 1970-11-14, 1970-11-15, 1970-11-17, 1970-11-20, 1970-11-21, 1970-11-24, 1970-11-26, 1970-11-28, 1970-11-29, 1970-12-01, 1970-12-05, 1970-12-06, 1970-12-08, 1970-12-09, 1970-12-12, 1970-12-15, 1970-12-18, 1970-12-20, 1970-12-23, 1970-12-26, 1970-12-30, 1971-01-02, 1971-01-06, 1971-01-07, 1971-01-09, 1971-01-12, 1971-01-16, 1971-01-17, 1971-01-20, 1971-01-23, 1971-01-24, 1971-01-26, 1971-01-29, 1971-01-31, 1971-02-02, 1971-02-06, 1971-02-09, 1971-02-12, 1971-02-14, 1971-02-16, 1971-02-19, 1971-02-22, 1971-02-25, 1971-02-27, 1971-02-28, 1971-03-03, 1971-03-06, 1971-03-07, 1971-03-09, 1971-03-11, 1971-03-13, 1971-03-16, 1971-03-19, 1971-03-21, 1971-03-23, 1971-03-25, 1971-03-26, 1971-03-28, 1971-03-30, 1971-03-31, 1971-04-02, 1971-04-04
+    ## 17                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1975-12-03
+    ## 18 1972-10-07, 1972-10-11, 1972-10-12, 1972-10-14, 1972-10-17, 1972-10-19, 1972-10-21, 1972-10-22, 1972-10-24, 1972-10-28, 1972-10-31, 1972-11-03, 1972-11-05, 1972-11-08, 1972-11-11, 1972-11-12, 1972-11-14, 1972-11-17, 1972-11-19, 1972-11-21, 1972-11-22, 1972-11-24, 1972-11-26, 1972-11-28, 1972-12-01, 1972-12-05, 1972-12-07, 1972-12-09, 1972-12-10, 1972-12-12, 1972-12-15, 1972-12-16, 1972-12-20, 1972-12-21, 1972-12-23, 1972-12-26, 1972-12-29, 1972-12-30, 1973-01-01, 1973-01-03, 1973-01-06, 1973-01-07, 1973-01-09, 1973-01-12, 1973-01-14, 1973-01-16, 1973-01-19, 1973-01-20, 1973-01-24, 1973-01-26, 1973-01-27, 1973-02-01, 1973-02-03, 1973-02-04, 1973-02-06, 1973-02-09, 1973-02-11, 1973-02-13, 1973-02-14, 1973-02-16, 1973-02-17, 1973-02-20, 1973-02-22, 1973-02-24, 1973-02-28, 1973-03-03, 1973-03-04, 1973-03-09, 1973-03-10, 1973-03-14, 1973-03-16, 1973-03-17, 1973-03-21, 1973-03-22, 1973-03-25, 1973-03-27, 1973-03-30, 1973-03-31
+    ## 19                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1980-03-10
+    ## 20                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1973-02-09, 1973-10-10, 1973-10-26, 1973-11-16, 1974-03-31, 1974-10-15, 1974-11-16, 1974-12-28, 1975-02-01, 1975-02-14, 1975-02-15
+    ## 21                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1991-10-21, 1992-11-28, 1993-02-03, 1993-03-09, 1993-10-06, 1993-11-05, 1994-01-16, 1994-04-01, 1995-02-18, 1995-03-11, 1995-10-15, 1996-02-10, 1996-12-15, 1997-02-15, 1997-03-26, 1997-04-09, 1997-12-15
+    ## 22                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1988-03-08, 1988-03-10, 1988-03-12, 1988-03-13, 1988-03-16, 1988-03-18, 1988-03-22, 1988-03-25, 1988-03-26, 1988-03-29, 1988-04-01
+    ## 23                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             2000-02-19
+    ## 24                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1986-11-25
+    ## 25                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1992-03-18, 1992-03-20, 1992-03-22, 1992-03-24, 1992-03-26, 1992-03-28, 1992-03-29, 1992-04-12, 1992-04-14, 1992-04-16
+    ## 26                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     2001-03-16, 2001-12-08, 2001-12-13
+    ## 27                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1982-02-28
+    ## 28                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1988-02-21, 1990-02-28
+    ## 29                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 2004-03-29, 2004-04-03
+    ## 30                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1988-03-01
+    ## 31                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1972-02-22, 1972-04-02
+    ## 32 1970-10-09, 1970-10-11, 1970-10-12, 1970-10-14, 1970-10-15, 1970-10-18, 1970-10-20, 1970-10-23, 1970-10-25, 1970-10-27, 1970-10-31, 1970-11-04, 1970-11-05, 1970-11-07, 1970-11-10, 1970-11-11, 1970-11-14, 1970-11-15, 1970-11-17, 1970-11-20, 1970-11-21, 1970-11-24, 1970-11-26, 1970-11-28, 1970-11-29, 1970-12-01, 1970-12-05, 1970-12-06, 1970-12-08, 1970-12-09, 1970-12-12, 1970-12-15, 1970-12-18, 1970-12-20, 1970-12-23, 1970-12-26, 1970-12-30, 1971-01-02, 1971-01-06, 1971-01-07, 1971-01-09, 1971-01-12, 1971-01-16, 1971-01-17, 1971-01-20, 1971-01-23, 1971-01-24, 1971-01-26, 1971-01-29, 1971-01-31, 1971-02-02, 1971-02-06, 1971-02-09, 1971-02-12, 1971-02-14, 1971-02-16, 1971-02-19, 1971-02-22, 1971-02-25, 1971-02-27, 1971-02-28, 1971-03-03, 1971-03-06, 1971-03-07, 1971-03-09, 1971-03-11, 1971-03-13, 1971-03-16, 1971-03-19, 1971-03-21, 1971-03-23, 1971-03-25, 1971-03-26, 1971-03-28, 1971-03-30, 1971-03-31, 1971-04-02, 1971-04-04
+    ## 33                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1976-03-23, 1977-12-23, 1978-04-07, 1979-01-05
     ##    mostAssistsOneGame mostAssistsOneSeason
-    ## 1                   3                   35
-    ## 2                   3                   53
-    ## 3                   5                   66
-    ## 4                   2                   17
-    ## 5                   4                   41
-    ## 6                   6                   95
-    ## 7                   4                   46
-    ## 8                   4                   57
-    ## 9                   4                   57
-    ## 10                  0                    0
-    ## 11                  1                    1
-    ## 12                  2                   14
-    ## 13                  1                    2
-    ## 14                  2                   14
-    ## 15                  2                   12
-    ## 16                  1                    2
-    ## 17                  3                   16
-    ## 18                  1                    4
-    ## 19                  3                   49
-    ## 20                  3                   43
-    ## 21                  5                   29
-    ## 22                  2                    5
-    ## 23                  1                    3
-    ## 24                  0                    0
-    ## 25                  1                    1
-    ## 26                  1                    1
-    ## 27                  0                    0
-    ## 28                  1                    5
-    ## 29                  3                   21
-    ## 30                  1                    7
-    ## 31                  1                    1
-    ## 32                  1                    5
-    ## 33                  0                    0
+    ## 1                   3                   63
+    ## 2                   4                   83
+    ## 3                   2                   13
+    ## 4                   4                   50
+    ## 5                   3                   19
+    ## 6                   5                   56
+    ## 7                   3                   51
+    ## 8                   4                   18
+    ## 9                   1                    1
+    ## 10                  3                   40
+    ## 11                  1                    2
+    ## 12                  1                    1
+    ## 13                  0                    0
+    ## 14                  2                   19
+    ## 15                  1                    2
+    ## 16                  0                    0
+    ## 17                  2                   12
+    ## 18                  0                    0
+    ## 19                  4                   14
+    ## 20                  3                   62
+    ## 21                  2                   28
+    ## 22                  0                    0
+    ## 23                  2                   10
+    ## 24                  1                    1
+    ## 25                  0                    0
+    ## 26                  1                    2
+    ## 27                  3                   13
+    ## 28                  3                   26
+    ## 29                  1                    2
+    ## 30                  2                    3
+    ## 31                  2                   20
+    ## 32                  0                    0
+    ## 33                  3                   40
     ##    mostAssistsSeasonIds
-    ## 1              19651966
-    ## 2              19961997
-    ## 3              19761977
-    ## 4              19961997
-    ## 5              19831984
-    ## 6              19921993
-    ## 7              19931994
-    ## 8              19801981
-    ## 9              19761977
-    ## 10             19251926
-    ## 11             19691970
-    ## 12             19241925
-    ## 13             19321933
-    ## 14             19571958
-    ## 15             19761977
-    ## 16             19821983
-    ## 17             19861987
-    ## 18             19221923
-    ## 19             19821983
-    ## 20             19921993
-    ## 21   19361937, 19371938
-    ## 22             19611962
-    ## 23             19231924
-    ## 24             19281929
-    ## 25             19381939
-    ## 26             19621963
-    ## 27             19491950
-    ## 28             19441945
-    ## 29             19291930
-    ## 30             19531954
-    ## 31             19451946
-    ## 32             19551956
-    ## 33             19501951
-    ##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                mostGoalsGameDates
-    ## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          1959-03-15, 1961-12-16
-    ## 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      2006-04-11
-    ## 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      1981-10-10
-    ## 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  1996-11-16, 2000-11-29, 2000-11-30, 2002-03-26
-    ## 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              1982-03-22, 1983-01-02, 1983-12-21
-    ## 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      1993-10-15
-    ## 7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      1993-12-01
-    ## 8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              1980-01-12, 1980-03-29, 1981-03-28
-    ## 9                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      1977-02-02
-    ## 10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1925-11-28, 1925-12-01, 1925-12-05, 1925-12-09, 1925-12-12, 1925-12-19, 1925-12-23, 1925-12-26, 1925-12-29, 1925-12-30, 1926-01-01, 1926-01-05, 1926-01-09, 1926-01-12, 1926-01-15, 1926-01-21, 1926-01-23, 1926-01-26, 1926-01-29, 1926-02-02, 1926-02-03, 1926-02-06, 1926-02-09, 1926-02-11, 1926-02-13, 1926-02-16, 1926-02-18, 1926-02-20, 1926-02-22, 1926-02-27, 1926-03-04, 1926-03-06, 1926-03-11, 1926-03-13, 1926-03-16, 1926-03-17
-    ## 11                                                                                                                                                                                                                                                 1969-10-11, 1969-10-15, 1969-10-18, 1969-10-19, 1969-10-22, 1969-10-25, 1969-10-29, 1969-11-01, 1969-11-02, 1969-11-04, 1969-11-05, 1969-11-08, 1969-11-09, 1969-11-12, 1969-11-15, 1969-11-19, 1969-11-22, 1969-11-23, 1969-11-26, 1969-11-29, 1969-11-30, 1969-12-03, 1969-12-06, 1969-12-07, 1969-12-10, 1969-12-11, 1969-12-13, 1969-12-14, 1969-12-20, 1969-12-21, 1969-12-24, 1969-12-26, 1969-12-27, 1969-12-31, 1970-01-03, 1970-01-04, 1970-01-07, 1970-01-10, 1970-01-14, 1970-01-15, 1970-01-17, 1970-01-22, 1970-01-23, 1970-01-25, 1970-01-28, 1970-01-31, 1970-02-01, 1970-02-04, 1970-02-05, 1970-02-07, 1970-02-11, 1970-02-12, 1970-02-14, 1970-02-15, 1970-02-18, 1970-02-21, 1970-02-22, 1970-02-25, 1970-02-28, 1970-03-01, 1970-03-03, 1970-03-05, 1970-03-07, 1970-03-11, 1970-03-14, 1970-03-15, 1970-03-18, 1970-03-21, 1970-03-22, 1970-03-25, 1970-03-28, 1970-03-29, 1970-04-01, 1970-04-02, 1970-04-04, 1970-04-05
-    ## 12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1922-12-23, 1924-12-03, 1926-01-05
-    ## 13                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1932-11-10, 1932-11-12, 1932-11-17, 1932-11-20, 1932-11-24, 1932-11-26, 1932-11-27, 1932-12-03, 1932-12-08, 1932-12-10, 1932-12-13, 1932-12-15, 1932-12-17, 1932-12-20, 1932-12-22, 1932-12-24, 1932-12-27, 1932-12-29, 1933-01-01, 1933-01-03, 1933-01-05, 1933-01-07, 1933-01-10, 1933-01-14, 1933-01-17, 1933-01-19, 1933-01-24, 1933-01-26, 1933-01-28, 1933-01-31, 1933-02-04, 1933-02-07, 1933-02-11, 1933-02-14, 1933-02-16, 1933-02-18, 1933-02-23, 1933-02-25, 1933-02-28, 1933-03-02, 1933-03-04, 1933-03-05, 1933-03-07, 1933-03-11, 1933-03-16, 1933-03-18, 1933-03-21, 1933-03-23
-    ## 14                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1958-01-12
-    ## 15                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1975-02-25
-    ## 16                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1982-11-03
-    ## 17                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1987-02-18
-    ## 18                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1922-12-23
-    ## 19                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1983-01-12, 1985-03-24
-    ## 20                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1992-03-17
-    ## 21                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1939-01-12, 1946-03-02
-    ## 22                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1962-03-24, 1962-12-26
-    ## 23                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1923-12-22
-    ## 24                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1928-12-01
-    ## 25 1937-11-04, 1937-11-06, 1937-11-13, 1937-11-14, 1937-11-18, 1937-11-20, 1937-11-21, 1937-11-23, 1937-11-25, 1937-11-27, 1937-12-04, 1937-12-11, 1937-12-14, 1937-12-16, 1937-12-18, 1937-12-25, 1937-12-26, 1937-12-28, 1938-01-01, 1938-01-04, 1938-01-06, 1938-01-08, 1938-01-13, 1938-01-15, 1938-01-16, 1938-01-20, 1938-01-22, 1938-01-29, 1938-02-01, 1938-02-03, 1938-02-05, 1938-02-06, 1938-02-10, 1938-02-12, 1938-02-13, 1938-02-17, 1938-02-19, 1938-02-20, 1938-02-22, 1938-02-26, 1938-03-01, 1938-03-05, 1938-03-06, 1938-03-08, 1938-03-12, 1938-03-17, 1938-03-19, 1938-03-20, 1938-11-03, 1938-11-05, 1938-11-10, 1938-11-12, 1938-11-15, 1938-11-17, 1938-11-19, 1938-11-20, 1938-11-24, 1938-11-26, 1938-12-03, 1938-12-04, 1938-12-10, 1938-12-15, 1938-12-17, 1938-12-24, 1938-12-26, 1938-12-27, 1938-12-31, 1939-01-01, 1939-01-03, 1939-01-07, 1939-01-08, 1939-01-12, 1939-01-14, 1939-01-15, 1939-01-17, 1939-01-21, 1939-01-24, 1939-01-28, 1939-01-29, 1939-02-02, 1939-02-04, 1939-02-05, 1939-02-07, 1939-02-11, 1939-02-12, 1939-02-18, 1939-02-19, 1939-02-25, 1939-02-26, 1939-02-28, 1939-03-02, 1939-03-04, 1939-03-11, 1939-03-14, 1939-03-18, 1939-03-19
-    ## 26                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1962-12-15
-    ## 27                                                                                                                                                                                                                                                                                                                         1949-10-15, 1949-10-16, 1949-10-19, 1949-10-22, 1949-10-27, 1949-10-29, 1949-10-30, 1949-11-02, 1949-11-05, 1949-11-06, 1949-11-10, 1949-11-12, 1949-11-13, 1949-11-16, 1949-11-19, 1949-11-20, 1949-11-23, 1949-11-24, 1949-11-26, 1949-11-27, 1949-12-01, 1949-12-03, 1949-12-04, 1949-12-08, 1949-12-10, 1949-12-11, 1949-12-14, 1949-12-15, 1949-12-17, 1949-12-18, 1949-12-21, 1949-12-24, 1949-12-25, 1949-12-28, 1949-12-31, 1950-01-01, 1950-01-04, 1950-01-07, 1950-01-11, 1950-01-14, 1950-01-18, 1950-01-19, 1950-01-21, 1950-01-22, 1950-01-25, 1950-01-28, 1950-01-29, 1950-02-01, 1950-02-04, 1950-02-05, 1950-02-08, 1950-02-11, 1950-02-12, 1950-02-16, 1950-02-18, 1950-02-19, 1950-02-22, 1950-02-25, 1950-03-01, 1950-03-04, 1950-03-05, 1950-03-09, 1950-03-11, 1950-03-12, 1950-03-15, 1950-03-18, 1950-03-19, 1950-03-22, 1950-03-25, 1950-03-26
-    ## 28                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1944-11-04, 1945-01-06, 1945-01-28, 1945-02-18
-    ## 29                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1931-03-21
-    ## 30                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1954-01-02, 1954-02-20, 1954-10-09, 1955-01-02, 1955-01-08, 1955-01-19
-    ## 31                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1945-10-27, 1945-11-01, 1945-11-03, 1945-11-04, 1945-11-07, 1945-11-08, 1945-11-10, 1945-11-11, 1945-11-14, 1945-11-17, 1945-11-18, 1945-11-24, 1945-11-25, 1945-12-01, 1945-12-02, 1945-12-08, 1945-12-09, 1945-12-13, 1945-12-15, 1945-12-16, 1945-12-22, 1945-12-23, 1945-12-25, 1945-12-26, 1945-12-29, 1946-01-01, 1946-01-05, 1946-01-10, 1946-01-12, 1946-01-19, 1946-01-20, 1946-01-23, 1946-01-26, 1946-02-02, 1946-02-03, 1946-02-06, 1946-02-09, 1946-02-10, 1946-02-16, 1946-02-23, 1946-02-24, 1946-02-27, 1946-03-02, 1946-03-03, 1946-03-06, 1946-03-09, 1946-03-10, 1946-03-14, 1946-03-16, 1946-03-17
-    ## 32                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1955-10-19, 1955-11-19, 1955-12-10, 1956-01-14
-    ## 33                                                                                                                                                                                                                                                                                                                         1950-10-14, 1950-10-15, 1950-10-18, 1950-10-21, 1950-10-22, 1950-10-25, 1950-10-28, 1950-10-29, 1950-11-01, 1950-11-02, 1950-11-04, 1950-11-08, 1950-11-11, 1950-11-12, 1950-11-16, 1950-11-18, 1950-11-19, 1950-11-22, 1950-11-23, 1950-11-25, 1950-11-26, 1950-11-30, 1950-12-02, 1950-12-03, 1950-12-06, 1950-12-09, 1950-12-10, 1950-12-13, 1950-12-14, 1950-12-16, 1950-12-17, 1950-12-20, 1950-12-23, 1950-12-27, 1950-12-30, 1950-12-31, 1951-01-06, 1951-01-09, 1951-01-13, 1951-01-14, 1951-01-18, 1951-01-20, 1951-01-21, 1951-01-24, 1951-01-27, 1951-01-28, 1951-02-01, 1951-02-03, 1951-02-04, 1951-02-07, 1951-02-10, 1951-02-11, 1951-02-15, 1951-02-17, 1951-02-18, 1951-02-21, 1951-02-24, 1951-03-01, 1951-03-03, 1951-03-05, 1951-03-07, 1951-03-10, 1951-03-11, 1951-03-14, 1951-03-15, 1951-03-17, 1951-03-18, 1951-03-21, 1951-03-24, 1951-03-25
-    ##    mostGoalsOneGame mostGoalsOneSeason mostGoalsSeasonIds
-    ## 1                 3                 23           19591960
-    ## 2                 4                 41 19961997, 20012002
-    ## 3                 3                 19           19791980
-    ## 4                 2                 15           20022003
-    ## 5                 4                 54           19811982
-    ## 6                 3                 32 19921993, 19951996
-    ## 7                 3                 53           19931994
-    ## 8                 3                 40           19801981
-    ## 9                 5                 22           19761977
-    ## 10                0                  0           19251926
-    ## 11                0                  0           19691970
-    ## 12                3                 21 19241925, 19251926
-    ## 13                0                  0           19321933
-    ## 14                2                 10           19571958
-    ## 15                3                  7           19741975
-    ## 16                1                  1           19821983
-    ## 17                2                  7           19861987
-    ## 18                2                  5           19221923
-    ## 19                3                 37           19831984
-    ## 20                3                 24           19911992
-    ## 21                4                 26           19471948
-    ## 22                1                  1 19611962, 19621963
-    ## 23                1                  1           19231924
-    ## 24                1                  1           19281929
-    ## 25                0                  0 19371938, 19381939
-    ## 26                1                  1           19621963
-    ## 27                0                  0           19491950
-    ## 28                1                  4           19441945
-    ## 29                4                 23           19301931
-    ## 30                1                  4           19541955
-    ## 31                0                  0           19451946
-    ## 32                2                 14           19551956
-    ## 33                0                  0           19501951
+    ## 1              20102011
+    ## 2              20092010
+    ## 3    19921993, 19931994
+    ## 4              19921993
+    ## 5              20002001
+    ## 6              20022003
+    ## 7              19861987
+    ## 8              19771978
+    ## 9              19871988
+    ## 10             19871988
+    ## 11             19881989
+    ## 12             19791980
+    ## 13             19701971
+    ## 14             19711972
+    ## 15             19931994
+    ## 16             19701971
+    ## 17             19741975
+    ## 18             19721973
+    ## 19             19791980
+    ## 20             19741975
+    ## 21             19931994
+    ## 22             19871988
+    ## 23             19992000
+    ## 24             19861987
+    ## 25             19911992
+    ## 26             20012002
+    ## 27             19831984
+    ## 28             19871988
+    ## 29             20032004
+    ## 30             19871988
+    ## 31             19711972
+    ## 32             19701971
+    ## 33             19761977
+    ##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    mostGoalsGameDates
+    ## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          2004-02-24
+    ## 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          2009-11-14
+    ## 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  1992-11-23, 1993-10-11, 1993-11-16
+    ## 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          1992-10-12
+    ## 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          1997-04-12
+    ## 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              2002-12-14, 2003-12-09
+    ## 7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              1985-11-09, 1990-01-07
+    ## 8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              1978-01-28, 1978-02-18
+    ## 9  1986-10-11, 1986-10-13, 1986-10-15, 1986-10-16, 1986-10-18, 1986-10-22, 1986-10-24, 1986-10-26, 1986-10-28, 1986-10-31, 1986-11-02, 1986-11-04, 1986-11-05, 1986-11-07, 1986-11-08, 1986-11-11, 1986-11-12, 1986-11-14, 1986-11-18, 1986-11-21, 1986-11-22, 1986-11-25, 1986-11-26, 1986-11-29, 1986-12-02, 1986-12-05, 1986-12-07, 1986-12-09, 1986-12-11, 1986-12-13, 1986-12-14, 1986-12-17, 1986-12-19, 1986-12-20, 1986-12-23, 1986-12-27, 1986-12-30, 1987-01-02, 1987-01-04, 1987-01-06, 1987-01-07, 1987-01-10, 1987-01-11, 1987-01-14, 1987-01-16, 1987-01-17, 1987-01-19, 1987-01-21, 1987-01-23, 1987-01-27, 1987-01-28, 1987-01-30, 1987-02-01, 1987-02-03, 1987-02-04, 1987-02-06, 1987-02-08, 1987-02-14, 1987-02-17, 1987-02-18, 1987-02-20, 1987-02-22, 1987-02-24, 1987-02-26, 1987-02-28, 1987-03-01, 1987-03-04, 1987-03-06, 1987-03-08, 1987-03-10, 1987-03-13, 1987-03-17, 1987-03-20, 1987-03-22, 1987-03-26, 1987-03-28, 1987-03-29, 1987-04-01, 1987-04-03, 1987-04-05, 1987-12-06, 1987-12-08, 1987-12-11, 1987-12-12, 1987-12-15, 1987-12-17, 1987-12-20, 1987-12-23, 1987-12-26, 1987-12-28, 1987-12-29, 1987-12-31, 1988-01-02, 1988-01-04, 1988-01-06, 1988-01-07, 1988-01-09, 1988-01-12, 1988-01-13, 1988-01-15, 1988-01-17, 1988-01-19, 1988-01-22, 1988-01-24, 1988-01-26, 1988-01-29, 1988-01-30, 1988-02-02, 1988-02-03, 1988-02-05, 1988-02-11, 1988-02-13, 1988-02-14, 1988-02-17, 1988-02-19, 1988-02-21, 1988-02-23, 1988-02-24, 1988-02-26, 1988-02-28, 1988-03-01, 1988-03-03, 1988-03-06, 1988-03-08, 1988-03-10, 1988-03-12, 1988-03-13, 1988-03-16, 1988-03-18, 1988-03-22, 1988-03-25, 1988-03-26, 1988-03-29, 1988-04-01, 1990-03-04, 1990-03-09, 1990-03-11, 1990-03-13, 1990-03-15, 1990-03-17, 1990-03-18, 1990-03-20, 1990-03-23, 1990-03-25, 1990-03-27, 1990-03-31, 1990-10-04, 1990-10-06, 1990-10-09, 1990-10-12, 1990-10-14, 1990-10-17, 1990-10-19, 1990-10-21, 1990-10-23, 1990-10-25, 1990-10-27, 1990-10-30, 1990-11-01, 1990-11-03, 1990-11-06, 1990-11-08, 1990-11-09, 1990-11-11, 1990-11-14, 1990-11-16, 1990-11-19, 1990-11-21, 1990-11-23, 1990-11-24, 1990-11-27, 1990-11-29, 1990-12-02, 1990-12-04, 1990-12-05, 1990-12-07, 1990-12-10, 1990-12-12, 1990-12-14, 1990-12-16, 1990-12-18, 1990-12-20, 1990-12-22, 1990-12-23, 1990-12-27, 1990-12-28, 1990-12-31, 1991-01-02, 1991-01-03, 1991-01-05, 1991-01-08, 1991-01-10, 1991-01-12, 1991-01-16, 1991-01-23, 1991-01-25, 1991-01-26, 1991-01-28, 1991-01-30, 1991-01-31, 1991-02-02, 1991-02-05, 1991-02-07, 1991-02-08, 1991-02-10, 1991-02-14, 1991-02-16, 1991-02-18, 1991-02-20, 1991-02-21, 1991-02-23, 1991-02-25, 1991-02-27, 1991-03-01, 1991-03-03, 1991-03-05, 1991-03-07, 1991-03-09, 1991-03-10, 1991-03-13, 1991-03-16, 1991-03-17, 1991-03-20, 1991-03-22, 1991-03-26, 1991-03-28, 1991-10-27, 1991-10-29, 1991-11-01, 1991-11-03, 1991-11-05, 1991-11-07, 1991-11-10, 1991-11-12, 1991-11-14, 1991-11-16, 1991-11-19, 1991-11-21, 1991-11-22, 1991-11-26, 1991-11-29, 1991-12-01, 1991-12-03, 1991-12-04, 1991-12-07, 1991-12-10, 1991-12-12, 1991-12-14, 1991-12-17, 1991-12-19, 1991-12-22, 1991-12-27, 1991-12-28, 1991-12-31, 1992-01-03, 1992-01-04, 1992-01-07, 1992-01-12, 1992-01-14, 1992-01-15, 1992-01-21, 1992-01-23, 1992-01-25, 1992-01-28, 1992-01-30, 1992-02-01, 1992-02-04, 1992-02-06, 1992-02-10, 1992-02-12, 1992-02-13, 1992-02-15, 1992-02-17, 1992-02-19, 1992-02-21, 1992-02-23, 1992-02-25, 1992-02-28, 1992-03-01, 1992-03-02, 1992-03-05, 1992-03-07, 1992-03-08, 1992-03-12, 1992-03-14, 1992-03-18, 1992-03-20, 1992-03-22, 1992-03-24, 1992-03-26, 1992-03-28, 1992-03-29, 1992-04-12, 1992-04-14, 1992-04-16
+    ## 10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1987-10-08
+    ## 11                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1989-03-22
+    ## 12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1979-10-09, 1979-10-12, 1979-10-14, 1979-10-17, 1979-10-18, 1979-10-20, 1979-10-21, 1979-10-24, 1979-10-27, 1979-10-31, 1979-11-02, 1979-11-04, 1979-11-06, 1979-11-10, 1979-11-11, 1979-11-13, 1979-11-14, 1979-11-16, 1979-11-18, 1979-11-20, 1979-11-23, 1979-11-24, 1979-11-28, 1979-11-30, 1979-12-02, 1979-12-04, 1979-12-05, 1979-12-08, 1979-12-09, 1979-12-11, 1979-12-14, 1979-12-15, 1979-12-19, 1979-12-21, 1979-12-22, 1979-12-28, 1979-12-29, 1980-01-03, 1980-01-04, 1980-01-06, 1980-01-08, 1980-01-09, 1980-01-11, 1980-01-12, 1980-01-16, 1980-01-18, 1980-01-22, 1980-01-23, 1980-01-27, 1980-01-29, 1980-02-02, 1980-02-03, 1980-02-07, 1980-02-09, 1980-02-12, 1980-02-16, 1980-02-17, 1980-02-19, 1980-02-22, 1980-02-23, 1980-02-26, 1980-02-29, 1980-03-01, 1980-03-04, 1980-03-05, 1980-03-07, 1980-03-09, 1980-03-10, 1980-03-13, 1980-03-15, 1980-03-16, 1980-03-19, 1980-03-21, 1980-03-23, 1980-03-25, 1980-03-28, 1980-03-30, 1980-04-01, 1980-04-03, 1980-04-05
+    ## 13                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1970-11-04, 1970-11-05, 1970-11-07, 1970-11-10, 1970-11-11, 1970-11-14, 1970-11-15, 1970-11-17, 1970-11-20, 1970-11-21, 1970-11-24, 1970-11-26, 1970-11-28, 1970-11-29, 1970-12-01
+    ## 14                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1972-01-05
+    ## 15                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1994-01-05
+    ## 16                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1970-10-09, 1970-10-11, 1970-10-12, 1970-10-14, 1970-10-15, 1970-10-18, 1970-10-20, 1970-10-23, 1970-10-25, 1970-10-27, 1970-10-31, 1970-11-04, 1970-11-05, 1970-11-07, 1970-11-10, 1970-11-11, 1970-11-14, 1970-11-15, 1970-11-17, 1970-11-20, 1970-11-21, 1970-11-24, 1970-11-26, 1970-11-28, 1970-11-29, 1970-12-01, 1970-12-05, 1970-12-06, 1970-12-08, 1970-12-09, 1970-12-12, 1970-12-15, 1970-12-18, 1970-12-20, 1970-12-23, 1970-12-26, 1970-12-30, 1971-01-02, 1971-01-06, 1971-01-07, 1971-01-09, 1971-01-12, 1971-01-16, 1971-01-17, 1971-01-20, 1971-01-23, 1971-01-24, 1971-01-26, 1971-01-29, 1971-01-31, 1971-02-02, 1971-02-06, 1971-02-09, 1971-02-12, 1971-02-14, 1971-02-16, 1971-02-19, 1971-02-22, 1971-02-25, 1971-02-27, 1971-02-28, 1971-03-03, 1971-03-06, 1971-03-07, 1971-03-09, 1971-03-11, 1971-03-13, 1971-03-16, 1971-03-19, 1971-03-21, 1971-03-23, 1971-03-25, 1971-03-26, 1971-03-28, 1971-03-30, 1971-03-31, 1971-04-02, 1971-04-04
+    ## 17                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1974-12-03
+    ## 18                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1972-10-07, 1972-10-11, 1972-10-12, 1972-10-14, 1972-10-17, 1972-10-19, 1972-10-21, 1972-10-22, 1972-10-24, 1972-10-28, 1972-10-31, 1972-11-03, 1972-11-05, 1972-11-08, 1972-11-11, 1972-11-12, 1972-11-14, 1972-11-17, 1972-11-19, 1972-11-21, 1972-11-22, 1972-11-24, 1972-11-26, 1972-11-28, 1972-12-01, 1972-12-05, 1972-12-07, 1972-12-09, 1972-12-10, 1972-12-12, 1972-12-15, 1972-12-16, 1972-12-20, 1972-12-21, 1972-12-23, 1972-12-26, 1972-12-29, 1972-12-30, 1973-01-01, 1973-01-03, 1973-01-06, 1973-01-07, 1973-01-09, 1973-01-12, 1973-01-14, 1973-01-16, 1973-01-19, 1973-01-20, 1973-01-24, 1973-01-26, 1973-01-27, 1973-02-01, 1973-02-03, 1973-02-04, 1973-02-06, 1973-02-09, 1973-02-11, 1973-02-13, 1973-02-14, 1973-02-16, 1973-02-17, 1973-02-20, 1973-02-22, 1973-02-24, 1973-02-28, 1973-03-03, 1973-03-04, 1973-03-09, 1973-03-10, 1973-03-14, 1973-03-16, 1973-03-17, 1973-03-21, 1973-03-22, 1973-03-25, 1973-03-27, 1973-03-30, 1973-03-31
+    ## 19                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1979-12-05, 1980-12-19, 1981-01-13
+    ## 20                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1972-01-22, 1973-01-16
+    ## 21                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1991-11-22
+    ## 22                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1988-04-01
+    ## 23                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1999-04-07, 1999-04-14, 1999-12-06, 2000-03-22, 2000-10-18, 2001-01-18, 2001-02-18, 2002-03-10, 2002-11-29, 2003-01-17
+    ## 24                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1986-10-11, 1986-10-13, 1986-10-15, 1986-10-16, 1986-10-18, 1986-10-22, 1986-10-24, 1986-10-26, 1986-10-28, 1986-10-31, 1986-11-02, 1986-11-04, 1986-11-05, 1986-11-07, 1986-11-08, 1986-11-11, 1986-11-12, 1986-11-14, 1986-11-18, 1986-11-21, 1986-11-22, 1986-11-25, 1986-11-26, 1986-11-29, 1986-12-02, 1986-12-05, 1986-12-07, 1986-12-09, 1986-12-11, 1986-12-13, 1986-12-14, 1986-12-17, 1986-12-19, 1986-12-20, 1986-12-23, 1986-12-27, 1986-12-30, 1987-01-02, 1987-01-04, 1987-01-06, 1987-01-07, 1987-01-10, 1987-01-11, 1987-01-14, 1987-01-16, 1987-01-17, 1987-01-19, 1987-01-21, 1987-01-23, 1987-01-27, 1987-01-28, 1987-01-30, 1987-02-01, 1987-02-03, 1987-02-04, 1987-02-06, 1987-02-08, 1987-02-14, 1987-02-17, 1987-02-18, 1987-02-20, 1987-02-22, 1987-02-24, 1987-02-26, 1987-02-28, 1987-03-01, 1987-03-04, 1987-03-06, 1987-03-08, 1987-03-10, 1987-03-13, 1987-03-17, 1987-03-20, 1987-03-22, 1987-03-26, 1987-03-28, 1987-03-29, 1987-04-01, 1987-04-03, 1987-04-05
+    ## 25                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1992-03-18, 1992-03-20, 1992-03-22, 1992-03-24, 1992-03-26, 1992-03-28, 1992-03-29, 1992-04-12, 1992-04-14, 1992-04-16
+    ## 26                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             2001-04-07, 2001-11-11
+    ## 27                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1983-12-13
+    ## 28                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1986-12-27, 1987-01-16, 1987-11-07, 1987-11-27, 1987-12-01, 1988-02-13, 1988-02-26, 1988-03-18, 1988-03-25, 1989-02-10, 1989-04-01, 1989-04-02, 1989-11-05, 1989-11-26, 1990-01-18
+    ## 29                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         2004-03-10, 2004-03-12, 2004-03-13, 2004-03-16, 2004-03-18, 2004-03-19, 2004-03-21, 2004-03-24, 2004-03-27, 2004-03-29, 2004-03-31, 2004-04-02, 2004-04-03
+    ## 30                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1988-03-03, 1988-03-10, 1989-03-24, 1989-03-29
+    ## 31                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1972-01-29
+    ## 32                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1970-10-09, 1970-10-11, 1970-10-12, 1970-10-14, 1970-10-15, 1970-10-18, 1970-10-20, 1970-10-23, 1970-10-25, 1970-10-27, 1970-10-31, 1970-11-04, 1970-11-05, 1970-11-07, 1970-11-10, 1970-11-11, 1970-11-14, 1970-11-15, 1970-11-17, 1970-11-20, 1970-11-21, 1970-11-24, 1970-11-26, 1970-11-28, 1970-11-29, 1970-12-01, 1970-12-05, 1970-12-06, 1970-12-08, 1970-12-09, 1970-12-12, 1970-12-15, 1970-12-18, 1970-12-20, 1970-12-23, 1970-12-26, 1970-12-30, 1971-01-02, 1971-01-06, 1971-01-07, 1971-01-09, 1971-01-12, 1971-01-16, 1971-01-17, 1971-01-20, 1971-01-23, 1971-01-24, 1971-01-26, 1971-01-29, 1971-01-31, 1971-02-02, 1971-02-06, 1971-02-09, 1971-02-12, 1971-02-14, 1971-02-16, 1971-02-19, 1971-02-22, 1971-02-25, 1971-02-27, 1971-02-28, 1971-03-03, 1971-03-06, 1971-03-07, 1971-03-09, 1971-03-11, 1971-03-13, 1971-03-16, 1971-03-19, 1971-03-21, 1971-03-23, 1971-03-25, 1971-03-26, 1971-03-28, 1971-03-30, 1971-03-31, 1971-04-02, 1971-04-04
+    ## 33                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1976-10-06
+    ##    mostGoalsOneGame mostGoalsOneSeason
+    ## 1                 4                 41
+    ## 2                 3                 29
+    ## 3                 2                 16
+    ## 4                 4                 60
+    ## 5                 2                 11
+    ## 6                 4                 48
+    ## 7                 2                 12
+    ## 8                 2                  8
+    ## 9                 0                  0
+    ## 10                4                 36
+    ## 11                2                  4
+    ## 12                0                  0
+    ## 13                0                  0
+    ## 14                2                 19
+    ## 15                1                  1
+    ## 16                0                  0
+    ## 17                2                 11
+    ## 18                0                  0
+    ## 19                2                 18
+    ## 20                3                 30
+    ## 21                3                  5
+    ## 22                2                  2
+    ## 23                1                  3
+    ## 24                0                  0
+    ## 25                0                  0
+    ## 26                1                  1
+    ## 27                2                  7
+    ## 28                1                  7
+    ## 29                0                  0
+    ## 30                1                  2
+    ## 31                2                 14
+    ## 32                0                  0
+    ## 33                4                 28
+    ##                                  mostGoalsSeasonIds
+    ## 1                                          20102011
+    ## 2                                          20092010
+    ## 3                                          19931994
+    ## 4                                19921993, 19931994
+    ## 5                                          19992000
+    ## 6                                          20022003
+    ## 7                                19851986, 19861987
+    ## 8                                          19771978
+    ## 9  19861987, 19871988, 19891990, 19901991, 19911992
+    ## 10                                         19871988
+    ## 11                                         19881989
+    ## 12                                         19791980
+    ## 13                                         19701971
+    ## 14                                         19711972
+    ## 15                                         19931994
+    ## 16                                         19701971
+    ## 17                                         19741975
+    ## 18                                         19721973
+    ## 19                                         19801981
+    ## 20                                         19721973
+    ## 21                               19911992, 19961997
+    ## 22                                         19871988
+    ## 23                                         20002001
+    ## 24                                         19861987
+    ## 25                                         19911992
+    ## 26                               20002001, 20012002
+    ## 27                                         19831984
+    ## 28                                         19871988
+    ## 29                                         20032004
+    ## 30                               19871988, 19881989
+    ## 31                                         19711972
+    ## 32                                         19701971
+    ## 33                                         19761977
     ##    mostPenaltyMinutesOneSeason mostPenaltyMinutesSeasonIds
-    ## 1                           97                    19551956
-    ## 2                           94                    20012002
-    ## 3                          170                    19811982
-    ## 4                          365                    19971998
-    ## 5                          229                    19801981
-    ## 6                          105                    19931994
-    ## 7                           98                    19931994
-    ## 8                          203                    19811982
-    ## 9                          104                    19801981
-    ## 10                           0                    19251926
-    ## 11                           0                    19691970
-    ## 12                          67                    19241925
-    ## 13                           0                    19321933
-    ## 14                          12                    19571958
-    ## 15                          12          19741975, 19761977
-    ## 16                          11                    19821983
-    ## 17                          66                    19861987
-    ## 18                          10                    19221923
-    ## 19                          31                    19801981
-    ## 20                         117                    19921993
-    ## 21                          12                    19471948
-    ## 22                          68                    19611962
-    ## 23                           4                    19231924
-    ## 24                          10                    19281929
-    ## 25                           0          19371938, 19381939
-    ## 26                           2                    19621963
-    ## 27                           9                    19491950
-    ## 28                           6                    19441945
-    ## 29                          80          19261927, 19281929
-    ## 30                          70                    19531954
-    ## 31                           6                    19451946
-    ## 32                          40                    19551956
-    ## 33                           2                    19501951
-    ##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       mostPointsGameDates
-    ## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              1957-03-16, 1962-02-25, 1964-12-12, 1965-03-21, 1967-11-02
-    ## 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              2006-04-11
-    ## 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  1977-12-16, 1978-10-14
-    ## 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              2000-11-29
-    ## 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      1982-01-31, 1982-03-22, 1983-12-08
-    ## 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              1993-02-13
-    ## 7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      1993-02-13, 1994-01-08, 1994-04-14
-    ## 8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              1980-01-12
-    ## 9                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  1977-02-02, 1977-02-20
-    ## 10                                                                                                                                                                                                                                                                                                                                                                                                                         1925-11-28, 1925-12-01, 1925-12-05, 1925-12-09, 1925-12-12, 1925-12-19, 1925-12-23, 1925-12-26, 1925-12-29, 1925-12-30, 1926-01-01, 1926-01-05, 1926-01-09, 1926-01-12, 1926-01-15, 1926-01-21, 1926-01-23, 1926-01-26, 1926-01-29, 1926-02-02, 1926-02-03, 1926-02-06, 1926-02-09, 1926-02-11, 1926-02-13, 1926-02-16, 1926-02-18, 1926-02-20, 1926-02-22, 1926-02-27, 1926-03-04, 1926-03-06, 1926-03-11, 1926-03-13, 1926-03-16, 1926-03-17
-    ## 11                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1970-03-07
-    ## 12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1922-12-23, 1923-02-03, 1923-02-14, 1924-12-10
-    ## 13                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1933-01-03, 1933-01-05
-    ## 14                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1957-12-25, 1958-01-12, 1958-01-26, 1958-02-08, 1958-02-09
-    ## 15                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1975-02-25
-    ## 16                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1982-10-13, 1982-10-30, 1982-11-03
-    ## 17                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1986-11-05
-    ## 18                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1922-12-23
-    ## 19                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1981-10-10
-    ## 20                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1993-01-08
-    ## 21                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1942-11-28
-    ## 22                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1961-10-28
-    ## 23                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1923-12-22, 1923-12-26, 1924-01-05, 1924-01-19
-    ## 24                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1928-12-01
-    ## 25                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1938-11-24
-    ## 26                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1962-12-15, 1962-12-16
-    ## 27 1949-10-15, 1949-10-16, 1949-10-19, 1949-10-22, 1949-10-27, 1949-10-29, 1949-10-30, 1949-11-02, 1949-11-05, 1949-11-06, 1949-11-10, 1949-11-12, 1949-11-13, 1949-11-16, 1949-11-19, 1949-11-20, 1949-11-23, 1949-11-24, 1949-11-26, 1949-11-27, 1949-12-01, 1949-12-03, 1949-12-04, 1949-12-08, 1949-12-10, 1949-12-11, 1949-12-14, 1949-12-15, 1949-12-17, 1949-12-18, 1949-12-21, 1949-12-24, 1949-12-25, 1949-12-28, 1949-12-31, 1950-01-01, 1950-01-04, 1950-01-07, 1950-01-11, 1950-01-14, 1950-01-18, 1950-01-19, 1950-01-21, 1950-01-22, 1950-01-25, 1950-01-28, 1950-01-29, 1950-02-01, 1950-02-04, 1950-02-05, 1950-02-08, 1950-02-11, 1950-02-12, 1950-02-16, 1950-02-18, 1950-02-19, 1950-02-22, 1950-02-25, 1950-03-01, 1950-03-04, 1950-03-05, 1950-03-09, 1950-03-11, 1950-03-12, 1950-03-15, 1950-03-18, 1950-03-19, 1950-03-22, 1950-03-25, 1950-03-26
-    ## 28                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1944-11-04
-    ## 29                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1929-12-14, 1931-02-28, 1931-03-21, 1933-01-14
-    ## 30                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1953-10-24, 1954-01-02, 1954-01-30, 1954-02-06, 1954-02-13, 1954-02-14, 1954-02-20, 1954-02-28, 1954-03-07, 1954-10-09, 1954-10-23, 1955-01-02, 1955-01-05, 1955-01-08, 1955-01-19
-    ## 31                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1945-11-08
-    ## 32                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1956-01-14
-    ## 33 1950-10-14, 1950-10-15, 1950-10-18, 1950-10-21, 1950-10-22, 1950-10-25, 1950-10-28, 1950-10-29, 1950-11-01, 1950-11-02, 1950-11-04, 1950-11-08, 1950-11-11, 1950-11-12, 1950-11-16, 1950-11-18, 1950-11-19, 1950-11-22, 1950-11-23, 1950-11-25, 1950-11-26, 1950-11-30, 1950-12-02, 1950-12-03, 1950-12-06, 1950-12-09, 1950-12-10, 1950-12-13, 1950-12-14, 1950-12-16, 1950-12-17, 1950-12-20, 1950-12-23, 1950-12-27, 1950-12-30, 1950-12-31, 1951-01-06, 1951-01-09, 1951-01-13, 1951-01-14, 1951-01-18, 1951-01-20, 1951-01-21, 1951-01-24, 1951-01-27, 1951-01-28, 1951-02-01, 1951-02-03, 1951-02-04, 1951-02-07, 1951-02-10, 1951-02-11, 1951-02-15, 1951-02-17, 1951-02-18, 1951-02-21, 1951-02-24, 1951-03-01, 1951-03-03, 1951-03-05, 1951-03-07, 1951-03-10, 1951-03-11, 1951-03-14, 1951-03-15, 1951-03-17, 1951-03-18, 1951-03-21, 1951-03-24, 1951-03-25
+    ## 1                           50                    20072008
+    ## 2                           66                    20062007
+    ## 3                          371                    19961997
+    ## 4                           86                    19931994
+    ## 5                          372                    19971998
+    ## 6                           74                    19981999
+    ## 7                          105                    19871988
+    ## 8                            6                    19771978
+    ## 9                           81                    19901991
+    ## 10                          30                    19871988
+    ## 11                          35                    19881989
+    ## 12                           0                    19791980
+    ## 13                          12                    19701971
+    ## 14                          22                    19721973
+    ## 15                         190                    19931994
+    ## 16                           0                    19701971
+    ## 17                          70                    19721973
+    ## 18                           6                    19721973
+    ## 19                          57                    19801981
+    ## 20                          46                    19741975
+    ## 21                          63                    19911992
+    ## 22                          48                    19871988
+    ## 23                         115                    19981999
+    ## 24                          14                    19861987
+    ## 25                           0                    19911992
+    ## 26                          21                    20002001
+    ## 27                          24                    19831984
+    ## 28                          58                    19871988
+    ## 29                           2                    20032004
+    ## 30                           6                    19871988
+    ## 31                          12                    19711972
+    ## 32                           0                    19701971
+    ## 33                          54                    19791980
+    ##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       mostPointsGameDates
+    ## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              2007-02-06
+    ## 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              2015-11-21
+    ## 3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  1992-11-23, 1993-10-23
+    ## 4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  1992-10-12, 1996-12-15
+    ## 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              2000-12-08
+    ## 6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              2003-02-25
+    ## 7                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              1986-01-31
+    ## 8                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  1978-01-28, 1978-03-15
+    ## 9                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              1987-12-15
+    ## 10                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1987-10-08, 1987-11-27, 1988-02-14, 1988-10-12, 1992-11-16
+    ## 11                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1989-03-22, 1989-04-01
+    ## 12                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1979-12-19
+    ## 13                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1970-11-04, 1970-11-05, 1970-11-07, 1970-11-10, 1970-11-11, 1970-11-14, 1970-11-15, 1970-11-17, 1970-11-20, 1970-11-21, 1970-11-24, 1970-11-26, 1970-11-28, 1970-11-29, 1970-12-01
+    ## 14                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1972-01-19
+    ## 15                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1993-11-03, 1994-01-05, 1994-01-09
+    ## 16 1970-10-09, 1970-10-11, 1970-10-12, 1970-10-14, 1970-10-15, 1970-10-18, 1970-10-20, 1970-10-23, 1970-10-25, 1970-10-27, 1970-10-31, 1970-11-04, 1970-11-05, 1970-11-07, 1970-11-10, 1970-11-11, 1970-11-14, 1970-11-15, 1970-11-17, 1970-11-20, 1970-11-21, 1970-11-24, 1970-11-26, 1970-11-28, 1970-11-29, 1970-12-01, 1970-12-05, 1970-12-06, 1970-12-08, 1970-12-09, 1970-12-12, 1970-12-15, 1970-12-18, 1970-12-20, 1970-12-23, 1970-12-26, 1970-12-30, 1971-01-02, 1971-01-06, 1971-01-07, 1971-01-09, 1971-01-12, 1971-01-16, 1971-01-17, 1971-01-20, 1971-01-23, 1971-01-24, 1971-01-26, 1971-01-29, 1971-01-31, 1971-02-02, 1971-02-06, 1971-02-09, 1971-02-12, 1971-02-14, 1971-02-16, 1971-02-19, 1971-02-22, 1971-02-25, 1971-02-27, 1971-02-28, 1971-03-03, 1971-03-06, 1971-03-07, 1971-03-09, 1971-03-11, 1971-03-13, 1971-03-16, 1971-03-19, 1971-03-21, 1971-03-23, 1971-03-25, 1971-03-26, 1971-03-28, 1971-03-30, 1971-03-31, 1971-04-02, 1971-04-04
+    ## 17                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         1973-12-08, 1974-11-19, 1974-11-26, 1974-11-30, 1974-12-03, 1975-03-08, 1975-03-14, 1975-12-03
+    ## 18 1972-10-07, 1972-10-11, 1972-10-12, 1972-10-14, 1972-10-17, 1972-10-19, 1972-10-21, 1972-10-22, 1972-10-24, 1972-10-28, 1972-10-31, 1972-11-03, 1972-11-05, 1972-11-08, 1972-11-11, 1972-11-12, 1972-11-14, 1972-11-17, 1972-11-19, 1972-11-21, 1972-11-22, 1972-11-24, 1972-11-26, 1972-11-28, 1972-12-01, 1972-12-05, 1972-12-07, 1972-12-09, 1972-12-10, 1972-12-12, 1972-12-15, 1972-12-16, 1972-12-20, 1972-12-21, 1972-12-23, 1972-12-26, 1972-12-29, 1972-12-30, 1973-01-01, 1973-01-03, 1973-01-06, 1973-01-07, 1973-01-09, 1973-01-12, 1973-01-14, 1973-01-16, 1973-01-19, 1973-01-20, 1973-01-24, 1973-01-26, 1973-01-27, 1973-02-01, 1973-02-03, 1973-02-04, 1973-02-06, 1973-02-09, 1973-02-11, 1973-02-13, 1973-02-14, 1973-02-16, 1973-02-17, 1973-02-20, 1973-02-22, 1973-02-24, 1973-02-28, 1973-03-03, 1973-03-04, 1973-03-09, 1973-03-10, 1973-03-14, 1973-03-16, 1973-03-17, 1973-03-21, 1973-03-22, 1973-03-25, 1973-03-27, 1973-03-30, 1973-03-31
+    ## 19                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1980-03-10
+    ## 20                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     1973-02-09, 1973-10-10, 1975-02-14
+    ## 21                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1991-11-22
+    ## 22                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1988-04-01
+    ## 23                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             2000-02-19
+    ## 24                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1986-11-25
+    ## 25                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1992-03-18, 1992-03-20, 1992-03-22, 1992-03-24, 1992-03-26, 1992-03-28, 1992-03-29, 1992-04-12, 1992-04-14, 1992-04-16
+    ## 26                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             2001-03-16, 2001-04-07, 2001-11-11, 2001-12-08, 2001-12-13
+    ## 27                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1982-02-28
+    ## 28                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1988-02-21, 1990-02-28
+    ## 29                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 2004-03-29, 2004-04-03
+    ## 30                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1988-03-01
+    ## 31                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             1972-01-29
+    ## 32 1970-10-09, 1970-10-11, 1970-10-12, 1970-10-14, 1970-10-15, 1970-10-18, 1970-10-20, 1970-10-23, 1970-10-25, 1970-10-27, 1970-10-31, 1970-11-04, 1970-11-05, 1970-11-07, 1970-11-10, 1970-11-11, 1970-11-14, 1970-11-15, 1970-11-17, 1970-11-20, 1970-11-21, 1970-11-24, 1970-11-26, 1970-11-28, 1970-11-29, 1970-12-01, 1970-12-05, 1970-12-06, 1970-12-08, 1970-12-09, 1970-12-12, 1970-12-15, 1970-12-18, 1970-12-20, 1970-12-23, 1970-12-26, 1970-12-30, 1971-01-02, 1971-01-06, 1971-01-07, 1971-01-09, 1971-01-12, 1971-01-16, 1971-01-17, 1971-01-20, 1971-01-23, 1971-01-24, 1971-01-26, 1971-01-29, 1971-01-31, 1971-02-02, 1971-02-06, 1971-02-09, 1971-02-12, 1971-02-14, 1971-02-16, 1971-02-19, 1971-02-22, 1971-02-25, 1971-02-27, 1971-02-28, 1971-03-03, 1971-03-06, 1971-03-07, 1971-03-09, 1971-03-11, 1971-03-13, 1971-03-16, 1971-03-19, 1971-03-21, 1971-03-23, 1971-03-25, 1971-03-26, 1971-03-28, 1971-03-30, 1971-03-31, 1971-04-02, 1971-04-04
+    ## 33                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 1976-10-06, 1977-12-23
     ##    mostPointsOneGame mostPointsOneSeason
-    ## 1                  4                  53
-    ## 2                  6                  94
-    ## 3                  5                  78
-    ## 4                  3                  29
-    ## 5                  5                  93
-    ## 6                  6                 127
-    ## 7                  4                  99
-    ## 8                  5                  97
-    ## 9                  5                  79
-    ## 10                 0                   0
-    ## 11                 1                   1
-    ## 12                 4                  35
-    ## 13                 1                   2
-    ## 14                 2                  24
-    ## 15                 3                  18
-    ## 16                 1                   3
-    ## 17                 3                  23
-    ## 18                 3                   9
-    ## 19                 5                  80
-    ## 20                 5                  65
-    ## 21                 6                  53
-    ## 22                 2                   6
-    ## 23                 1                   4
+    ## 1                  5                 104
+    ## 2                  5                 112
+    ## 3                  3                  29
+    ## 4                  5                 110
+    ## 5                  3                  28
+    ## 6                  6                 104
+    ## 7                  4                  63
+    ## 8                  4                  26
+    ## 9                  1                   1
+    ## 10                 4                  76
+    ## 11                 2                   6
+    ## 12                 1                   1
+    ## 13                 0                   0
+    ## 14                 3                  38
+    ## 15                 1                   3
+    ## 16                 0                   0
+    ## 17                 2                  23
+    ## 18                 0                   0
+    ## 19                 4                  29
+    ## 20                 4                  78
+    ## 21                 3                  32
+    ## 22                 2                   2
+    ## 23                 2                  12
     ## 24                 1                   1
-    ## 25                 1                   1
-    ## 26                 1                   2
-    ## 27                 0                   0
-    ## 28                 2                   9
-    ## 29                 4                  43
-    ## 30                 1                   9
-    ## 31                 1                   1
-    ## 32                 3                  19
-    ## 33                 0                   0
+    ## 25                 0                   0
+    ## 26                 1                   3
+    ## 27                 3                  20
+    ## 28                 3                  33
+    ## 29                 1                   2
+    ## 30                 2                   5
+    ## 31                 3                  34
+    ## 32                 0                   0
+    ## 33                 4                  68
     ##    mostPointsSeasonIds penaltyMinutes playerId points
-    ## 1             19611962            726  8444971    713
-    ## 2             19961997            748  8451774    987
-    ## 3             19761977           1292  8451102    768
-    ## 4             20022003           2265  8446454    196
-    ## 5             19831984            940  8452152    537
-    ## 6             19921993            386  8447206    452
-    ## 7             19931994            194  8445000    219
-    ## 8             19801981            420  8450107    203
-    ## 9             19761977            651  8451990    414
-    ## 10            19251926              0  8444851      0
-    ## 11            19691970              0  8444859      1
-    ## 12            19241925            318  8444861    119
-    ## 13            19321933              0  8444863      2
-    ## 14            19571958             18  8444868     33
-    ## 15            19741975             30  8444869     39
-    ## 16            19821983             11  8444896      3
-    ## 17            19861987             76  8444914     26
-    ## 18            19221923             12  8444936     13
-    ## 19            19821983            166  8444944    393
-    ## 20            19921993            267  8444945    157
-    ## 21            19471948             56  8444954    432
-    ## 22            19611962             74  8444955      9
-    ## 23            19231924              4  8444956      4
-    ## 24            19281929             10  8444964      1
-    ## 25            19381939              0  8444972      1
-    ## 26            19621963              2  8444973      2
-    ## 27            19491950              9  8444979      0
-    ## 28            19441945              6  8444995      9
-    ## 29            19291930            488  8444998    192
-    ## 30            19531954            128  8445001     15
-    ## 31            19451946              6  8445003      1
-    ## 32            19551956             48  8445004     20
-    ## 33            19501951              2  8445018      0
+    ## 1             20102011            546  8467875   1041
+    ## 2             20092010            680  8467876   1070
+    ## 3             19931994           2127  8449961     98
+    ## 4             19921993            328  8455738    478
+    ## 5             20002001           1159  8459246    103
+    ## 6             20022003            614  8458530    756
+    ## 7             19861987            526  8448839    307
+    ## 8             19771978              6  8444869     26
+    ## 9             19871988            189  8444893      1
+    ## 10            19871988            154  8444894    369
+    ## 11            19881989             35  8444898      6
+    ## 12            19791980              0  8444905      1
+    ## 13            19701971             12  8444966      0
+    ## 14            19711972             43  8445007     43
+    ## 15            19931994            265  8445017      3
+    ## 16            19701971              0  8445100      0
+    ## 17            19741975            263  8445104     67
+    ## 18            19721973              6  8445114      0
+    ## 19            19801981             68  8445118     48
+    ## 20            19741975            140  8445137    388
+    ## 21            19931994            290  8445208    154
+    ## 22            19871988             48  8445232      2
+    ## 23            19992000            375  8445266     44
+    ## 24            19861987             14  8445277      1
+    ## 25            19911992              0  8445335      0
+    ## 26            20012002             39  8445413      5
+    ## 27            19831984             54  8445415     44
+    ## 28            19871988            172  8445416     70
+    ## 29            20032004              2  8445428      2
+    ## 30            19871988             11  8445455      8
+    ## 31            19711972             12  8445521     34
+    ## 32            19701971              0  8445530      0
+    ## 33            19761977            168  8445558    221
     ##    positionCode rookiePoints seasons
-    ## 1             R           25      21
-    ## 2             C           NA      13
-    ## 3             D           39      16
-    ## 4             R            0      12
-    ## 5             R           NA       8
-    ## 6             C           NA       7
-    ## 7             L           NA       4
-    ## 8             R           NA       3
-    ## 9             D           35       9
-    ## 10            L            0       1
-    ## 11            C            1       1
-    ## 12            C            0       6
-    ## 13            L           NA       1
-    ## 14            L            6       3
-    ## 15            D           18       3
-    ## 16            C            3       1
-    ## 17            R           NA       2
-    ## 18            L            0       4
-    ## 19            R           26       8
-    ## 20            R           NA       3
-    ## 21            C           45      10
-    ## 22            D           NA       4
-    ## 23            L           NA       1
-    ## 24            D           NA       1
-    ## 25            C            0       2
-    ## 26            R            2       1
-    ## 27            D            0       1
-    ## 28            D            9       1
-    ## 29            R           28       8
-    ## 30            R            9       3
-    ## 31            D            1       1
-    ## 32            L           19       4
-    ## 33            R            0       1
-    ##  [ reached 'max' / getOption("max.print") -- omitted 868 rows ]
+    ## 1             L           34      17
+    ## 2             C           29      17
+    ## 3             L            8       8
+    ## 4             R           60       7
+    ## 5             L           NA       6
+    ## 6             L           NA      12
+    ## 7             D           30      10
+    ## 8             D           NA       1
+    ## 9             D            1       5
+    ## 10            L           NA       8
+    ## 11            L           NA       1
+    ## 12            D           NA       1
+    ## 13            D            0       1
+    ## 14            L           NA       2
+    ## 15            L            3       5
+    ## 16            D            0       1
+    ## 17            D            7       5
+    ## 18            D            0       1
+    ## 19            L           19       2
+    ## 20            L           NA       6
+    ## 21            D           NA       7
+    ## 22            R            2       1
+    ## 23            D           NA       5
+    ## 24            D            1       1
+    ## 25            C            0       1
+    ## 26            D           NA       2
+    ## 27            D            9       5
+    ## 28            D           NA       4
+    ## 29            D           NA       1
+    ## 30            L           NA       2
+    ## 31            C           NA       1
+    ## 32            R            0       1
+    ## 33            R           56       6
+    ##  [ reached 'max' / getOption("max.print") -- omitted 528 rows ]
     ## 
     ## $total
-    ## [1] 901
+    ## [1] 561
 
 ### NHL stats API
 
@@ -2058,3 +2059,19 @@ getStats(stats = "statsSingleSeasonPlayoffs")
     ## 31     Golden Knights /api/v1/franchises/38
 
 ## Exploratory Data Analysis
+
+``` r
+franTot <- getFranTeamTot()
+```
+
+    ## No encoding supplied: defaulting to UTF-8.
+
+``` r
+franTot <- franTot$data %>% select(-c("id", "activeFranchise", "firstSeasonId", "gameTypeId", "lastSeasonId"))
+franStats <- getStats(expand = "person.names") 
+franStats <- franStats$teams %>% select(c("locationName", "firstYearOfPlay", "franchiseId", "venue.city", "venue.timeZone.id", "venue.timeZone.tz", "division.name", "conference.name"))
+combined <- full_join(franTot, franStats, by = "franchiseId") 
+ggplot(combined, aes(x = homeWins, y = homeLosses)) + geom_point(aes(color = division.name))
+```
+
+![](README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
