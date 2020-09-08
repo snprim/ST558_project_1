@@ -7,6 +7,8 @@ output:
 
 ```{r, echo = FALSE}
 # rmarkdown::render("vignette.Rmd", output_format = "github_document", output_file = "README.md")
+# add new variables: percentages of wins, losses, homegames, awaygames
+# add a wrapper function
 ```
 In this vignette, we want to show how to access APIs to retrieve data. We use two NHL repositories as examples: [NHL records](https://gitlab.com/dword4/nhlapi/-/tree/master) and [NHL stats](https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md).  
 
@@ -100,6 +102,7 @@ Examples of arguments:
   * `teamId = "4, 5, 29"`  
   * `stats = "statsSingleSeasonPlayoffs"`  
 
+
 ```{r}
 baseurl_stats <- "https://statsapi.web.nhl.com/api/v1/teams"
 getStats <- function(expand = "", teamID = "", stats = ""){
@@ -115,10 +118,51 @@ getStats <- function(expand = "", teamID = "", stats = ""){
 }
 getStats(expand = "person.names") %>% head()
 getStats(stats = "statsSingleSeasonPlayoffs") %>% head()
+getStats(expand = "team.roster")
 
 ```
 ## A wrapper function for all the functions above  
 
+Endpoints:  
+
+  * franchise (getFran)  
+  * team total (getFranTeamTot)  
+  * season record (getFranSeaRec)  
+  * goalie record (getFranGoaRec)  
+  * skater record (getFranSkaRec)  
+  * stats (getStats)  
+    + expand = "team.roster"  
+    + expand = "person.names"  
+    + expand = "team.schedule.next"  
+    + expand = "team.schedule.previous"  
+    + expand = "team.stats"  
+    + expand = "team.roster", season = "20142015"  
+    + teamId = "4, 5, 29"  
+    + stats = "statsSingleSeasonPlayoffs"  
+
+```{r}
+# add a 
+nhlFun <- function(endpoints, ...){
+  if (endpoints == "franchise") {
+    getFran()
+  } else if (endpoints == "team total") {
+    getFranTeamTot()
+  } else if (endpoints == "season record"){
+    getFranSeaRec(...)
+  } else if (endpoints == "goalie record"){
+    getFranGoaRec(...)
+  } else if (endpoints == "skater record"){
+    getFranSkaRec(...)
+  } else if (endpoints == "stats"){
+    getStats(...)
+  } else {
+    stop("Please enter a valid endpoint")
+  }
+}
+nhlFun(endpoints = "team total")
+nhlFun(endpoints = "skater record", "20")
+nhlFun(endpoints = "stats", expand = "person.team")
+```
 
 ## Exploratory Data Analysis  
 
