@@ -5,6 +5,8 @@ Vignette
   - [Functions](#functions)
       - [NHL records API](#nhl-records-api)
       - [NHL stats API](#nhl-stats-api)
+  - [A wrapper function for all the functions
+    above](#a-wrapper-function-for-all-the-functions-above)
   - [Exploratory Data Analysis](#exploratory-data-analysis)
 
 In this vignette, we want to show how to access APIs to retrieve data.
@@ -31,16 +33,17 @@ To be able to access data from APIs, you should install and load the
 baseurl_records <- "https://records.nhl.com/site/api"
 ```
 
+Here is a function to get basic information about all teams.  
 /franchise (Returns id, ﬁrstSeasonId and lastSeasonId and name of every
 team in the history of the NHL)
 
 ``` r
-getfran <- function(){
+getFran <- function(){
   fullurl <- paste0(baseurl_records, "/", "franchise")
   fran <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(fran)
 }
-getfran() %>% head()
+getFran() %>% head()
 ```
 
     ## No encoding supplied: defaulting to UTF-8.
@@ -128,6 +131,7 @@ getfran() %>% head()
     ## $total
     ## [1] 38
 
+This is a function to retrieve stats about all teams.  
 /franchise-team-totals (Returns Total stats for every franchise (ex
 roadTies, roadWins, etc))
 
@@ -386,8 +390,11 @@ getFranTeamTot() %>% head()
     ## $total
     ## [1] 105
 
+This function retrieves season records from one specific team, and
+therefore you need to provide the `franchiseId` as an argument. The ID
+can be found using `getFran` or `getFranTeamTot`.  
 /site/api/franchise-season-records?cayenneExp=franchiseId=ID (Drill-down
-into season records for a speciﬁc franchise)
+into season records for a specific franchise)
 
 ``` r
 getFranSeaRec <- function(franID) {
@@ -451,8 +458,10 @@ getFranSeaRec("20") %>% head()
     ## $total
     ## [1] 1
 
+This function retrieves goalie records, and again a `franchiseId` is
+required.  
 /franchise-goalie-records?cayenneExp=franchiseId=ID (Goalie records for
-the speciﬁed franchise)
+the specified franchise)
 
 ``` r
 getFranGoaRec <- function(franID) {
@@ -891,6 +900,8 @@ getFranGoaRec("20") %>% head()
     ## $total
     ## [1] 39
 
+This function retrieves information about skater records, and a
+`franchiseId` is required.  
 /franchise-skater-records?cayenneExp=franchiseId=ID (Skater records,
 same interaction as goalie endpoint)
 
@@ -1388,6 +1399,32 @@ getFranSkaRec("20") %>% head()
     ## [1] 561
 
 ### NHL stats API
+
+For this function, eight modifiers can be chosen, and thus an argument
+(`expand`, `teamID`, or `stats`) has to be provided. Below are the eight
+modifiers:
+
+  - ?expand=team.roster Shows roster of active players for the specified
+    team  
+  - ?expand=person.names Same as above, but gives less info.  
+  - ?expand=team.schedule.next Returns details of the upcoming game for
+    a team  
+  - ?expand=team.schedule.previous Same as above but for the last game
+    played  
+  - ?expand=team.stats Returns the teams stats for the season  
+  - ?expand=team.roster\&season=20142015 Adding the season identifier
+    shows the roster for that season  
+  - ?teamId=4,5,29 Can string team id together to get multiple teams  
+  - ?stats=statsSingleSeasonPlayoffs Specify which stats to get. Not
+    fully sure all of the values
+
+Examples of arguments:
+
+  - `expand = "person.names"`  
+  - `teamId = "4, 5, 29"`  
+  - `stats = "statsSingleSeasonPlayoffs"`
+
+<!-- end list -->
 
 ``` r
 baseurl_stats <- "https://statsapi.web.nhl.com/api/v1/teams"
@@ -2059,6 +2096,8 @@ getStats(stats = "statsSingleSeasonPlayoffs") %>% head()
     ## 30            Coyotes /api/v1/franchises/28
     ## 31     Golden Knights /api/v1/franchises/38
 
+## A wrapper function for all the functions above
+
 ## Exploratory Data Analysis
 
 ``` r
@@ -2136,4 +2175,4 @@ head(combined)
 ggplot(combined, aes(x = homeWins, y = homeLosses)) + geom_point(aes(color = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
