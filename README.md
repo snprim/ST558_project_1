@@ -3598,6 +3598,7 @@ nhlFun(endpoints = "stats", expand = "person.team")
 ## Exploratory Data Analysis
 
 ``` r
+# perhaps use the wrapper function here
 franTot <- getFranTeamTot()
 ```
 
@@ -3672,4 +3673,4 @@ head(combined)
 ggplot(combined, aes(x = homeWins, y = homeLosses)) + geom_point(aes(color = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-49-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->

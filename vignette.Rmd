@@ -167,6 +167,7 @@ nhlFun(endpoints = "stats", expand = "person.team")
 ## Exploratory Data Analysis  
 
 ```{r}
+# perhaps use the wrapper function here
 franTot <- getFranTeamTot()
 franTot <- franTot$data %>% select(-c("id", "activeFranchise", "firstSeasonId", "gameTypeId", "lastSeasonId"))
 franStats <- getStats(expand = "person.names") 

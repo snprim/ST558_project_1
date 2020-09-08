@@ -4132,7 +4132,8 @@ library(tidyverse)
 ## 31     Golden Knights /api/v1/franchises/38
 </code></pre>
 <h2 id="exploratory-data-analysis">Exploratory Data Analysis</h2>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>franTot &lt;-<span class="st"> </span><span class="kw">getFranTeamTot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="co"># perhaps use the wrapper function here</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a>franTot &lt;-<span class="st"> </span><span class="kw">getFranTeamTot</span>()</span></code></pre></div>
 <pre><code>## No encoding supplied: defaulting to UTF-8.
 </code></pre>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>franTot &lt;-<span class="st"> </span>franTot<span class="op">$</span>data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;activeFranchise&quot;</span>, <span class="st">&quot;firstSeasonId&quot;</span>, <span class="st">&quot;gameTypeId&quot;</span>, <span class="st">&quot;lastSeasonId&quot;</span>))</span>
