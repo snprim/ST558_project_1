@@ -7,7 +7,6 @@ output:
 
 ```{r, echo = FALSE}
 # rmarkdown::render("vignette.Rmd", output_format = "github_document", output_file = "README.md")
-# add a wrapper function
 ```
 In this vignette, we want to show how to access APIs to retrieve data. We use two NHL repositories as examples: [NHL records](https://gitlab.com/dword4/nhlapi/-/tree/master) and [NHL stats](https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md).  
 
