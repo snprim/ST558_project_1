@@ -619,24 +619,6 @@ library(httr)
 library(jsonlite)
 library(tidyverse)
 ```
-
-```
-## -- Attaching packages --------------------------------------- tidyverse 1.3.0 --
-```
-
-```
-## v ggplot2 3.3.2     v purrr   0.3.4
-## v tibble  3.0.3     v dplyr   1.0.1
-## v tidyr   1.1.1     v stringr 1.4.0
-## v readr   1.3.1     v forcats 0.5.0
-```
-
-```
-## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-## x dplyr::filter()  masks stats::filter()
-## x purrr::flatten() masks jsonlite::flatten()
-## x dplyr::lag()     masks stats::lag()
-```
 </code></pre>
 <h2 id="functions">Functions</h2>
 <h3 id="nhl-records-api">NHL records API</h3>
@@ -4157,7 +4139,7 @@ library(tidyverse)
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>franTot &lt;-<span class="st"> </span>franTot<span class="op">$</span>data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;activeFranchise&quot;</span>, <span class="st">&quot;firstSeasonId&quot;</span>, <span class="st">&quot;gameTypeId&quot;</span>, <span class="st">&quot;lastSeasonId&quot;</span>))</span>
 <span id="cb27-2"><a href="#cb27-2"></a>franStats &lt;-<span class="st"> </span><span class="kw">getStats</span>(<span class="dt">expand =</span> <span class="st">&quot;person.names&quot;</span>) </span>
 <span id="cb27-3"><a href="#cb27-3"></a>franStats &lt;-<span class="st"> </span>franStats<span class="op">$</span>teams <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(<span class="st">&quot;locationName&quot;</span>, <span class="st">&quot;firstYearOfPlay&quot;</span>, <span class="st">&quot;franchiseId&quot;</span>, <span class="st">&quot;venue.city&quot;</span>, <span class="st">&quot;venue.timeZone.id&quot;</span>, <span class="st">&quot;venue.timeZone.tz&quot;</span>, <span class="st">&quot;division.name&quot;</span>, <span class="st">&quot;conference.name&quot;</span>))</span>
-<span id="cb27-4"><a href="#cb27-4"></a>combined &lt;-<span class="st"> </span><span class="kw">full_join</span>(franTot, franStats, <span class="dt">by =</span> <span class="st">&quot;franchiseId&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">winPercent =</span> wins <span class="op">/</span><span class="st"> </span>gamesPlayed) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">homeWinPercent =</span> homeWins <span class="op">/</span><span class="st"> </span>wins)</span>
+<span id="cb27-4"><a href="#cb27-4"></a>combined &lt;-<span class="st"> </span><span class="kw">full_join</span>(franTot, franStats, <span class="dt">by =</span> <span class="st">&quot;franchiseId&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">winPercent =</span> wins <span class="op">/</span><span class="st"> </span>gamesPlayed, <span class="dt">homeWinPercent =</span> homeWins <span class="op">/</span><span class="st"> </span>wins)</span>
 <span id="cb27-5"><a href="#cb27-5"></a><span class="kw">head</span>(combined)</span></code></pre></div>
 <pre><code>##   franchiseId gamesPlayed goalsAgainst goalsFor homeLosses
 ## 1          23        2937         8708     8647        507

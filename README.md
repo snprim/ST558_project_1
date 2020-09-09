@@ -24,24 +24,6 @@ To be able to access data from APIs, you should install and load the
     library(jsonlite)
     library(tidyverse)
     ```
-    
-    ```
-    ## -- Attaching packages --------------------------------------- tidyverse 1.3.0 --
-    ```
-    
-    ```
-    ## v ggplot2 3.3.2     v purrr   0.3.4
-    ## v tibble  3.0.3     v dplyr   1.0.1
-    ## v tidyr   1.1.1     v stringr 1.4.0
-    ## v readr   1.3.1     v forcats 0.5.0
-    ```
-    
-    ```
-    ## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-    ## x dplyr::filter()  masks stats::filter()
-    ## x purrr::flatten() masks jsonlite::flatten()
-    ## x dplyr::lag()     masks stats::lag()
-    ```
 
 ## Functions
 
@@ -3626,7 +3608,7 @@ franTot <- getFranTeamTot()
 franTot <- franTot$data %>% select(-c("id", "activeFranchise", "firstSeasonId", "gameTypeId", "lastSeasonId"))
 franStats <- getStats(expand = "person.names") 
 franStats <- franStats$teams %>% select(c("locationName", "firstYearOfPlay", "franchiseId", "venue.city", "venue.timeZone.id", "venue.timeZone.tz", "division.name", "conference.name"))
-combined <- full_join(franTot, franStats, by = "franchiseId") %>% mutate(winPercent = wins / gamesPlayed) %>% mutate(homeWinPercent = homeWins / wins)
+combined <- full_join(franTot, franStats, by = "franchiseId") %>% mutate(winPercent = wins / gamesPlayed, homeWinPercent = homeWins / wins)
 head(combined)
 ```
 
@@ -3691,7 +3673,7 @@ head(combined)
 ggplot(combined, aes(x = homeWins, y = homeLosses)) + geom_point(aes(color = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ``` r
 ggplot(combined, aes (x = winPercent)) + geom_histogram(aes(y = ..density..))
@@ -3700,4 +3682,4 @@ ggplot(combined, aes (x = winPercent)) + geom_histogram(aes(y = ..density..))
     ## `stat_bin()` using `bins = 30`. Pick better value with
     ## `binwidth`.
 
-![](README_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
