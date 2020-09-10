@@ -33,9 +33,10 @@ of the NHL)
 getFran <- function(){
   fullurl <- paste0(baseurl_records, "/", "franchise")
   fran <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
-  return(fran)
+  return(fran$data)
 }
 getFran() %>% head()
+
 ```
 This is a function to retrieve stats about all teams.  
 /franchise-team-totals (Returns Total stats for every franchise (ex roadTies, roadWins, etc))  
@@ -43,7 +44,7 @@ This is a function to retrieve stats about all teams.
 getFranTeamTot <- function() {
   fullurl <- paste0(baseurl_records, "/", "franchise-team-totals")
   franTeamTot <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
-  return(franTeamTot)
+  return(franTeamTot$data)
 }
 getFranTeamTot() %>% head()
 ```
@@ -54,7 +55,7 @@ records for a specific franchise)
 getFranSeaRec <- function(franID) {
   fullurl <- paste0(baseurl_records, "/", "franchise-season-records?cayenneExp=franchiseId=", franID)
   franSeaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
-  return(franSeaRec)
+  return(franSeaRec$data)
 }
 getFranSeaRec("20") %>% head()
 ```
@@ -65,7 +66,7 @@ franchise)
 getFranGoaRec <- function(franID) {
   fullurl <- paste0(baseurl_records, "/", "franchise-goalie-records?cayenneExp=franchiseId=", franID)
   franGoaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
-  return(franGoaRec)
+  return(franGoaRec$data)
 }
 getFranGoaRec("20") %>% head()
 ```
@@ -76,7 +77,7 @@ goalie endpoint)
 getFranSkaRec <- function(franID) {
   fullurl <- paste0(baseurl_records, "/", "franchise-skater-records?cayenneExp=franchiseId=", franID)
   franSkaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
-  return(franSkaRec)
+  return(franSkaRec$data)
 }
 getFranSkaRec("20") %>% head()
 ```
@@ -112,11 +113,11 @@ getStats <- function(expand = "", teamID = "", stats = ""){
     fullurl <- paste0(baseurl_stats, "?stats=", stats)
   }
   stats <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
-  return(stats)
+  return(stats$teams)
 }
 getStats(expand = "person.names") %>% head()
 getStats(stats = "statsSingleSeasonPlayoffs") %>% head()
-getStats(expand = "team.roster")
+getStats(expand = "team.roster") %>% head()
 
 ```
 ## A wrapper function for all the functions above  
@@ -167,9 +168,9 @@ nhlFun(endpoints = "stats", expand = "person.team")
 ```{r}
 # perhaps use the wrapper function here
 franTot <- getFranTeamTot()
-franTot <- franTot$data %>% select(-c("id", "activeFranchise", "firstSeasonId", "gameTypeId", "lastSeasonId"))
+franTot <- franTot %>% select(-c("id", "activeFranchise", "firstSeasonId", "gameTypeId", "lastSeasonId"))
 franStats <- getStats(expand = "person.names") 
-franStats <- franStats$teams %>% select(c("locationName", "firstYearOfPlay", "franchiseId", "venue.city", "venue.timeZone.id", "venue.timeZone.tz", "division.name", "conference.name"))
+franStats <- franStats %>% select(c("locationName", "firstYearOfPlay", "franchiseId", "venue.city", "venue.timeZone.id", "venue.timeZone.tz", "division.name", "conference.name"))
 combined <- full_join(franTot, franStats, by = "franchiseId") %>% mutate(winPercent = wins / gamesPlayed, homeWinPercent = homeWins / wins)
 head(combined)
 ggplot(combined, aes(x = homeWins, y = homeLosses)) + geom_point(aes(color = division.name))
