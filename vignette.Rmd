@@ -48,38 +48,61 @@ getFranTeamTot <- function() {
 }
 getFranTeamTot() %>% head()
 ```
-This function retrieves season records from one specific team, and therefore you need to provide the `franchiseId` as an argument. The ID can be found using `getFran` or `getFranTeamTot`.  
+To allow for convenient access of team information in the following function, we first construct a subset of data, so users can use team names or franchise ID to look up information.  
+```{r}
+index <- getFranTeamTot() %>% select(c("franchiseId", "teamName")) %>% unique()
+```
+
+This function retrieves season records from one specific team, and therefore you need to provide the `franchiseId` or `teamName` as an argument. The ID can be found using `getFran` or `getFranTeamTot`.  
 /site/api/franchise-season-records?cayenneExp=franchiseId=ID (Drill-down into season
 records for a specific franchise)  
 ```{r}
-getFranSeaRec <- function(franID) {
-  fullurl <- paste0(baseurl_records, "/", "franchise-season-records?cayenneExp=franchiseId=", franID)
+getFranSeaRec <- function(team) {
+  if (is.character(team)) {
+    id <- index$franchiseId[index$teamName == team]
+  } else if (is.numeric(team)){
+    id <- team
+  }
+  fullurl <- paste0(baseurl_records, "/", "franchise-season-records?cayenneExp=franchiseId=", id)
   franSeaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franSeaRec$data)
 }
-getFranSeaRec("20") %>% head()
+getFranSeaRec(20) %>% head()
+getFranSeaRec("Vancouver Canucks") %>% head()
 ```
-This function retrieves goalie records, and again a `franchiseId` is required.  
+This function retrieves goalie records, and again a `franchiseId` or `teamName` is required.  
 /franchise-goalie-records?cayenneExp=franchiseId=ID (Goalie records for the specified
 franchise)  
 ```{r}
-getFranGoaRec <- function(franID) {
-  fullurl <- paste0(baseurl_records, "/", "franchise-goalie-records?cayenneExp=franchiseId=", franID)
+getFranGoaRec <- function(team) {
+  if (is.character(team)) {
+    id <- index$franchiseId[index$teamName == team]
+  } else if (is.numeric(team)){
+    id <- team
+  }
+  fullurl <- paste0(baseurl_records, "/", "franchise-goalie-records?cayenneExp=franchiseId=", id)
   franGoaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franGoaRec$data)
 }
-getFranGoaRec("20") %>% head()
+getFranGoaRec(20) %>% head()
+getFranGoaRec("Vancouver Canucks") %>% head()
 ```
-This function retrieves information about skater records, and a `franchiseId` is required.  
+This function retrieves information about skater records, and a `franchiseId` or `teamName` is required.  
 /franchise-skater-records?cayenneExp=franchiseId=ID (Skater records, same interaction as
 goalie endpoint)  
 ```{r}
-getFranSkaRec <- function(franID) {
-  fullurl <- paste0(baseurl_records, "/", "franchise-skater-records?cayenneExp=franchiseId=", franID)
+getFranSkaRec <- function(team) {
+  if (is.character(team)) {
+    id <- index$franchiseId[index$teamName == team]
+  } else if (is.numeric(team)){
+    id <- team
+  }
+  fullurl <- paste0(baseurl_records, "/", "franchise-skater-records?cayenneExp=franchiseId=", id)
   franSkaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franSkaRec$data)
 }
-getFranSkaRec("20") %>% head()
+getFranSkaRec(20) %>% head()
+getFranSkaRec("Vancouver Canucks") %>% head()
 ```
 
 ### NHL stats API  
