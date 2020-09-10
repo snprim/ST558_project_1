@@ -610,7 +610,8 @@ Examples of arguments:
   - `teamId = "4, 5, 29"`  
   - `stats = "statsSingleSeasonPlayoffs"`
 
-<!-- end list -->
+For more information about these modifiers, see [the
+documentation](https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md).
 
 ``` r
 baseurl_stats <- "https://statsapi.web.nhl.com/api/v1/teams"
@@ -882,7 +883,10 @@ Endpoints:
       - teamId = “4, 5, 29”  
       - stats = “statsSingleSeasonPlayoffs”
 
-<!-- end list -->
+See more details in the documentation of [NHL
+records](https://gitlab.com/dword4/nhlapi/-/blob/master/records-api.md)
+and [NHL
+stats](https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md).
 
 ``` r
 # add a 
@@ -1559,7 +1563,7 @@ head(combined)
 ggplot(combined, aes(x = homeWins, y = homeLosses)) + geom_point(aes(color = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ``` r
 ggplot(combined, aes (x = winPercent)) + geom_histogram(aes(y = ..density..))
@@ -1568,4 +1572,4 @@ ggplot(combined, aes (x = winPercent)) + geom_histogram(aes(y = ..density..))
     ## `stat_bin()` using `bins = 30`. Pick better value with
     ## `binwidth`.
 
-![](README_files/figure-gfm/unnamed-chunk-27-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->

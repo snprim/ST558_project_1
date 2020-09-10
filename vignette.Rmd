@@ -124,6 +124,7 @@ Examples of arguments:
   * `teamId = "4, 5, 29"`  
   * `stats = "statsSingleSeasonPlayoffs"`  
 
+For more information about these modifiers, see [the documentation](https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md).
 
 ```{r}
 baseurl_stats <- "https://statsapi.web.nhl.com/api/v1/teams"
@@ -161,6 +162,8 @@ Endpoints:
     + expand = "team.roster", season = "20142015"  
     + teamId = "4, 5, 29"  
     + stats = "statsSingleSeasonPlayoffs"  
+
+See more details in the documentation of [NHL records](https://gitlab.com/dword4/nhlapi/-/blob/master/records-api.md) and [NHL stats](https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md).
 
 ```{r}
 # add a 
