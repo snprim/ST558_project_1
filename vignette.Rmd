@@ -132,20 +132,26 @@ For more information about these modifiers, see [the documentation](https://gitl
 # test2 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?expand=team.roster") %>% content("text") %>% fromJSON(flatten = TRUE)
 # test2$teams$roster.roster
 test3 <- GET("https://statsapi.web.nhl.com/api/v1/teams/20?expand=person.names") %>% content("text") %>% fromJSON(flatten = TRUE)
-test3$teams
-# test4 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?expand=team.schedule.next") %>% content("text") %>% fromJSON(flatten = TRUE)
-# test4$teams$nextGameSchedule.dates
+str(test3$teams)
+test3 <-as.data.frame(test3$teams)
+str(test3)
+
+test4 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?expand=team.schedule.next") %>% content("text") %>% fromJSON(flatten = TRUE)
+test4 <- test4$teams$nextGameSchedule.dates
+test4<- as.data.frame(test4[[1]]$games)
 # test5 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?expand=team.stats") %>% content("text") %>% fromJSON(flatten = TRUE)
 # test5$teams$teamStats
-# test6 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?expand=team.schedule.previous") %>% content("text") %>% fromJSON(flatten = TRUE)
-# test6$teams$previousGameSchedule.dates
-test7 <- GET("https://statsapi.web.nhl.com/api/v1/teams?expand=team.roster&season=20142015") %>% content("text") %>% fromJSON(flatten = TRUE)
-test7
-test8 <- GET("https://statsapi.web.nhl.com/api/v1/teams?teamId=1,3,5") %>% content("text") %>% fromJSON(flatten = TRUE)
-test8$teams
+test6 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?expand=team.schedule.previous") %>% content("text") %>% fromJSON(flatten = TRUE)
+test6 <- test6$teams$previousGameSchedule.dates
+test6 <- as.data.frame(test6[[1]]$games)
+# test7 <- GET("https://statsapi.web.nhl.com/api/v1/teams/20?expand=team.roster&season=20142015") %>% content("text") %>% fromJSON(flatten = TRUE)
+# test7 <- test7$teams
+# test8 <- GET("https://statsapi.web.nhl.com/api/v1/teams?teamId=1,3,5") %>% content("text") %>% fromJSON(flatten = TRUE)
+# test8 <- test8$teams
 test9 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?stats=statsSingleSeasonPlayoffs") %>% content("text") %>% fromJSON(flatten = TRUE)
-test9$teams
+test9 <- test9$teams
 # need to figure out if all other modifiers use stats$teams
+# need to change nextGameSchedule and previousGameSchedule
 # make a table for id and franchiseId?
 ```
 
@@ -175,6 +181,8 @@ getStats <- function(expand = "", teamID = "", stats = ""){
     stats <- stats$teams$previousGameSchedule.dates
   } else if (expand == "team.stats"){
     stats <- stats$teams$teamStats
+  } else {
+    stats <- stats$teams
   }
   return(stats)
 }
