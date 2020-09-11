@@ -145,6 +145,7 @@ test8 <- GET("https://statsapi.web.nhl.com/api/v1/teams?teamId=1,3,5") %>% conte
 test8$teams
 test9 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?stats=statsSingleSeasonPlayoffs") %>% content("text") %>% fromJSON(flatten = TRUE)
 test9$teams
+# need to figure out if all other modifiers use stats$teams
 ```
 
 
