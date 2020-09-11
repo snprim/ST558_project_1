@@ -131,7 +131,7 @@ For more information about these modifiers, see [the documentation](https://gitl
 # figuring out NHL stats
 # test2 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?expand=team.roster") %>% content("text") %>% fromJSON(flatten = TRUE)
 # test2$teams$roster.roster
-test3 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?expand=person.names") %>% content("text") %>% fromJSON(flatten = TRUE)
+test3 <- GET("https://statsapi.web.nhl.com/api/v1/teams/20?expand=person.names") %>% content("text") %>% fromJSON(flatten = TRUE)
 test3$teams
 # test4 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?expand=team.schedule.next") %>% content("text") %>% fromJSON(flatten = TRUE)
 # test4$teams$nextGameSchedule.dates
@@ -146,6 +146,7 @@ test8$teams
 test9 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?stats=statsSingleSeasonPlayoffs") %>% content("text") %>% fromJSON(flatten = TRUE)
 test9$teams
 # need to figure out if all other modifiers use stats$teams
+# make a table for id and franchiseId?
 ```
 
 

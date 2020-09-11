@@ -1233,7 +1233,7 @@ head(combined)
 ggplot(combined, aes(x = homeWins, y = homeLosses)) + geom_point(aes(color = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
 
 ``` r
 ggplot(combined, aes (x = winPercent)) + geom_histogram(aes(y = ..density..))
@@ -1242,4 +1242,4 @@ ggplot(combined, aes (x = winPercent)) + geom_histogram(aes(y = ..density..))
     ## `stat_bin()` using `bins = 30`. Pick better value with
     ## `binwidth`.
 
-![](README_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-20-2.png)<!-- -->
