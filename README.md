@@ -89,21 +89,21 @@ getFranTeamTot() %>% head()
     ## 1        2937         8708     8647        507
     ## 2         257          634      697         53
     ## 3        3732        11779    11889        674
-    ## 4         289          845      925         48
+    ## 4         290          847      926         48
     ## 5        6504        19863    19864       1132
     ## 6         518         1447     1404        104
     ##   homeOvertimeLosses homeTies homeWins lastSeasonId losses
     ## 1                 82       96      783           NA   1181
     ## 2                  0       NA       74           NA    120
     ## 3                 81      170      942           NA   1570
-    ## 4                  1       NA       89           NA    130
+    ## 4                  1       NA       89           NA    131
     ## 5                 73      448     1600           NA   2693
     ## 6                  0        1      137           NA    266
     ##   overtimeLosses penaltyMinutes pointPctg points roadLosses
     ## 1            162          44397    0.5330   3131        674
     ## 2              0           4266    0.0039      2         67
     ## 3            159          57422    0.5115   3818        896
-    ## 4              0           5498    0.0138      8         82
+    ## 4              0           5511    0.0138      8         83
     ## 5            147          85564    0.5125   6667       1561
     ## 6              0           8181    0.0000      0        162
     ##   roadOvertimeLosses roadTies roadWins shootoutLosses
@@ -616,253 +616,125 @@ documentation](https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md).
 ``` r
 baseurl_stats <- "https://statsapi.web.nhl.com/api/v1/teams"
 getStats <- function(expand = "", teamID = "", stats = ""){
+  if (teamID!=""){
+    if (length(teamID)==1){
+      baseurl_stats <- paste0("https://statsapi.web.nhl.com/api/v1/teams/", teamID)
+    }
+    else{
+      fullurl <- paste0("https://statsapi.web.nhl.com/api/v1/teams?teamID=", teamID)
+    }
+  }
   if (expand != ""){
     fullurl <- paste0(baseurl_stats, "?expand=", expand)
-  } else if (teamID != ""){
-    fullurl <- paste0(baseurl_stats, "?teamID=", teamID)
   } else if (stats != ""){
     fullurl <- paste0(baseurl_stats, "?stats=", stats)
   }
   stats <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
-  return(stats$teams)
+  if (expand == "team.roster"){
+    stats <- stats$teams$roster.roster
+  } else if (expand == "team.schedule.next"){
+    stats <- stats$teams$nextGameSchedule.dates
+  } else if (expand == "team.schedule.previous"){
+    stats <- stats$teams$previousGameSchedule.dates
+  } else if (expand == "team.stats"){
+    stats <- stats$teams$teamStats
+  }
+  return(stats)
 }
-getStats(expand = "person.names") %>% head()
+# it seems that we need to go into one more level to get person and roster info
+getStats(teamID = 20, expand = "team.stats")
 ```
 
-    ##   id                name            link abbreviation
-    ## 1  1   New Jersey Devils /api/v1/teams/1          NJD
-    ## 2  2  New York Islanders /api/v1/teams/2          NYI
-    ## 3  3    New York Rangers /api/v1/teams/3          NYR
-    ## 4  4 Philadelphia Flyers /api/v1/teams/4          PHI
-    ## 5  5 Pittsburgh Penguins /api/v1/teams/5          PIT
-    ## 6  6       Boston Bruins /api/v1/teams/6          BOS
-    ##    teamName locationName firstYearOfPlay    shortName
-    ## 1    Devils   New Jersey            1982   New Jersey
-    ## 2 Islanders     New York            1972 NY Islanders
-    ## 3   Rangers     New York            1926   NY Rangers
-    ## 4    Flyers Philadelphia            1967 Philadelphia
-    ## 5  Penguins   Pittsburgh            1967   Pittsburgh
-    ## 6    Bruins       Boston            1924       Boston
-    ##                      officialSiteUrl franchiseId active
-    ## 1    http://www.newjerseydevils.com/          23   TRUE
-    ## 2   http://www.newyorkislanders.com/          22   TRUE
-    ## 3     http://www.newyorkrangers.com/          10   TRUE
-    ## 4 http://www.philadelphiaflyers.com/          16   TRUE
-    ## 5     http://pittsburghpenguins.com/          17   TRUE
-    ## 6       http://www.bostonbruins.com/           6   TRUE
-    ##              venue.name          venue.link   venue.city
-    ## 1     Prudential Center /api/v1/venues/null       Newark
-    ## 2       Barclays Center /api/v1/venues/5026     Brooklyn
-    ## 3 Madison Square Garden /api/v1/venues/5054     New York
-    ## 4    Wells Fargo Center /api/v1/venues/5096 Philadelphia
-    ## 5      PPG Paints Arena /api/v1/venues/5034   Pittsburgh
-    ## 6             TD Garden /api/v1/venues/5085       Boston
-    ##   venue.id venue.timeZone.id venue.timeZone.offset
-    ## 1       NA  America/New_York                    -4
-    ## 2     5026  America/New_York                    -4
-    ## 3     5054  America/New_York                    -4
-    ## 4     5096  America/New_York                    -4
-    ## 5     5034  America/New_York                    -4
-    ## 6     5085  America/New_York                    -4
-    ##   venue.timeZone.tz division.id division.name
-    ## 1               EDT          18  Metropolitan
-    ## 2               EDT          18  Metropolitan
-    ## 3               EDT          18  Metropolitan
-    ## 4               EDT          18  Metropolitan
-    ## 5               EDT          18  Metropolitan
-    ## 6               EDT          17      Atlantic
-    ##   division.nameShort        division.link
-    ## 1              Metro /api/v1/divisions/18
-    ## 2              Metro /api/v1/divisions/18
-    ## 3              Metro /api/v1/divisions/18
-    ## 4              Metro /api/v1/divisions/18
-    ## 5              Metro /api/v1/divisions/18
-    ## 6                ATL /api/v1/divisions/17
-    ##   division.abbreviation conference.id conference.name
-    ## 1                     M             6         Eastern
-    ## 2                     M             6         Eastern
-    ## 3                     M             6         Eastern
-    ## 4                     M             6         Eastern
-    ## 5                     M             6         Eastern
-    ## 6                     A             6         Eastern
-    ##         conference.link franchise.franchiseId
-    ## 1 /api/v1/conferences/6                    23
-    ## 2 /api/v1/conferences/6                    22
-    ## 3 /api/v1/conferences/6                    10
-    ## 4 /api/v1/conferences/6                    16
-    ## 5 /api/v1/conferences/6                    17
-    ## 6 /api/v1/conferences/6                     6
-    ##   franchise.teamName        franchise.link
-    ## 1             Devils /api/v1/franchises/23
-    ## 2          Islanders /api/v1/franchises/22
-    ## 3            Rangers /api/v1/franchises/10
-    ## 4             Flyers /api/v1/franchises/16
-    ## 5           Penguins /api/v1/franchises/17
-    ## 6             Bruins  /api/v1/franchises/6
+    ## [[1]]
+    ##                                                                                                                                                                                                                                                                                                                                                                                                                                  splits
+    ## 1 70, NA, 36, 15th, 27, 17th, 7, 21st, 79, 16th, 56.4, 18th, 2.914, 20th, 3.057, 16th, 0.9178, 24th, 21.2, 12th, 41, 19th, 35, 8th, 193, 24th, 82.1, 8th, 31.6, 15th, 32.4429, 24th, 0.667, 26th, 0.4, 3rd, 0.857, 5th, 0.852, 17th, 0.5, 12th, 0.485, 12th, 4120, 5th, 2022, 15th, 2098, 26th, 49.1, 22nd, 9.2, NA, 0.906, NA, NA, 9th, NA, 13th, NA, 20th, 20, 20, Calgary Flames, Calgary Flames, /api/v1/teams/20, /api/v1/teams/20
+    ##    type.displayName type.gameType.id
+    ## 1 statsSingleSeason                R
+    ##   type.gameType.description type.gameType.postseason
+    ## 1            Regular season                    FALSE
 
 ``` r
-getStats(stats = "statsSingleSeasonPlayoffs") %>% head()
+# getStats(expand = "team.roster&season=20142015") %>% head()
+getStats(teamID = 53, expand = "team.roster")
 ```
 
-    ##   id                name            link abbreviation
-    ## 1  1   New Jersey Devils /api/v1/teams/1          NJD
-    ## 2  2  New York Islanders /api/v1/teams/2          NYI
-    ## 3  3    New York Rangers /api/v1/teams/3          NYR
-    ## 4  4 Philadelphia Flyers /api/v1/teams/4          PHI
-    ## 5  5 Pittsburgh Penguins /api/v1/teams/5          PIT
-    ## 6  6       Boston Bruins /api/v1/teams/6          BOS
-    ##    teamName locationName firstYearOfPlay    shortName
-    ## 1    Devils   New Jersey            1982   New Jersey
-    ## 2 Islanders     New York            1972 NY Islanders
-    ## 3   Rangers     New York            1926   NY Rangers
-    ## 4    Flyers Philadelphia            1967 Philadelphia
-    ## 5  Penguins   Pittsburgh            1967   Pittsburgh
-    ## 6    Bruins       Boston            1924       Boston
-    ##                      officialSiteUrl franchiseId active
-    ## 1    http://www.newjerseydevils.com/          23   TRUE
-    ## 2   http://www.newyorkislanders.com/          22   TRUE
-    ## 3     http://www.newyorkrangers.com/          10   TRUE
-    ## 4 http://www.philadelphiaflyers.com/          16   TRUE
-    ## 5     http://pittsburghpenguins.com/          17   TRUE
-    ## 6       http://www.bostonbruins.com/           6   TRUE
-    ##              venue.name          venue.link   venue.city
-    ## 1     Prudential Center /api/v1/venues/null       Newark
-    ## 2       Barclays Center /api/v1/venues/5026     Brooklyn
-    ## 3 Madison Square Garden /api/v1/venues/5054     New York
-    ## 4    Wells Fargo Center /api/v1/venues/5096 Philadelphia
-    ## 5      PPG Paints Arena /api/v1/venues/5034   Pittsburgh
-    ## 6             TD Garden /api/v1/venues/5085       Boston
-    ##   venue.id venue.timeZone.id venue.timeZone.offset
-    ## 1       NA  America/New_York                    -4
-    ## 2     5026  America/New_York                    -4
-    ## 3     5054  America/New_York                    -4
-    ## 4     5096  America/New_York                    -4
-    ## 5     5034  America/New_York                    -4
-    ## 6     5085  America/New_York                    -4
-    ##   venue.timeZone.tz division.id division.name
-    ## 1               EDT          18  Metropolitan
-    ## 2               EDT          18  Metropolitan
-    ## 3               EDT          18  Metropolitan
-    ## 4               EDT          18  Metropolitan
-    ## 5               EDT          18  Metropolitan
-    ## 6               EDT          17      Atlantic
-    ##   division.nameShort        division.link
-    ## 1              Metro /api/v1/divisions/18
-    ## 2              Metro /api/v1/divisions/18
-    ## 3              Metro /api/v1/divisions/18
-    ## 4              Metro /api/v1/divisions/18
-    ## 5              Metro /api/v1/divisions/18
-    ## 6                ATL /api/v1/divisions/17
-    ##   division.abbreviation conference.id conference.name
-    ## 1                     M             6         Eastern
-    ## 2                     M             6         Eastern
-    ## 3                     M             6         Eastern
-    ## 4                     M             6         Eastern
-    ## 5                     M             6         Eastern
-    ## 6                     A             6         Eastern
-    ##         conference.link franchise.franchiseId
-    ## 1 /api/v1/conferences/6                    23
-    ## 2 /api/v1/conferences/6                    22
-    ## 3 /api/v1/conferences/6                    10
-    ## 4 /api/v1/conferences/6                    16
-    ## 5 /api/v1/conferences/6                    17
-    ## 6 /api/v1/conferences/6                     6
-    ##   franchise.teamName        franchise.link
-    ## 1             Devils /api/v1/franchises/23
-    ## 2          Islanders /api/v1/franchises/22
-    ## 3            Rangers /api/v1/franchises/10
-    ## 4             Flyers /api/v1/franchises/16
-    ## 5           Penguins /api/v1/franchises/17
-    ## 6             Bruins  /api/v1/franchises/6
+    ## [[1]]
+    ##    jerseyNumber person.id      person.fullName
+    ## 1            15   8470755      Brad Richardson
+    ## 2            34   8471262       Carl Soderberg
+    ## 3            33   8471274       Alex Goligoski
+    ## 4             4   8471769   Niklas Hjalmarsson
+    ## 5            40   8473546      Michael Grabner
+    ## 6            81   8473548          Phil Kessel
+    ## 7            55   8474218         Jason Demers
+    ## 8            21   8474613         Derek Stepan
+    ## 9            23   8475171 Oliver Ekman-Larsson
+    ## 10           35   8475311        Darcy Kuemper
+    ## 11           91   8475791          Taylor Hall
+    ## 12           13   8476994    Vinnie Hinostroza
+    ## 13           32   8477293         Antti Raanta
+    ## 14           82   8477851      Jordan Oesterle
+    ## 15            8   8477951        Nick Schmaltz
+    ## 16           18   8477989     Christian Dvorak
+    ## 17           36   8478432    Christian Fischer
+    ## 18           67   8478474        Lawson Crouse
+    ## 19           83   8478856        Conor Garland
+    ## 20            9   8479343       Clayton Keller
+    ## 21            6   8479345       Jakob Chychrun
+    ## 22           29   8480849       Barrett Hayton
+    ## 23           46   8480950      Ilya Lyubushkin
+    ##               person.link position.code position.name
+    ## 1  /api/v1/people/8470755             C        Center
+    ## 2  /api/v1/people/8471262             C        Center
+    ## 3  /api/v1/people/8471274             D    Defenseman
+    ## 4  /api/v1/people/8471769             D    Defenseman
+    ## 5  /api/v1/people/8473546             L     Left Wing
+    ## 6  /api/v1/people/8473548             R    Right Wing
+    ## 7  /api/v1/people/8474218             D    Defenseman
+    ## 8  /api/v1/people/8474613             C        Center
+    ## 9  /api/v1/people/8475171             D    Defenseman
+    ## 10 /api/v1/people/8475311             G        Goalie
+    ## 11 /api/v1/people/8475791             L     Left Wing
+    ## 12 /api/v1/people/8476994             R    Right Wing
+    ## 13 /api/v1/people/8477293             G        Goalie
+    ## 14 /api/v1/people/8477851             D    Defenseman
+    ## 15 /api/v1/people/8477951             C        Center
+    ## 16 /api/v1/people/8477989             C        Center
+    ## 17 /api/v1/people/8478432             R    Right Wing
+    ## 18 /api/v1/people/8478474             L     Left Wing
+    ## 19 /api/v1/people/8478856             R    Right Wing
+    ## 20 /api/v1/people/8479343             R    Right Wing
+    ## 21 /api/v1/people/8479345             D    Defenseman
+    ## 22 /api/v1/people/8480849             C        Center
+    ## 23 /api/v1/people/8480950             D    Defenseman
+    ##    position.type position.abbreviation
+    ## 1        Forward                     C
+    ## 2        Forward                     C
+    ## 3     Defenseman                     D
+    ## 4     Defenseman                     D
+    ## 5        Forward                    LW
+    ## 6        Forward                    RW
+    ## 7     Defenseman                     D
+    ## 8        Forward                     C
+    ## 9     Defenseman                     D
+    ## 10        Goalie                     G
+    ## 11       Forward                    LW
+    ## 12       Forward                    RW
+    ## 13        Goalie                     G
+    ## 14    Defenseman                     D
+    ## 15       Forward                     C
+    ## 16       Forward                     C
+    ## 17       Forward                    RW
+    ## 18       Forward                    LW
+    ## 19       Forward                    RW
+    ## 20       Forward                    RW
+    ## 21    Defenseman                     D
+    ## 22       Forward                     C
+    ## 23    Defenseman                     D
 
 ``` r
-getStats(expand = "team.roster") %>% head()
+# getStats(stats = "statsSingleSeasonPlayoffs") %>% head()
 ```
-
-    ##   id                name            link abbreviation
-    ## 1  1   New Jersey Devils /api/v1/teams/1          NJD
-    ## 2  2  New York Islanders /api/v1/teams/2          NYI
-    ## 3  3    New York Rangers /api/v1/teams/3          NYR
-    ## 4  4 Philadelphia Flyers /api/v1/teams/4          PHI
-    ## 5  5 Pittsburgh Penguins /api/v1/teams/5          PIT
-    ## 6  6       Boston Bruins /api/v1/teams/6          BOS
-    ##    teamName locationName firstYearOfPlay    shortName
-    ## 1    Devils   New Jersey            1982   New Jersey
-    ## 2 Islanders     New York            1972 NY Islanders
-    ## 3   Rangers     New York            1926   NY Rangers
-    ## 4    Flyers Philadelphia            1967 Philadelphia
-    ## 5  Penguins   Pittsburgh            1967   Pittsburgh
-    ## 6    Bruins       Boston            1924       Boston
-    ##                      officialSiteUrl franchiseId active
-    ## 1    http://www.newjerseydevils.com/          23   TRUE
-    ## 2   http://www.newyorkislanders.com/          22   TRUE
-    ## 3     http://www.newyorkrangers.com/          10   TRUE
-    ## 4 http://www.philadelphiaflyers.com/          16   TRUE
-    ## 5     http://pittsburghpenguins.com/          17   TRUE
-    ## 6       http://www.bostonbruins.com/           6   TRUE
-    ##              venue.name          venue.link   venue.city
-    ## 1     Prudential Center /api/v1/venues/null       Newark
-    ## 2       Barclays Center /api/v1/venues/5026     Brooklyn
-    ## 3 Madison Square Garden /api/v1/venues/5054     New York
-    ## 4    Wells Fargo Center /api/v1/venues/5096 Philadelphia
-    ## 5      PPG Paints Arena /api/v1/venues/5034   Pittsburgh
-    ## 6             TD Garden /api/v1/venues/5085       Boston
-    ##   venue.id venue.timeZone.id venue.timeZone.offset
-    ## 1       NA  America/New_York                    -4
-    ## 2     5026  America/New_York                    -4
-    ## 3     5054  America/New_York                    -4
-    ## 4     5096  America/New_York                    -4
-    ## 5     5034  America/New_York                    -4
-    ## 6     5085  America/New_York                    -4
-    ##   venue.timeZone.tz division.id division.name
-    ## 1               EDT          18  Metropolitan
-    ## 2               EDT          18  Metropolitan
-    ## 3               EDT          18  Metropolitan
-    ## 4               EDT          18  Metropolitan
-    ## 5               EDT          18  Metropolitan
-    ## 6               EDT          17      Atlantic
-    ##   division.nameShort        division.link
-    ## 1              Metro /api/v1/divisions/18
-    ## 2              Metro /api/v1/divisions/18
-    ## 3              Metro /api/v1/divisions/18
-    ## 4              Metro /api/v1/divisions/18
-    ## 5              Metro /api/v1/divisions/18
-    ## 6                ATL /api/v1/divisions/17
-    ##   division.abbreviation conference.id conference.name
-    ## 1                     M             6         Eastern
-    ## 2                     M             6         Eastern
-    ## 3                     M             6         Eastern
-    ## 4                     M             6         Eastern
-    ## 5                     M             6         Eastern
-    ## 6                     A             6         Eastern
-    ##         conference.link franchise.franchiseId
-    ## 1 /api/v1/conferences/6                    23
-    ## 2 /api/v1/conferences/6                    22
-    ## 3 /api/v1/conferences/6                    10
-    ## 4 /api/v1/conferences/6                    16
-    ## 5 /api/v1/conferences/6                    17
-    ## 6 /api/v1/conferences/6                     6
-    ##   franchise.teamName        franchise.link
-    ## 1             Devils /api/v1/franchises/23
-    ## 2          Islanders /api/v1/franchises/22
-    ## 3            Rangers /api/v1/franchises/10
-    ## 4             Flyers /api/v1/franchises/16
-    ## 5           Penguins /api/v1/franchises/17
-    ## 6             Bruins  /api/v1/franchises/6
-    ##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                roster.roster
-    ## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      19, 35, 76, 21, 33, 28, 5, 97, 8, 15, 44, 25, 32, 37, 29, 16, 14, 63, 41, 13, 86, 8471233, 8471239, 8474056, 8475151, 8476368, 8476923, 8476941, 8477038, 8477355, 8477401, 8477425, 8477509, 8477541, 8478401, 8478406, 8479291, 8479315, 8479407, 8479415, 8480002, 8481559, Travis Zajac, Cory Schneider, P.K. Subban, Kyle Palmieri, Fredrik Claesson, Damon Severson, Connor Carrick, Nikita Gusev, Will Butcher, John Hayden, Miles Wood, Mirco Mueller, Dakota Mermis, Pavel Zacha, Mackenzie Blackwood, Kevin Rooney, Joey Anderson, Jesper Bratt, Michael McLeod, Nico Hischier, Jack Hughes, /api/v1/people/8471233, /api/v1/people/8471239, /api/v1/people/8474056, /api/v1/people/8475151, /api/v1/people/8476368, /api/v1/people/8476923, /api/v1/people/8476941, /api/v1/people/8477038, /api/v1/people/8477355, /api/v1/people/8477401, /api/v1/people/8477425, /api/v1/people/8477509, /api/v1/people/8477541, /api/v1/people/8478401, /api/v1/people/8478406, /api/v1/people/8479291, /api/v1/people/8479315, /api/v1/people/8479407, /api/v1/people/8479415, /api/v1/people/8480002, /api/v1/people/8481559, C, G, D, R, D, D, D, L, D, C, L, D, D, C, G, C, R, L, C, C, C, Center, Goalie, Defenseman, Right Wing, Defenseman, Defenseman, Defenseman, Left Wing, Defenseman, Center, Left Wing, Defenseman, Defenseman, Center, Goalie, Center, Right Wing, Left Wing, Center, Center, Center, Forward, Goalie, Defenseman, Forward, Defenseman, Defenseman, Defenseman, Forward, Defenseman, Forward, Forward, Defenseman, Defenseman, Forward, Goalie, Forward, Forward, Forward, Forward, Forward, Forward, C, G, D, RW, D, D, D, LW, D, C, LW, D, D, C, G, C, RW, LW, C, C, C
-    ## 2                                                                                                                                                                                                                               55, 16, 1, 4, 47, 15, 10, 40, 34, 12, 7, 17, 2, 53, 27, 29, 14, 44, 24, 33, 3, 6, 32, 28, 25, 13, 18, 21, 38, 8, 8470187, 8471217, 8471306, 8472382, 8473463, 8473504, 8473544, 8473575, 8474066, 8474573, 8474586, 8474709, 8475181, 8475231, 8475314, 8475754, 8475832, 8476419, 8476429, 8476444, 8476917, 8477506, 8477527, 8477936, 8478038, 8478445, 8478463, 8479526, 8480222, 8480865, Johnny Boychuk, Andrew Ladd, Thomas Greiss, Andy Greene, Leo Komarov, Cal Clutterbuck, Derick Brassard, Semyon Varlamov, Thomas Hickey, Josh Bailey, Jordan Eberle, Matt Martin, Nick Leddy, Casey Cizikas, Anders Lee, Brock Nelson, Tom Kuhnhackl, Jean-Gabriel Pageau, Scott Mayfield, Christopher Gibson, Adam Pelech, Ryan Pulock, Ross Johnston, Michael Dal Colle, Devon Toews, Mathew Barzal, Anthony Beauvillier, Otto Koivula, Sebastian Aho, Noah Dobson, /api/v1/people/8470187, /api/v1/people/8471217, /api/v1/people/8471306, /api/v1/people/8472382, /api/v1/people/8473463, /api/v1/people/8473504, /api/v1/people/8473544, /api/v1/people/8473575, /api/v1/people/8474066, /api/v1/people/8474573, /api/v1/people/8474586, /api/v1/people/8474709, /api/v1/people/8475181, /api/v1/people/8475231, /api/v1/people/8475314, /api/v1/people/8475754, /api/v1/people/8475832, /api/v1/people/8476419, /api/v1/people/8476429, /api/v1/people/8476444, /api/v1/people/8476917, /api/v1/people/8477506, /api/v1/people/8477527, /api/v1/people/8477936, /api/v1/people/8478038, /api/v1/people/8478445, /api/v1/people/8478463, /api/v1/people/8479526, /api/v1/people/8480222, /api/v1/people/8480865, D, L, G, D, R, R, C, G, D, R, R, L, D, C, L, C, R, C, D, G, D, D, L, L, D, C, L, L, D, D, Defenseman, Left Wing, Goalie, Defenseman, Right Wing, Right Wing, Center, Goalie, Defenseman, Right Wing, Right Wing, Left Wing, Defenseman, Center, Left Wing, Center, Right Wing, Center, Defenseman, Goalie, Defenseman, Defenseman, Left Wing, Left Wing, Defenseman, Center, Left Wing, Left Wing, Defenseman, Defenseman, Defenseman, Forward, Goalie, Defenseman, Forward, Forward, Forward, Goalie, Defenseman, Forward, Forward, Forward, Defenseman, Forward, Forward, Forward, Forward, Forward, Defenseman, Goalie, Defenseman, Defenseman, Forward, Forward, Defenseman, Forward, Forward, Forward, Defenseman, Defenseman, D, LW, G, D, RW, RW, C, G, D, RW, RW, LW, D, C, LW, C, RW, C, D, G, D, D, LW, LW, D, C, LW, LW, D, D
-    ## 3                                                                                                                                                38, 74, 30, 18, 42, 20, 14, 17, 29, 16, 93, 33, 8, 65, 89, 77, 48, 31, 44, 10, 46, 23, 55, 12, 25, 21, 26, 95, 72, 40, 24, 8474230, 8480833, 8468685, 8471686, 8474090, 8475184, 8475735, 8475855, 8476396, 8476458, 8476459, 8476858, 8476885, 8476982, 8477402, 8477950, 8477962, 8478048, 8478178, 8478550, 8479027, 8479323, 8479324, 8479328, 8479333, 8479353, 8479364, 8479968, 8480078, 8480382, 8481554, Micheal Haley, Vitali Kravtsov, Henrik Lundqvist, Marc Staal, Brendan Smith, Chris Kreider, Greg McKegg, Jesper Fast, Steven Fogarty, Ryan Strome, Mika Zibanejad, Phillip Di Giuseppe, Jacob Trouba, Danny O'Regan, Pavel Buchnevich, Tony DeAngelo, Brendan Lemieux, Igor Shesterkin, Darren Raddysh, Artemi Panarin, Brandon Crawley, Adam Fox, Ryan Lindgren, Julien Gauthier, Libor Hajek, Brett Howden, Tim Gettinger, Vinni Lettieri, Filip Chytil, Alexandar Georgiev, Kaapo Kakko, /api/v1/people/8474230, /api/v1/people/8480833, /api/v1/people/8468685, /api/v1/people/8471686, /api/v1/people/8474090, /api/v1/people/8475184, /api/v1/people/8475735, /api/v1/people/8475855, /api/v1/people/8476396, /api/v1/people/8476458, /api/v1/people/8476459, /api/v1/people/8476858, /api/v1/people/8476885, /api/v1/people/8476982, /api/v1/people/8477402, /api/v1/people/8477950, /api/v1/people/8477962, /api/v1/people/8478048, /api/v1/people/8478178, /api/v1/people/8478550, /api/v1/people/8479027, /api/v1/people/8479323, /api/v1/people/8479324, /api/v1/people/8479328, /api/v1/people/8479333, /api/v1/people/8479353, /api/v1/people/8479364, /api/v1/people/8479968, /api/v1/people/8480078, /api/v1/people/8480382, /api/v1/people/8481554, C, R, G, D, D, L, C, R, C, C, C, L, D, C, R, D, L, G, D, L, D, D, D, R, D, C, L, R, C, G, R, Center, Right Wing, Goalie, Defenseman, Defenseman, Left Wing, Center, Right Wing, Center, Center, Center, Left Wing, Defenseman, Center, Right Wing, Defenseman, Left Wing, Goalie, Defenseman, Left Wing, Defenseman, Defenseman, Defenseman, Right Wing, Defenseman, Center, Left Wing, Right Wing, Center, Goalie, Right Wing, Forward, Forward, Goalie, Defenseman, Defenseman, Forward, Forward, Forward, Forward, Forward, Forward, Forward, Defenseman, Forward, Forward, Defenseman, Forward, Goalie, Defenseman, Forward, Defenseman, Defenseman, Defenseman, Forward, Defenseman, Forward, Forward, Forward, Forward, Goalie, Forward, C, RW, G, D, D, LW, C, RW, C, C, C, LW, D, C, RW, D, LW, G, D, LW, D, D, D, RW, D, C, LW, RW, C, G, RW
-    ## 4 55, 44, 44, 37, 15, 28, 61, 25, 93, 38, 18, 13, 10, 3, 14, 21, 53, 12, 8, 6, 62, 59, 23, 11, 9, 5, 34, 82, 79, 48, 67, 49, 54, 8477502, 8473485, 8470775, 8470880, 8471702, 8473512, 8474027, 8474037, 8474161, 8474683, 8475752, 8475763, 8476404, 8476407, 8476461, 8476872, 8476906, 8477290, 8477462, 8477948, 8477979, 8478017, 8478067, 8478439, 8478500, 8479026, 8479312, 8479382, 8479394, 8480028, 8480279, 8480797, 8481178, Samuel Morin, Chris Stewart, Nate Thompson, Brian Elliott, Matt Niskanen, Claude Giroux, Justin Braun, James van Riemsdyk, Jakub Voracek, Derek Grant, Tyler Pitlick, Kevin Hayes, Andy Andreoff, Andy Welinski, Sean Couturier, Scott Laughton, Shayne Gostisbehere, Michael Raffl, Robert Hagg, Travis Sanheim, Nicolas Aube-Kubel, Mark Friedman, Oskar Lindblom, Travis Konecny, Ivan Provorov, Philippe Myers, Alex Lyon, Connor Bunnaman, Carter Hart, Morgan Frost, Kirill Ustimenko, Joel Farabee, Egor Zamula, /api/v1/people/8477502, /api/v1/people/8473485, /api/v1/people/8470775, /api/v1/people/8470880, /api/v1/people/8471702, /api/v1/people/8473512, /api/v1/people/8474027, /api/v1/people/8474037, /api/v1/people/8474161, /api/v1/people/8474683, /api/v1/people/8475752, /api/v1/people/8475763, /api/v1/people/8476404, /api/v1/people/8476407, /api/v1/people/8476461, /api/v1/people/8476872, /api/v1/people/8476906, /api/v1/people/8477290, /api/v1/people/8477462, /api/v1/people/8477948, /api/v1/people/8477979, /api/v1/people/8478017, /api/v1/people/8478067, /api/v1/people/8478439, /api/v1/people/8478500, /api/v1/people/8479026, /api/v1/people/8479312, /api/v1/people/8479382, /api/v1/people/8479394, /api/v1/people/8480028, /api/v1/people/8480279, /api/v1/people/8480797, /api/v1/people/8481178, D, R, C, G, D, C, D, L, R, C, C, C, C, D, C, C, D, L, D, D, R, D, L, R, D, D, G, C, G, C, G, L, D, Defenseman, Right Wing, Center, Goalie, Defenseman, Center, Defenseman, Left Wing, Right Wing, Center, Center, Center, Center, Defenseman, Center, Center, Defenseman, Left Wing, Defenseman, Defenseman, Right Wing, Defenseman, Left Wing, Right Wing, Defenseman, Defenseman, Goalie, Center, Goalie, Center, Goalie, Left Wing, Defenseman, Defenseman, Forward, Forward, Goalie, Defenseman, Forward, Defenseman, Forward, Forward, Forward, Forward, Forward, Forward, Defenseman, Forward, Forward, Defenseman, Forward, Defenseman, Defenseman, Forward, Defenseman, Forward, Forward, Defenseman, Defenseman, Goalie, Forward, Goalie, Forward, Goalie, Forward, Defenseman, D, RW, C, G, D, C, D, LW, RW, C, C, C, C, D, C, C, D, LW, D, D, RW, D, LW, RW, D, D, G, C, G, C, G, LW, D
-    ## 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                27, 18, 12, 71, 87, 3, 58, 72, 4, 8, 16, 17, 30, 53, 2, 59, 35, 43, 42, 19, 28, 37, 57, 6, 13, 46, 50, 8475760, 8478866, 8466139, 8471215, 8471675, 8471677, 8471724, 8471887, 8474602, 8475208, 8475722, 8475810, 8476899, 8476927, 8477244, 8477404, 8477465, 8477839, 8477953, 8477955, 8477969, 8478043, 8478074, 8478507, 8479293, 8479944, 8480945, Nick Bjugstad, Dominik Simon, Patrick Marleau, Evgeni Malkin, Sidney Crosby, Jack Johnson, Kris Letang, Patric Hornqvist, Justin Schultz, Brian Dumoulin, Jason Zucker, Bryan Rust, Matt Murray, Teddy Blueger, Chad Ruhwedel, Jake Guentzel, Tristan Jarry, Conor Sheary, Kasperi Kapanen, Jared McCann, Marcus Pettersson, Sam Lafferty, Anthony Angello, John Marino, Brandon Tanev, Zach Aston-Reese, Juuso Riikola, /api/v1/people/8475760, /api/v1/people/8478866, /api/v1/people/8466139, /api/v1/people/8471215, /api/v1/people/8471675, /api/v1/people/8471677, /api/v1/people/8471724, /api/v1/people/8471887, /api/v1/people/8474602, /api/v1/people/8475208, /api/v1/people/8475722, /api/v1/people/8475810, /api/v1/people/8476899, /api/v1/people/8476927, /api/v1/people/8477244, /api/v1/people/8477404, /api/v1/people/8477465, /api/v1/people/8477839, /api/v1/people/8477953, /api/v1/people/8477955, /api/v1/people/8477969, /api/v1/people/8478043, /api/v1/people/8478074, /api/v1/people/8478507, /api/v1/people/8479293, /api/v1/people/8479944, /api/v1/people/8480945, C, C, C, C, C, D, D, R, D, D, L, R, G, C, D, L, G, L, R, C, D, C, C, D, L, C, D, Center, Center, Center, Center, Center, Defenseman, Defenseman, Right Wing, Defenseman, Defenseman, Left Wing, Right Wing, Goalie, Center, Defenseman, Left Wing, Goalie, Left Wing, Right Wing, Center, Defenseman, Center, Center, Defenseman, Left Wing, Center, Defenseman, Forward, Forward, Forward, Forward, Forward, Defenseman, Defenseman, Forward, Defenseman, Defenseman, Forward, Forward, Goalie, Forward, Defenseman, Forward, Goalie, Forward, Forward, Forward, Defenseman, Forward, Forward, Defenseman, Forward, Forward, Defenseman, C, C, C, C, C, D, D, RW, D, D, LW, RW, G, C, D, LW, G, LW, RW, C, D, C, C, D, LW, C, D
-    ## 6                                                                                         86, 33, 37, 41, 46, 40, 63, 27, 13, 14, 20, 52, 35, 47, 48, 75, 21, 88, 10, 28, 67, 80, 25, 79, 19, 74, 73, 82, 58, 68, 83, 26, 8476191, 8465009, 8470638, 8470860, 8471276, 8471695, 8473419, 8475186, 8475745, 8475780, 8475807, 8476374, 8476509, 8476792, 8476891, 8477365, 8477941, 8477956, 8478075, 8478131, 8478415, 8478435, 8478443, 8478468, 8478485, 8478498, 8479325, 8479365, 8480001, 8480021, 8480901, 8480944, Kevan Miller, Zdeno Chara, Patrice Bergeron, Jaroslav Halak, David Krejci, Tuukka Rask, Brad Marchand, John Moore, Charlie Coyle, Chris Wagner, Joakim Nordstrom, Sean Kuraly, Maxime Lagace, Torey Krug, Matt Grzelcyk, Connor Clifton, Nick Ritchie, David Pastrnak, Anders Bjork, Ondrej Kase, Jakub Zboril, Dan Vladar, Brandon Carlo, Jeremy Lauzon, Zach Senyshyn, Jake DeBrusk, Charlie McAvoy, Trent Frederic, Urho Vaakanainen, Jack Studnicka, Karson Kuhlman, Par Lindholm, /api/v1/people/8476191, /api/v1/people/8465009, /api/v1/people/8470638, /api/v1/people/8470860, /api/v1/people/8471276, /api/v1/people/8471695, /api/v1/people/8473419, /api/v1/people/8475186, /api/v1/people/8475745, /api/v1/people/8475780, /api/v1/people/8475807, /api/v1/people/8476374, /api/v1/people/8476509, /api/v1/people/8476792, /api/v1/people/8476891, /api/v1/people/8477365, /api/v1/people/8477941, /api/v1/people/8477956, /api/v1/people/8478075, /api/v1/people/8478131, /api/v1/people/8478415, /api/v1/people/8478435, /api/v1/people/8478443, /api/v1/people/8478468, /api/v1/people/8478485, /api/v1/people/8478498, /api/v1/people/8479325, /api/v1/people/8479365, /api/v1/people/8480001, /api/v1/people/8480021, /api/v1/people/8480901, /api/v1/people/8480944, D, D, C, G, C, G, L, D, C, R, C, C, G, D, D, D, L, R, L, R, D, G, D, D, R, L, D, C, D, C, C, C, Defenseman, Defenseman, Center, Goalie, Center, Goalie, Left Wing, Defenseman, Center, Right Wing, Center, Center, Goalie, Defenseman, Defenseman, Defenseman, Left Wing, Right Wing, Left Wing, Right Wing, Defenseman, Goalie, Defenseman, Defenseman, Right Wing, Left Wing, Defenseman, Center, Defenseman, Center, Center, Center, Defenseman, Defenseman, Forward, Goalie, Forward, Goalie, Forward, Defenseman, Forward, Forward, Forward, Forward, Goalie, Defenseman, Defenseman, Defenseman, Forward, Forward, Forward, Forward, Defenseman, Goalie, Defenseman, Defenseman, Forward, Forward, Defenseman, Forward, Defenseman, Forward, Forward, Forward, D, D, C, G, C, G, LW, D, C, RW, C, C, G, D, D, D, LW, RW, LW, RW, D, G, D, D, RW, LW, D, C, D, C, C, C
-    ##              roster.link
-    ## 1 /api/v1/teams/1/roster
-    ## 2 /api/v1/teams/2/roster
-    ## 3 /api/v1/teams/3/roster
-    ## 4 /api/v1/teams/4/roster
-    ## 5 /api/v1/teams/5/roster
-    ## 6 /api/v1/teams/6/roster
 
 ## A wrapper function for all the functions above
 
@@ -907,252 +779,6 @@ nhlFun <- function(endpoints, ...){
     stop("Please enter a valid endpoint")
   }
 }
-nhlFun(endpoints = "team total")
-```
-
-    ## No encoding supplied: defaulting to UTF-8.
-
-    ##    id activeFranchise firstSeasonId franchiseId gameTypeId
-    ## 1   1               1      19821983          23          2
-    ## 2   2               1      19821983          23          3
-    ## 3   3               1      19721973          22          2
-    ## 4   4               1      19721973          22          3
-    ## 5   5               1      19261927          10          2
-    ## 6   6               1      19261927          10          3
-    ## 7   7               1      19671968          16          3
-    ## 8   8               1      19671968          16          2
-    ## 9   9               1      19671968          17          2
-    ## 10 10               1      19671968          17          3
-    ## 11 11               1      19241925           6          2
-    ## 12 12               1      19241925           6          3
-    ## 13 13               1      19701971          19          2
-    ## 14 14               1      19701971          19          3
-    ## 15 15               1      19171918           1          3
-    ## 16 16               1      19171918           1          2
-    ## 17 17               1      19921993          30          2
-    ## 18 18               1      19921993          30          3
-    ## 19 19               1      19271928           5          2
-    ## 20 20               1      19271928           5          3
-    ## 21 21               1      19992000          35          2
-    ## 22 22               1      19992000          35          3
-    ## 23 23               1      19971998          26          3
-    ## 24 24               1      19971998          26          2
-    ## 25 25               1      19931994          33          2
-    ## 26 26               1      19931994          33          3
-    ## 27 27               1      19921993          31          2
-    ## 28 28               1      19921993          31          3
-    ## 29 29               1      19741975          24          2
-    ## 30 30               1      19741975          24          3
-    ## 31 31               1      19261927          11          3
-    ## 32 32               1      19261927          11          2
-    ## 33 33               1      19321933          12          2
-    ##    gamesPlayed goalsAgainst goalsFor homeLosses
-    ## 1         2937         8708     8647        507
-    ## 2          257          634      697         53
-    ## 3         3732        11779    11889        674
-    ## 4          289          845      925         48
-    ## 5         6504        19863    19864       1132
-    ## 6          518         1447     1404        104
-    ## 7          449         1332     1335         97
-    ## 8         4115        12054    13527        572
-    ## 9         4115        13893    13678        679
-    ## 10         385         1110     1174         83
-    ## 11        6570        19001    20944        953
-    ## 12         664         1875     1923        149
-    ## 13        3889        11767    12333        623
-    ## 14         256          765      763         54
-    ## 15         759         1927     2271        131
-    ## 16        6731        18092    21632        870
-    ## 17        2139         6390     6093        403
-    ## 18         151          372      357         35
-    ## 19        6460        19805    19793       1075
-    ## 20         538         1477     1380        117
-    ## 21         902         3014     2465        204
-    ## 22           4           17        6          2
-    ## 23         101          252      241         21
-    ## 24        1756         5004     4735        320
-    ## 25        2053         5969     5476        385
-    ## 26          48          128      115         13
-    ## 27        2138         6499     6035        407
-    ## 28         151          402      410         37
-    ## 29        3577        11390    11325        612
-    ## 30         290          821      826         75
-    ## 31         548         1669     1566        104
-    ## 32        6504        19501    19376       1117
-    ## 33        6237        18710    19423        929
-    ##    homeOvertimeLosses homeTies homeWins lastSeasonId losses
-    ## 1                  82       96      783           NA   1181
-    ## 2                   0       NA       74           NA    120
-    ## 3                  81      170      942           NA   1570
-    ## 4                   1       NA       89           NA    130
-    ## 5                  73      448     1600           NA   2693
-    ## 6                   0        1      137           NA    266
-    ## 7                   0       NA      135           NA    218
-    ## 8                  89      193     1204           NA   1429
-    ## 9                  58      205     1116           NA   1718
-    ## 10                  0       NA      112           NA    178
-    ## 11                 89      376     1867           NA   2387
-    ## 12                  2        3      191           NA    332
-    ## 13                 80      197     1045           NA   1530
-    ## 14                  0       NA       73           NA    132
-    ## 15                  0        3      254           NA    317
-    ## 16                 91      381     2025           NA   2281
-    ## 17                 89       60      519           NA    912
-    ## 18                  0       NA       37           NA     79
-    ## 19                 82      388     1684           NA   2682
-    ## 20                  0        2      148           NA    279
-    ## 21                 38       26      183     20102011    437
-    ## 22                  0       NA        0     20102011      4
-    ## 23                  0       NA       29           NA     48
-    ## 24                 72       52      433           NA    713
-    ## 25                112       65      465           NA    856
-    ## 26                  0       NA       12           NA     29
-    ## 27                 67       56      538           NA    930
-    ## 28                  0       NA       42           NA     67
-    ## 29                 80      153      942           NA   1452
-    ## 30                  1       NA       74           NA    152
-    ## 31                  0        1      166           NA    275
-    ## 32                 82      410     1642           NA   2736
-    ## 33                 94      368     1729           NA   2419
-    ##    overtimeLosses penaltyMinutes pointPctg points
-    ## 1             162          44397    0.5330   3131
-    ## 2               0           4266    0.0039      2
-    ## 3             159          57422    0.5115   3818
-    ## 4               0           5498    0.0138      8
-    ## 5             147          85564    0.5125   6667
-    ## 6               0           8181    0.0000      0
-    ## 7               0           9104    0.0045      4
-    ## 8             175          75761    0.5759   4740
-    ## 9             148          65826    0.5180   4263
-    ## 10              0           6056    0.0156     12
-    ## 11            184          88037    0.5625   7391
-    ## 12              0          10505    0.0301     40
-    ## 13            160          60329    0.5334   4149
-    ## 14              0           4682    0.0000      0
-    ## 15              0          12047    0.0000      0
-    ## 16            164          87019    0.5868   7899
-    ## 17            164          29175    0.5084   2175
-    ## 18              0           2102    0.0000      0
-    ## 19            167          91941    0.5121   6616
-    ## 20              0           8491    0.0112     12
-    ## 21             78          13727    0.4473    807
-    ## 22              0            115    0.0000      0
-    ## 23              0           1198    0.0792     16
-    ## 24            166          19015    0.5222   1834
-    ## 25            203          28603    0.4990   2049
-    ## 26              0            669    0.0000      0
-    ## 27            147          30489    0.5044   2157
-    ## 28              0           2110    0.0728     22
-    ## 29            158          56928    0.5296   3789
-    ## 30              1           5100    0.0655     38
-    ## 31              0           8855    0.0000      0
-    ## 32            166          91917    0.5040   6556
-    ## 33            173          83995    0.5363   6690
-    ##    roadLosses roadOvertimeLosses roadTies roadWins
-    ## 1         674                 80      123      592
-    ## 2          67                  0       NA       63
-    ## 3         896                 78      177      714
-    ## 4          82                  0       NA       70
-    ## 5        1561                 74      360     1256
-    ## 6         162                  0        7      107
-    ## 7         121                  0       NA       96
-    ## 8         857                 86      264      850
-    ## 9        1039                 90      178      750
-    ## 10         95                  1       NA       95
-    ## 11       1434                 95      415     1341
-    ## 12        183                  0        3      135
-    ## 13        907                 80      212      745
-    ## 14         78                  0       NA       51
-    ## 15        186                  0        5      180
-    ## 16       1411                 73      456     1424
-    ## 17        509                 75       55      429
-    ## 18         44                  0       NA       35
-    ## 19       1607                 85      385     1154
-    ## 20        162                  0        1      108
-    ## 21        233                 40       19      159
-    ## 22          2                  0       NA        0
-    ## 23         27                  1       NA       24
-    ## 24        393                 94       34      358
-    ## 25        471                 91       77      387
-    ## 26         16                  0       NA        7
-    ## 27        523                 80       56      411
-    ## 28         30                  0       NA       42
-    ## 29        840                 78      150      722
-    ## 30         77                  1       NA       63
-    ## 31        171                  0        4      102
-    ## 32       1619                 84      404     1146
-    ## 33       1490                 79      405     1143
-    ##    shootoutLosses shootoutWins shutouts teamId
-    ## 1              79           78      193      1
-    ## 2               0            0       25      1
-    ## 3              67           82      167      2
-    ## 4               0            0       12      2
-    ## 5              66           78      403      3
-    ## 6               0            0       44      3
-    ## 7               0            0       33      4
-    ## 8              88           50      245      4
-    ## 9              53           80      184      5
-    ## 10              0            0       30      5
-    ## 11             80           64      500      6
-    ## 12              0            0       49      6
-    ## 13             71           77      194      7
-    ## 14              0            0       18      7
-    ## 15              0            0       67      8
-    ## 16             63           68      542      8
-    ## 17             78           56      135      9
-    ## 18              0            0       12      9
-    ## 19             77           58      419     10
-    ## 20              0            0       49     10
-    ## 21             29           37       41     11
-    ## 22              0            0        0     11
-    ## 23              0            0       10     12
-    ## 24             59           46       93     12
-    ## 25             95           70      112     13
-    ## 26              0            0        3     13
-    ## 27             57           67      118     14
-    ## 28              0            1       11     14
-    ## 29             69           65      174     15
-    ## 30              1            0       19     15
-    ## 31              0            0       32     16
-    ## 32             68           73      435     16
-    ## 33             73           69      421     17
-    ##               teamName ties triCode wins
-    ## 1    New Jersey Devils  219     NJD 1375
-    ## 2    New Jersey Devils   NA     NJD  137
-    ## 3   New York Islanders  347     NYI 1656
-    ## 4   New York Islanders   NA     NYI  159
-    ## 5     New York Rangers  808     NYR 2856
-    ## 6     New York Rangers    8     NYR  244
-    ## 7  Philadelphia Flyers   NA     PHI  231
-    ## 8  Philadelphia Flyers  457     PHI 2054
-    ## 9  Pittsburgh Penguins  383     PIT 1866
-    ## 10 Pittsburgh Penguins   NA     PIT  207
-    ## 11       Boston Bruins  791     BOS 3208
-    ## 12       Boston Bruins    6     BOS  326
-    ## 13      Buffalo Sabres  409     BUF 1790
-    ## 14      Buffalo Sabres   NA     BUF  124
-    ## 15  Montréal Canadiens    8     MTL  434
-    ## 16  Montréal Canadiens  837     MTL 3449
-    ## 17     Ottawa Senators  115     OTT  948
-    ## 18     Ottawa Senators   NA     OTT   72
-    ## 19 Toronto Maple Leafs  773     TOR 2838
-    ## 20 Toronto Maple Leafs    3     TOR  256
-    ## 21   Atlanta Thrashers   45     ATL  342
-    ## 22   Atlanta Thrashers   NA     ATL    0
-    ## 23 Carolina Hurricanes   NA     CAR   53
-    ## 24 Carolina Hurricanes   86     CAR  791
-    ## 25    Florida Panthers  142     FLA  852
-    ## 26    Florida Panthers   NA     FLA   19
-    ## 27 Tampa Bay Lightning  112     TBL  949
-    ## 28 Tampa Bay Lightning   NA     TBL   84
-    ## 29 Washington Capitals  303     WSH 1664
-    ## 30 Washington Capitals   NA     WSH  137
-    ## 31  Chicago Blackhawks    5     CHI  268
-    ## 32  Chicago Blackhawks  814     CHI 2788
-    ## 33   Detroit Red Wings  773     DET 2872
-    ##  [ reached 'max' / getOption("max.print") -- omitted 72 rows ]
-
-``` r
 nhlFun(endpoints = "skater record", "20")
 ```
 
@@ -1164,6 +790,10 @@ nhlFun(endpoints = "skater record", "20")
 nhlFun(endpoints = "stats", expand = "person.team")
 ```
 
+    ## $copyright
+    ## [1] "NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2020. All Rights Reserved."
+    ## 
+    ## $teams
     ##    id                  name             link abbreviation
     ## 1   1     New Jersey Devils  /api/v1/teams/1          NJD
     ## 2   2    New York Islanders  /api/v1/teams/2          NYI
@@ -1485,6 +1115,10 @@ nhlFun(endpoints = "stats", expand = "person.team")
     ## 30            Coyotes /api/v1/franchises/28
     ## 31     Golden Knights /api/v1/franchises/38
 
+``` r
+# nhlFun(endpoints = "team total")
+```
+
 ## Exploratory Data Analysis
 
 ``` r
@@ -1495,9 +1129,45 @@ franTot <- getFranTeamTot()
     ## No encoding supplied: defaulting to UTF-8.
 
 ``` r
+str(franTot)
+```
+
+    ## 'data.frame':    105 obs. of  30 variables:
+    ##  $ id                : int  1 2 3 4 5 6 7 8 9 10 ...
+    ##  $ activeFranchise   : int  1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ firstSeasonId     : int  19821983 19821983 19721973 19721973 19261927 19261927 19671968 19671968 19671968 19671968 ...
+    ##  $ franchiseId       : int  23 23 22 22 10 10 16 16 17 17 ...
+    ##  $ gameTypeId        : int  2 3 2 3 2 3 3 2 2 3 ...
+    ##  $ gamesPlayed       : int  2937 257 3732 290 6504 518 449 4115 4115 385 ...
+    ##  $ goalsAgainst      : int  8708 634 11779 847 19863 1447 1332 12054 13893 1110 ...
+    ##  $ goalsFor          : int  8647 697 11889 926 19864 1404 1335 13527 13678 1174 ...
+    ##  $ homeLosses        : int  507 53 674 48 1132 104 97 572 679 83 ...
+    ##  $ homeOvertimeLosses: int  82 0 81 1 73 0 0 89 58 0 ...
+    ##  $ homeTies          : int  96 NA 170 NA 448 1 NA 193 205 NA ...
+    ##  $ homeWins          : int  783 74 942 89 1600 137 135 1204 1116 112 ...
+    ##  $ lastSeasonId      : int  NA NA NA NA NA NA NA NA NA NA ...
+    ##  $ losses            : int  1181 120 1570 131 2693 266 218 1429 1718 178 ...
+    ##  $ overtimeLosses    : int  162 0 159 0 147 0 0 175 148 0 ...
+    ##  $ penaltyMinutes    : int  44397 4266 57422 5511 85564 8181 9104 75761 65826 6056 ...
+    ##  $ pointPctg         : num  0.533 0.0039 0.5115 0.0138 0.5125 ...
+    ##  $ points            : int  3131 2 3818 8 6667 0 4 4740 4263 12 ...
+    ##  $ roadLosses        : int  674 67 896 83 1561 162 121 857 1039 95 ...
+    ##  $ roadOvertimeLosses: int  80 0 78 0 74 0 0 86 90 1 ...
+    ##  $ roadTies          : int  123 NA 177 NA 360 7 NA 264 178 NA ...
+    ##  $ roadWins          : int  592 63 714 70 1256 107 96 850 750 95 ...
+    ##  $ shootoutLosses    : int  79 0 67 0 66 0 0 88 53 0 ...
+    ##  $ shootoutWins      : int  78 0 82 0 78 0 0 50 80 0 ...
+    ##  $ shutouts          : int  193 25 167 12 403 44 33 245 184 30 ...
+    ##  $ teamId            : int  1 1 2 2 3 3 4 4 5 5 ...
+    ##  $ teamName          : chr  "New Jersey Devils" "New Jersey Devils" "New York Islanders" "New York Islanders" ...
+    ##  $ ties              : int  219 NA 347 NA 808 8 NA 457 383 NA ...
+    ##  $ triCode           : chr  "NJD" "NJD" "NYI" "NYI" ...
+    ##  $ wins              : int  1375 137 1656 159 2856 244 231 2054 1866 207 ...
+
+``` r
 franTot <- franTot %>% select(-c("id", "activeFranchise", "firstSeasonId", "gameTypeId", "lastSeasonId"))
 franStats <- getStats(expand = "person.names") 
-franStats <- franStats %>% select(c("locationName", "firstYearOfPlay", "franchiseId", "venue.city", "venue.timeZone.id", "venue.timeZone.tz", "division.name", "conference.name"))
+franStats <- franStats$teams %>% select(c("locationName", "firstYearOfPlay", "franchiseId", "venue.city", "venue.timeZone.id", "venue.timeZone.tz", "division.name", "conference.name"))
 combined <- full_join(franTot, franStats, by = "franchiseId") %>% mutate(winPercent = wins / gamesPlayed, homeWinPercent = homeWins / wins)
 head(combined)
 ```
@@ -1506,21 +1176,21 @@ head(combined)
     ## 1          23        2937         8708     8647        507
     ## 2          23         257          634      697         53
     ## 3          22        3732        11779    11889        674
-    ## 4          22         289          845      925         48
+    ## 4          22         290          847      926         48
     ## 5          10        6504        19863    19864       1132
     ## 6          10         518         1447     1404        104
     ##   homeOvertimeLosses homeTies homeWins losses
     ## 1                 82       96      783   1181
     ## 2                  0       NA       74    120
     ## 3                 81      170      942   1570
-    ## 4                  1       NA       89    130
+    ## 4                  1       NA       89    131
     ## 5                 73      448     1600   2693
     ## 6                  0        1      137    266
     ##   overtimeLosses penaltyMinutes pointPctg points roadLosses
     ## 1            162          44397    0.5330   3131        674
     ## 2              0           4266    0.0039      2         67
     ## 3            159          57422    0.5115   3818        896
-    ## 4              0           5498    0.0138      8         82
+    ## 4              0           5511    0.0138      8         83
     ## 5            147          85564    0.5125   6667       1561
     ## 6              0           8181    0.0000      0        162
     ##   roadOvertimeLosses roadTies roadWins shootoutLosses
@@ -1555,7 +1225,7 @@ head(combined)
     ## 1         Eastern  0.4681648      0.5694545
     ## 2         Eastern  0.5330739      0.5401460
     ## 3         Eastern  0.4437299      0.5688406
-    ## 4         Eastern  0.5501730      0.5597484
+    ## 4         Eastern  0.5482759      0.5597484
     ## 5         Eastern  0.4391144      0.5602241
     ## 6         Eastern  0.4710425      0.5614754
 
@@ -1563,7 +1233,7 @@ head(combined)
 ggplot(combined, aes(x = homeWins, y = homeLosses)) + geom_point(aes(color = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ``` r
 ggplot(combined, aes (x = winPercent)) + geom_histogram(aes(y = ..density..))
@@ -1572,4 +1242,4 @@ ggplot(combined, aes (x = winPercent)) + geom_histogram(aes(y = ..density..))
     ## `stat_bin()` using `bins = 30`. Pick better value with
     ## `binwidth`.
 
-![](README_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->

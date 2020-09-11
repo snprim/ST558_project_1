@@ -126,22 +126,61 @@ Examples of arguments:
 
 For more information about these modifiers, see [the documentation](https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md).
 
+
+```{r, echo = FALSE, eval = FALSE}
+# figuring out NHL stats
+# test2 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?expand=team.roster") %>% content("text") %>% fromJSON(flatten = TRUE)
+# test2$teams$roster.roster
+test3 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?expand=person.names") %>% content("text") %>% fromJSON(flatten = TRUE)
+test3$teams
+# test4 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?expand=team.schedule.next") %>% content("text") %>% fromJSON(flatten = TRUE)
+# test4$teams$nextGameSchedule.dates
+# test5 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?expand=team.stats") %>% content("text") %>% fromJSON(flatten = TRUE)
+# test5$teams$teamStats
+# test6 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?expand=team.schedule.previous") %>% content("text") %>% fromJSON(flatten = TRUE)
+# test6$teams$previousGameSchedule.dates
+test7 <- GET("https://statsapi.web.nhl.com/api/v1/teams?expand=team.roster&season=20142015") %>% content("text") %>% fromJSON(flatten = TRUE)
+test7
+test8 <- GET("https://statsapi.web.nhl.com/api/v1/teams?teamId=1,3,5") %>% content("text") %>% fromJSON(flatten = TRUE)
+test8$teams
+test9 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?stats=statsSingleSeasonPlayoffs") %>% content("text") %>% fromJSON(flatten = TRUE)
+test9$teams
+```
+
+
 ```{r}
 baseurl_stats <- "https://statsapi.web.nhl.com/api/v1/teams"
 getStats <- function(expand = "", teamID = "", stats = ""){
+  if (teamID!=""){
+    if (length(teamID)==1){
+      baseurl_stats <- paste0("https://statsapi.web.nhl.com/api/v1/teams/", teamID)
+    }
+    else{
+      fullurl <- paste0("https://statsapi.web.nhl.com/api/v1/teams?teamID=", teamID)
+    }
+  }
   if (expand != ""){
     fullurl <- paste0(baseurl_stats, "?expand=", expand)
-  } else if (teamID != ""){
-    fullurl <- paste0(baseurl_stats, "?teamID=", teamID)
   } else if (stats != ""){
     fullurl <- paste0(baseurl_stats, "?stats=", stats)
   }
   stats <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
-  return(stats$teams)
+  if (expand == "team.roster"){
+    stats <- stats$teams$roster.roster
+  } else if (expand == "team.schedule.next"){
+    stats <- stats$teams$nextGameSchedule.dates
+  } else if (expand == "team.schedule.previous"){
+    stats <- stats$teams$previousGameSchedule.dates
+  } else if (expand == "team.stats"){
+    stats <- stats$teams$teamStats
+  }
+  return(stats)
 }
-getStats(expand = "person.names") %>% head()
-getStats(stats = "statsSingleSeasonPlayoffs") %>% head()
-getStats(expand = "team.roster") %>% head()
+# it seems that we need to go into one more level to get person and roster info
+getStats(teamID = 20, expand = "team.stats")
+# getStats(expand = "team.roster&season=20142015") %>% head()
+getStats(teamID = 53, expand = "team.roster")
+# getStats(stats = "statsSingleSeasonPlayoffs") %>% head()
 
 ```
 ## A wrapper function for all the functions above  
@@ -184,9 +223,9 @@ nhlFun <- function(endpoints, ...){
     stop("Please enter a valid endpoint")
   }
 }
-nhlFun(endpoints = "team total")
 nhlFun(endpoints = "skater record", "20")
 nhlFun(endpoints = "stats", expand = "person.team")
+# nhlFun(endpoints = "team total")
 ```
 
 ## Exploratory Data Analysis  
@@ -194,9 +233,10 @@ nhlFun(endpoints = "stats", expand = "person.team")
 ```{r}
 # perhaps use the wrapper function here
 franTot <- getFranTeamTot()
+str(franTot)
 franTot <- franTot %>% select(-c("id", "activeFranchise", "firstSeasonId", "gameTypeId", "lastSeasonId"))
 franStats <- getStats(expand = "person.names") 
-franStats <- franStats %>% select(c("locationName", "firstYearOfPlay", "franchiseId", "venue.city", "venue.timeZone.id", "venue.timeZone.tz", "division.name", "conference.name"))
+franStats <- franStats$teams %>% select(c("locationName", "firstYearOfPlay", "franchiseId", "venue.city", "venue.timeZone.id", "venue.timeZone.tz", "division.name", "conference.name"))
 combined <- full_join(franTot, franStats, by = "franchiseId") %>% mutate(winPercent = wins / gamesPlayed, homeWinPercent = homeWins / wins)
 head(combined)
 ggplot(combined, aes(x = homeWins, y = homeLosses)) + geom_point(aes(color = division.name))

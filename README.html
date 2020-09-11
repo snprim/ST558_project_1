@@ -669,21 +669,21 @@ library(tidyverse)
 ## 1        2937         8708     8647        507
 ## 2         257          634      697         53
 ## 3        3732        11779    11889        674
-## 4         289          845      925         48
+## 4         290          847      926         48
 ## 5        6504        19863    19864       1132
 ## 6         518         1447     1404        104
 ##   homeOvertimeLosses homeTies homeWins lastSeasonId losses
 ## 1                 82       96      783           NA   1181
 ## 2                  0       NA       74           NA    120
 ## 3                 81      170      942           NA   1570
-## 4                  1       NA       89           NA    130
+## 4                  1       NA       89           NA    131
 ## 5                 73      448     1600           NA   2693
 ## 6                  0        1      137           NA    266
 ##   overtimeLosses penaltyMinutes pointPctg points roadLosses
 ## 1            162          44397    0.5330   3131        674
 ## 2              0           4266    0.0039      2         67
 ## 3            159          57422    0.5115   3818        896
-## 4              0           5498    0.0138      8         82
+## 4              0           5511    0.0138      8         83
 ## 5            147          85564    0.5125   6667       1561
 ## 6              0           8181    0.0000      0        162
 ##   roadOvertimeLosses roadTies roadWins shootoutLosses
@@ -1151,246 +1151,118 @@ library(tidyverse)
 <p>For more information about these modifiers, see <a href="https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md">the documentation</a>.</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>baseurl_stats &lt;-<span class="st"> &quot;https://statsapi.web.nhl.com/api/v1/teams&quot;</span></span>
 <span id="cb21-2"><a href="#cb21-2"></a>getStats &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">expand =</span> <span class="st">&quot;&quot;</span>, <span class="dt">teamID =</span> <span class="st">&quot;&quot;</span>, <span class="dt">stats =</span> <span class="st">&quot;&quot;</span>){</span>
-<span id="cb21-3"><a href="#cb21-3"></a>  <span class="cf">if</span> (expand <span class="op">!=</span><span class="st"> &quot;&quot;</span>){</span>
-<span id="cb21-4"><a href="#cb21-4"></a>    fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_stats, <span class="st">&quot;?expand=&quot;</span>, expand)</span>
-<span id="cb21-5"><a href="#cb21-5"></a>  } <span class="cf">else</span> <span class="cf">if</span> (teamID <span class="op">!=</span><span class="st"> &quot;&quot;</span>){</span>
-<span id="cb21-6"><a href="#cb21-6"></a>    fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_stats, <span class="st">&quot;?teamID=&quot;</span>, teamID)</span>
-<span id="cb21-7"><a href="#cb21-7"></a>  } <span class="cf">else</span> <span class="cf">if</span> (stats <span class="op">!=</span><span class="st"> &quot;&quot;</span>){</span>
-<span id="cb21-8"><a href="#cb21-8"></a>    fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_stats, <span class="st">&quot;?stats=&quot;</span>, stats)</span>
-<span id="cb21-9"><a href="#cb21-9"></a>  }</span>
-<span id="cb21-10"><a href="#cb21-10"></a>  stats &lt;-<span class="st"> </span><span class="kw">GET</span>(fullurl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fromJSON</span>(<span class="dt">flatten =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb21-11"><a href="#cb21-11"></a>  <span class="kw">return</span>(stats<span class="op">$</span>teams)</span>
-<span id="cb21-12"><a href="#cb21-12"></a>}</span>
-<span id="cb21-13"><a href="#cb21-13"></a><span class="kw">getStats</span>(<span class="dt">expand =</span> <span class="st">&quot;person.names&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</span></code></pre></div>
-<pre><code>##   id                name            link abbreviation
-## 1  1   New Jersey Devils /api/v1/teams/1          NJD
-## 2  2  New York Islanders /api/v1/teams/2          NYI
-## 3  3    New York Rangers /api/v1/teams/3          NYR
-## 4  4 Philadelphia Flyers /api/v1/teams/4          PHI
-## 5  5 Pittsburgh Penguins /api/v1/teams/5          PIT
-## 6  6       Boston Bruins /api/v1/teams/6          BOS
-##    teamName locationName firstYearOfPlay    shortName
-## 1    Devils   New Jersey            1982   New Jersey
-## 2 Islanders     New York            1972 NY Islanders
-## 3   Rangers     New York            1926   NY Rangers
-## 4    Flyers Philadelphia            1967 Philadelphia
-## 5  Penguins   Pittsburgh            1967   Pittsburgh
-## 6    Bruins       Boston            1924       Boston
-##                      officialSiteUrl franchiseId active
-## 1    http://www.newjerseydevils.com/          23   TRUE
-## 2   http://www.newyorkislanders.com/          22   TRUE
-## 3     http://www.newyorkrangers.com/          10   TRUE
-## 4 http://www.philadelphiaflyers.com/          16   TRUE
-## 5     http://pittsburghpenguins.com/          17   TRUE
-## 6       http://www.bostonbruins.com/           6   TRUE
-##              venue.name          venue.link   venue.city
-## 1     Prudential Center /api/v1/venues/null       Newark
-## 2       Barclays Center /api/v1/venues/5026     Brooklyn
-## 3 Madison Square Garden /api/v1/venues/5054     New York
-## 4    Wells Fargo Center /api/v1/venues/5096 Philadelphia
-## 5      PPG Paints Arena /api/v1/venues/5034   Pittsburgh
-## 6             TD Garden /api/v1/venues/5085       Boston
-##   venue.id venue.timeZone.id venue.timeZone.offset
-## 1       NA  America/New_York                    -4
-## 2     5026  America/New_York                    -4
-## 3     5054  America/New_York                    -4
-## 4     5096  America/New_York                    -4
-## 5     5034  America/New_York                    -4
-## 6     5085  America/New_York                    -4
-##   venue.timeZone.tz division.id division.name
-## 1               EDT          18  Metropolitan
-## 2               EDT          18  Metropolitan
-## 3               EDT          18  Metropolitan
-## 4               EDT          18  Metropolitan
-## 5               EDT          18  Metropolitan
-## 6               EDT          17      Atlantic
-##   division.nameShort        division.link
-## 1              Metro /api/v1/divisions/18
-## 2              Metro /api/v1/divisions/18
-## 3              Metro /api/v1/divisions/18
-## 4              Metro /api/v1/divisions/18
-## 5              Metro /api/v1/divisions/18
-## 6                ATL /api/v1/divisions/17
-##   division.abbreviation conference.id conference.name
-## 1                     M             6         Eastern
-## 2                     M             6         Eastern
-## 3                     M             6         Eastern
-## 4                     M             6         Eastern
-## 5                     M             6         Eastern
-## 6                     A             6         Eastern
-##         conference.link franchise.franchiseId
-## 1 /api/v1/conferences/6                    23
-## 2 /api/v1/conferences/6                    22
-## 3 /api/v1/conferences/6                    10
-## 4 /api/v1/conferences/6                    16
-## 5 /api/v1/conferences/6                    17
-## 6 /api/v1/conferences/6                     6
-##   franchise.teamName        franchise.link
-## 1             Devils /api/v1/franchises/23
-## 2          Islanders /api/v1/franchises/22
-## 3            Rangers /api/v1/franchises/10
-## 4             Flyers /api/v1/franchises/16
-## 5           Penguins /api/v1/franchises/17
-## 6             Bruins  /api/v1/franchises/6
+<span id="cb21-3"><a href="#cb21-3"></a>  <span class="cf">if</span> (teamID<span class="op">!=</span><span class="st">&quot;&quot;</span>){</span>
+<span id="cb21-4"><a href="#cb21-4"></a>    <span class="cf">if</span> (<span class="kw">length</span>(teamID)<span class="op">==</span><span class="dv">1</span>){</span>
+<span id="cb21-5"><a href="#cb21-5"></a>      baseurl_stats &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;https://statsapi.web.nhl.com/api/v1/teams/&quot;</span>, teamID)</span>
+<span id="cb21-6"><a href="#cb21-6"></a>    }</span>
+<span id="cb21-7"><a href="#cb21-7"></a>    <span class="cf">else</span>{</span>
+<span id="cb21-8"><a href="#cb21-8"></a>      fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;https://statsapi.web.nhl.com/api/v1/teams?teamID=&quot;</span>, teamID)</span>
+<span id="cb21-9"><a href="#cb21-9"></a>    }</span>
+<span id="cb21-10"><a href="#cb21-10"></a>  }</span>
+<span id="cb21-11"><a href="#cb21-11"></a>  <span class="cf">if</span> (expand <span class="op">!=</span><span class="st"> &quot;&quot;</span>){</span>
+<span id="cb21-12"><a href="#cb21-12"></a>    fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_stats, <span class="st">&quot;?expand=&quot;</span>, expand)</span>
+<span id="cb21-13"><a href="#cb21-13"></a>  } <span class="cf">else</span> <span class="cf">if</span> (stats <span class="op">!=</span><span class="st"> &quot;&quot;</span>){</span>
+<span id="cb21-14"><a href="#cb21-14"></a>    fullurl &lt;-<span class="st"> </span><span class="kw">paste0</span>(baseurl_stats, <span class="st">&quot;?stats=&quot;</span>, stats)</span>
+<span id="cb21-15"><a href="#cb21-15"></a>  }</span>
+<span id="cb21-16"><a href="#cb21-16"></a>  stats &lt;-<span class="st"> </span><span class="kw">GET</span>(fullurl) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">content</span>(<span class="st">&quot;text&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">fromJSON</span>(<span class="dt">flatten =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb21-17"><a href="#cb21-17"></a>  <span class="cf">if</span> (expand <span class="op">==</span><span class="st"> &quot;team.roster&quot;</span>){</span>
+<span id="cb21-18"><a href="#cb21-18"></a>    stats &lt;-<span class="st"> </span>stats<span class="op">$</span>teams<span class="op">$</span>roster.roster</span>
+<span id="cb21-19"><a href="#cb21-19"></a>  } <span class="cf">else</span> <span class="cf">if</span> (expand <span class="op">==</span><span class="st"> &quot;team.schedule.next&quot;</span>){</span>
+<span id="cb21-20"><a href="#cb21-20"></a>    stats &lt;-<span class="st"> </span>stats<span class="op">$</span>teams<span class="op">$</span>nextGameSchedule.dates</span>
+<span id="cb21-21"><a href="#cb21-21"></a>  } <span class="cf">else</span> <span class="cf">if</span> (expand <span class="op">==</span><span class="st"> &quot;team.schedule.previous&quot;</span>){</span>
+<span id="cb21-22"><a href="#cb21-22"></a>    stats &lt;-<span class="st"> </span>stats<span class="op">$</span>teams<span class="op">$</span>previousGameSchedule.dates</span>
+<span id="cb21-23"><a href="#cb21-23"></a>  } <span class="cf">else</span> <span class="cf">if</span> (expand <span class="op">==</span><span class="st"> &quot;team.stats&quot;</span>){</span>
+<span id="cb21-24"><a href="#cb21-24"></a>    stats &lt;-<span class="st"> </span>stats<span class="op">$</span>teams<span class="op">$</span>teamStats</span>
+<span id="cb21-25"><a href="#cb21-25"></a>  }</span>
+<span id="cb21-26"><a href="#cb21-26"></a>  <span class="kw">return</span>(stats)</span>
+<span id="cb21-27"><a href="#cb21-27"></a>}</span>
+<span id="cb21-28"><a href="#cb21-28"></a><span class="co"># it seems that we need to go into one more level to get person and roster info</span></span>
+<span id="cb21-29"><a href="#cb21-29"></a><span class="kw">getStats</span>(<span class="dt">teamID =</span> <span class="dv">20</span>, <span class="dt">expand =</span> <span class="st">&quot;team.stats&quot;</span>)</span></code></pre></div>
+<pre><code>## [[1]]
+##                                                                                                                                                                                                                                                                                                                                                                                                                                  splits
+## 1 70, NA, 36, 15th, 27, 17th, 7, 21st, 79, 16th, 56.4, 18th, 2.914, 20th, 3.057, 16th, 0.9178, 24th, 21.2, 12th, 41, 19th, 35, 8th, 193, 24th, 82.1, 8th, 31.6, 15th, 32.4429, 24th, 0.667, 26th, 0.4, 3rd, 0.857, 5th, 0.852, 17th, 0.5, 12th, 0.485, 12th, 4120, 5th, 2022, 15th, 2098, 26th, 49.1, 22nd, 9.2, NA, 0.906, NA, NA, 9th, NA, 13th, NA, 20th, 20, 20, Calgary Flames, Calgary Flames, /api/v1/teams/20, /api/v1/teams/20
+##    type.displayName type.gameType.id
+## 1 statsSingleSeason                R
+##   type.gameType.description type.gameType.postseason
+## 1            Regular season                    FALSE
 </code></pre>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="kw">getStats</span>(<span class="dt">stats =</span> <span class="st">&quot;statsSingleSeasonPlayoffs&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</span></code></pre></div>
-<pre><code>##   id                name            link abbreviation
-## 1  1   New Jersey Devils /api/v1/teams/1          NJD
-## 2  2  New York Islanders /api/v1/teams/2          NYI
-## 3  3    New York Rangers /api/v1/teams/3          NYR
-## 4  4 Philadelphia Flyers /api/v1/teams/4          PHI
-## 5  5 Pittsburgh Penguins /api/v1/teams/5          PIT
-## 6  6       Boston Bruins /api/v1/teams/6          BOS
-##    teamName locationName firstYearOfPlay    shortName
-## 1    Devils   New Jersey            1982   New Jersey
-## 2 Islanders     New York            1972 NY Islanders
-## 3   Rangers     New York            1926   NY Rangers
-## 4    Flyers Philadelphia            1967 Philadelphia
-## 5  Penguins   Pittsburgh            1967   Pittsburgh
-## 6    Bruins       Boston            1924       Boston
-##                      officialSiteUrl franchiseId active
-## 1    http://www.newjerseydevils.com/          23   TRUE
-## 2   http://www.newyorkislanders.com/          22   TRUE
-## 3     http://www.newyorkrangers.com/          10   TRUE
-## 4 http://www.philadelphiaflyers.com/          16   TRUE
-## 5     http://pittsburghpenguins.com/          17   TRUE
-## 6       http://www.bostonbruins.com/           6   TRUE
-##              venue.name          venue.link   venue.city
-## 1     Prudential Center /api/v1/venues/null       Newark
-## 2       Barclays Center /api/v1/venues/5026     Brooklyn
-## 3 Madison Square Garden /api/v1/venues/5054     New York
-## 4    Wells Fargo Center /api/v1/venues/5096 Philadelphia
-## 5      PPG Paints Arena /api/v1/venues/5034   Pittsburgh
-## 6             TD Garden /api/v1/venues/5085       Boston
-##   venue.id venue.timeZone.id venue.timeZone.offset
-## 1       NA  America/New_York                    -4
-## 2     5026  America/New_York                    -4
-## 3     5054  America/New_York                    -4
-## 4     5096  America/New_York                    -4
-## 5     5034  America/New_York                    -4
-## 6     5085  America/New_York                    -4
-##   venue.timeZone.tz division.id division.name
-## 1               EDT          18  Metropolitan
-## 2               EDT          18  Metropolitan
-## 3               EDT          18  Metropolitan
-## 4               EDT          18  Metropolitan
-## 5               EDT          18  Metropolitan
-## 6               EDT          17      Atlantic
-##   division.nameShort        division.link
-## 1              Metro /api/v1/divisions/18
-## 2              Metro /api/v1/divisions/18
-## 3              Metro /api/v1/divisions/18
-## 4              Metro /api/v1/divisions/18
-## 5              Metro /api/v1/divisions/18
-## 6                ATL /api/v1/divisions/17
-##   division.abbreviation conference.id conference.name
-## 1                     M             6         Eastern
-## 2                     M             6         Eastern
-## 3                     M             6         Eastern
-## 4                     M             6         Eastern
-## 5                     M             6         Eastern
-## 6                     A             6         Eastern
-##         conference.link franchise.franchiseId
-## 1 /api/v1/conferences/6                    23
-## 2 /api/v1/conferences/6                    22
-## 3 /api/v1/conferences/6                    10
-## 4 /api/v1/conferences/6                    16
-## 5 /api/v1/conferences/6                    17
-## 6 /api/v1/conferences/6                     6
-##   franchise.teamName        franchise.link
-## 1             Devils /api/v1/franchises/23
-## 2          Islanders /api/v1/franchises/22
-## 3            Rangers /api/v1/franchises/10
-## 4             Flyers /api/v1/franchises/16
-## 5           Penguins /api/v1/franchises/17
-## 6             Bruins  /api/v1/franchises/6
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># getStats(expand = &quot;team.roster&amp;season=20142015&quot;) %&gt;% head()</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="kw">getStats</span>(<span class="dt">teamID =</span> <span class="dv">53</span>, <span class="dt">expand =</span> <span class="st">&quot;team.roster&quot;</span>)</span></code></pre></div>
+<pre><code>## [[1]]
+##    jerseyNumber person.id      person.fullName
+## 1            15   8470755      Brad Richardson
+## 2            34   8471262       Carl Soderberg
+## 3            33   8471274       Alex Goligoski
+## 4             4   8471769   Niklas Hjalmarsson
+## 5            40   8473546      Michael Grabner
+## 6            81   8473548          Phil Kessel
+## 7            55   8474218         Jason Demers
+## 8            21   8474613         Derek Stepan
+## 9            23   8475171 Oliver Ekman-Larsson
+## 10           35   8475311        Darcy Kuemper
+## 11           91   8475791          Taylor Hall
+## 12           13   8476994    Vinnie Hinostroza
+## 13           32   8477293         Antti Raanta
+## 14           82   8477851      Jordan Oesterle
+## 15            8   8477951        Nick Schmaltz
+## 16           18   8477989     Christian Dvorak
+## 17           36   8478432    Christian Fischer
+## 18           67   8478474        Lawson Crouse
+## 19           83   8478856        Conor Garland
+## 20            9   8479343       Clayton Keller
+## 21            6   8479345       Jakob Chychrun
+## 22           29   8480849       Barrett Hayton
+## 23           46   8480950      Ilya Lyubushkin
+##               person.link position.code position.name
+## 1  /api/v1/people/8470755             C        Center
+## 2  /api/v1/people/8471262             C        Center
+## 3  /api/v1/people/8471274             D    Defenseman
+## 4  /api/v1/people/8471769             D    Defenseman
+## 5  /api/v1/people/8473546             L     Left Wing
+## 6  /api/v1/people/8473548             R    Right Wing
+## 7  /api/v1/people/8474218             D    Defenseman
+## 8  /api/v1/people/8474613             C        Center
+## 9  /api/v1/people/8475171             D    Defenseman
+## 10 /api/v1/people/8475311             G        Goalie
+## 11 /api/v1/people/8475791             L     Left Wing
+## 12 /api/v1/people/8476994             R    Right Wing
+## 13 /api/v1/people/8477293             G        Goalie
+## 14 /api/v1/people/8477851             D    Defenseman
+## 15 /api/v1/people/8477951             C        Center
+## 16 /api/v1/people/8477989             C        Center
+## 17 /api/v1/people/8478432             R    Right Wing
+## 18 /api/v1/people/8478474             L     Left Wing
+## 19 /api/v1/people/8478856             R    Right Wing
+## 20 /api/v1/people/8479343             R    Right Wing
+## 21 /api/v1/people/8479345             D    Defenseman
+## 22 /api/v1/people/8480849             C        Center
+## 23 /api/v1/people/8480950             D    Defenseman
+##    position.type position.abbreviation
+## 1        Forward                     C
+## 2        Forward                     C
+## 3     Defenseman                     D
+## 4     Defenseman                     D
+## 5        Forward                    LW
+## 6        Forward                    RW
+## 7     Defenseman                     D
+## 8        Forward                     C
+## 9     Defenseman                     D
+## 10        Goalie                     G
+## 11       Forward                    LW
+## 12       Forward                    RW
+## 13        Goalie                     G
+## 14    Defenseman                     D
+## 15       Forward                     C
+## 16       Forward                     C
+## 17       Forward                    RW
+## 18       Forward                    LW
+## 19       Forward                    RW
+## 20       Forward                    RW
+## 21    Defenseman                     D
+## 22       Forward                     C
+## 23    Defenseman                     D
 </code></pre>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="kw">getStats</span>(<span class="dt">expand =</span> <span class="st">&quot;team.roster&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>()</span></code></pre></div>
-<pre><code>##   id                name            link abbreviation
-## 1  1   New Jersey Devils /api/v1/teams/1          NJD
-## 2  2  New York Islanders /api/v1/teams/2          NYI
-## 3  3    New York Rangers /api/v1/teams/3          NYR
-## 4  4 Philadelphia Flyers /api/v1/teams/4          PHI
-## 5  5 Pittsburgh Penguins /api/v1/teams/5          PIT
-## 6  6       Boston Bruins /api/v1/teams/6          BOS
-##    teamName locationName firstYearOfPlay    shortName
-## 1    Devils   New Jersey            1982   New Jersey
-## 2 Islanders     New York            1972 NY Islanders
-## 3   Rangers     New York            1926   NY Rangers
-## 4    Flyers Philadelphia            1967 Philadelphia
-## 5  Penguins   Pittsburgh            1967   Pittsburgh
-## 6    Bruins       Boston            1924       Boston
-##                      officialSiteUrl franchiseId active
-## 1    http://www.newjerseydevils.com/          23   TRUE
-## 2   http://www.newyorkislanders.com/          22   TRUE
-## 3     http://www.newyorkrangers.com/          10   TRUE
-## 4 http://www.philadelphiaflyers.com/          16   TRUE
-## 5     http://pittsburghpenguins.com/          17   TRUE
-## 6       http://www.bostonbruins.com/           6   TRUE
-##              venue.name          venue.link   venue.city
-## 1     Prudential Center /api/v1/venues/null       Newark
-## 2       Barclays Center /api/v1/venues/5026     Brooklyn
-## 3 Madison Square Garden /api/v1/venues/5054     New York
-## 4    Wells Fargo Center /api/v1/venues/5096 Philadelphia
-## 5      PPG Paints Arena /api/v1/venues/5034   Pittsburgh
-## 6             TD Garden /api/v1/venues/5085       Boston
-##   venue.id venue.timeZone.id venue.timeZone.offset
-## 1       NA  America/New_York                    -4
-## 2     5026  America/New_York                    -4
-## 3     5054  America/New_York                    -4
-## 4     5096  America/New_York                    -4
-## 5     5034  America/New_York                    -4
-## 6     5085  America/New_York                    -4
-##   venue.timeZone.tz division.id division.name
-## 1               EDT          18  Metropolitan
-## 2               EDT          18  Metropolitan
-## 3               EDT          18  Metropolitan
-## 4               EDT          18  Metropolitan
-## 5               EDT          18  Metropolitan
-## 6               EDT          17      Atlantic
-##   division.nameShort        division.link
-## 1              Metro /api/v1/divisions/18
-## 2              Metro /api/v1/divisions/18
-## 3              Metro /api/v1/divisions/18
-## 4              Metro /api/v1/divisions/18
-## 5              Metro /api/v1/divisions/18
-## 6                ATL /api/v1/divisions/17
-##   division.abbreviation conference.id conference.name
-## 1                     M             6         Eastern
-## 2                     M             6         Eastern
-## 3                     M             6         Eastern
-## 4                     M             6         Eastern
-## 5                     M             6         Eastern
-## 6                     A             6         Eastern
-##         conference.link franchise.franchiseId
-## 1 /api/v1/conferences/6                    23
-## 2 /api/v1/conferences/6                    22
-## 3 /api/v1/conferences/6                    10
-## 4 /api/v1/conferences/6                    16
-## 5 /api/v1/conferences/6                    17
-## 6 /api/v1/conferences/6                     6
-##   franchise.teamName        franchise.link
-## 1             Devils /api/v1/franchises/23
-## 2          Islanders /api/v1/franchises/22
-## 3            Rangers /api/v1/franchises/10
-## 4             Flyers /api/v1/franchises/16
-## 5           Penguins /api/v1/franchises/17
-## 6             Bruins  /api/v1/franchises/6
-##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                roster.roster
-## 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      19, 35, 76, 21, 33, 28, 5, 97, 8, 15, 44, 25, 32, 37, 29, 16, 14, 63, 41, 13, 86, 8471233, 8471239, 8474056, 8475151, 8476368, 8476923, 8476941, 8477038, 8477355, 8477401, 8477425, 8477509, 8477541, 8478401, 8478406, 8479291, 8479315, 8479407, 8479415, 8480002, 8481559, Travis Zajac, Cory Schneider, P.K. Subban, Kyle Palmieri, Fredrik Claesson, Damon Severson, Connor Carrick, Nikita Gusev, Will Butcher, John Hayden, Miles Wood, Mirco Mueller, Dakota Mermis, Pavel Zacha, Mackenzie Blackwood, Kevin Rooney, Joey Anderson, Jesper Bratt, Michael McLeod, Nico Hischier, Jack Hughes, /api/v1/people/8471233, /api/v1/people/8471239, /api/v1/people/8474056, /api/v1/people/8475151, /api/v1/people/8476368, /api/v1/people/8476923, /api/v1/people/8476941, /api/v1/people/8477038, /api/v1/people/8477355, /api/v1/people/8477401, /api/v1/people/8477425, /api/v1/people/8477509, /api/v1/people/8477541, /api/v1/people/8478401, /api/v1/people/8478406, /api/v1/people/8479291, /api/v1/people/8479315, /api/v1/people/8479407, /api/v1/people/8479415, /api/v1/people/8480002, /api/v1/people/8481559, C, G, D, R, D, D, D, L, D, C, L, D, D, C, G, C, R, L, C, C, C, Center, Goalie, Defenseman, Right Wing, Defenseman, Defenseman, Defenseman, Left Wing, Defenseman, Center, Left Wing, Defenseman, Defenseman, Center, Goalie, Center, Right Wing, Left Wing, Center, Center, Center, Forward, Goalie, Defenseman, Forward, Defenseman, Defenseman, Defenseman, Forward, Defenseman, Forward, Forward, Defenseman, Defenseman, Forward, Goalie, Forward, Forward, Forward, Forward, Forward, Forward, C, G, D, RW, D, D, D, LW, D, C, LW, D, D, C, G, C, RW, LW, C, C, C
-## 2                                                                                                                                                                                                                               55, 16, 1, 4, 47, 15, 10, 40, 34, 12, 7, 17, 2, 53, 27, 29, 14, 44, 24, 33, 3, 6, 32, 28, 25, 13, 18, 21, 38, 8, 8470187, 8471217, 8471306, 8472382, 8473463, 8473504, 8473544, 8473575, 8474066, 8474573, 8474586, 8474709, 8475181, 8475231, 8475314, 8475754, 8475832, 8476419, 8476429, 8476444, 8476917, 8477506, 8477527, 8477936, 8478038, 8478445, 8478463, 8479526, 8480222, 8480865, Johnny Boychuk, Andrew Ladd, Thomas Greiss, Andy Greene, Leo Komarov, Cal Clutterbuck, Derick Brassard, Semyon Varlamov, Thomas Hickey, Josh Bailey, Jordan Eberle, Matt Martin, Nick Leddy, Casey Cizikas, Anders Lee, Brock Nelson, Tom Kuhnhackl, Jean-Gabriel Pageau, Scott Mayfield, Christopher Gibson, Adam Pelech, Ryan Pulock, Ross Johnston, Michael Dal Colle, Devon Toews, Mathew Barzal, Anthony Beauvillier, Otto Koivula, Sebastian Aho, Noah Dobson, /api/v1/people/8470187, /api/v1/people/8471217, /api/v1/people/8471306, /api/v1/people/8472382, /api/v1/people/8473463, /api/v1/people/8473504, /api/v1/people/8473544, /api/v1/people/8473575, /api/v1/people/8474066, /api/v1/people/8474573, /api/v1/people/8474586, /api/v1/people/8474709, /api/v1/people/8475181, /api/v1/people/8475231, /api/v1/people/8475314, /api/v1/people/8475754, /api/v1/people/8475832, /api/v1/people/8476419, /api/v1/people/8476429, /api/v1/people/8476444, /api/v1/people/8476917, /api/v1/people/8477506, /api/v1/people/8477527, /api/v1/people/8477936, /api/v1/people/8478038, /api/v1/people/8478445, /api/v1/people/8478463, /api/v1/people/8479526, /api/v1/people/8480222, /api/v1/people/8480865, D, L, G, D, R, R, C, G, D, R, R, L, D, C, L, C, R, C, D, G, D, D, L, L, D, C, L, L, D, D, Defenseman, Left Wing, Goalie, Defenseman, Right Wing, Right Wing, Center, Goalie, Defenseman, Right Wing, Right Wing, Left Wing, Defenseman, Center, Left Wing, Center, Right Wing, Center, Defenseman, Goalie, Defenseman, Defenseman, Left Wing, Left Wing, Defenseman, Center, Left Wing, Left Wing, Defenseman, Defenseman, Defenseman, Forward, Goalie, Defenseman, Forward, Forward, Forward, Goalie, Defenseman, Forward, Forward, Forward, Defenseman, Forward, Forward, Forward, Forward, Forward, Defenseman, Goalie, Defenseman, Defenseman, Forward, Forward, Defenseman, Forward, Forward, Forward, Defenseman, Defenseman, D, LW, G, D, RW, RW, C, G, D, RW, RW, LW, D, C, LW, C, RW, C, D, G, D, D, LW, LW, D, C, LW, LW, D, D
-## 3                                                                                                                                                38, 74, 30, 18, 42, 20, 14, 17, 29, 16, 93, 33, 8, 65, 89, 77, 48, 31, 44, 10, 46, 23, 55, 12, 25, 21, 26, 95, 72, 40, 24, 8474230, 8480833, 8468685, 8471686, 8474090, 8475184, 8475735, 8475855, 8476396, 8476458, 8476459, 8476858, 8476885, 8476982, 8477402, 8477950, 8477962, 8478048, 8478178, 8478550, 8479027, 8479323, 8479324, 8479328, 8479333, 8479353, 8479364, 8479968, 8480078, 8480382, 8481554, Micheal Haley, Vitali Kravtsov, Henrik Lundqvist, Marc Staal, Brendan Smith, Chris Kreider, Greg McKegg, Jesper Fast, Steven Fogarty, Ryan Strome, Mika Zibanejad, Phillip Di Giuseppe, Jacob Trouba, Danny O&#39;Regan, Pavel Buchnevich, Tony DeAngelo, Brendan Lemieux, Igor Shesterkin, Darren Raddysh, Artemi Panarin, Brandon Crawley, Adam Fox, Ryan Lindgren, Julien Gauthier, Libor Hajek, Brett Howden, Tim Gettinger, Vinni Lettieri, Filip Chytil, Alexandar Georgiev, Kaapo Kakko, /api/v1/people/8474230, /api/v1/people/8480833, /api/v1/people/8468685, /api/v1/people/8471686, /api/v1/people/8474090, /api/v1/people/8475184, /api/v1/people/8475735, /api/v1/people/8475855, /api/v1/people/8476396, /api/v1/people/8476458, /api/v1/people/8476459, /api/v1/people/8476858, /api/v1/people/8476885, /api/v1/people/8476982, /api/v1/people/8477402, /api/v1/people/8477950, /api/v1/people/8477962, /api/v1/people/8478048, /api/v1/people/8478178, /api/v1/people/8478550, /api/v1/people/8479027, /api/v1/people/8479323, /api/v1/people/8479324, /api/v1/people/8479328, /api/v1/people/8479333, /api/v1/people/8479353, /api/v1/people/8479364, /api/v1/people/8479968, /api/v1/people/8480078, /api/v1/people/8480382, /api/v1/people/8481554, C, R, G, D, D, L, C, R, C, C, C, L, D, C, R, D, L, G, D, L, D, D, D, R, D, C, L, R, C, G, R, Center, Right Wing, Goalie, Defenseman, Defenseman, Left Wing, Center, Right Wing, Center, Center, Center, Left Wing, Defenseman, Center, Right Wing, Defenseman, Left Wing, Goalie, Defenseman, Left Wing, Defenseman, Defenseman, Defenseman, Right Wing, Defenseman, Center, Left Wing, Right Wing, Center, Goalie, Right Wing, Forward, Forward, Goalie, Defenseman, Defenseman, Forward, Forward, Forward, Forward, Forward, Forward, Forward, Defenseman, Forward, Forward, Defenseman, Forward, Goalie, Defenseman, Forward, Defenseman, Defenseman, Defenseman, Forward, Defenseman, Forward, Forward, Forward, Forward, Goalie, Forward, C, RW, G, D, D, LW, C, RW, C, C, C, LW, D, C, RW, D, LW, G, D, LW, D, D, D, RW, D, C, LW, RW, C, G, RW
-## 4 55, 44, 44, 37, 15, 28, 61, 25, 93, 38, 18, 13, 10, 3, 14, 21, 53, 12, 8, 6, 62, 59, 23, 11, 9, 5, 34, 82, 79, 48, 67, 49, 54, 8477502, 8473485, 8470775, 8470880, 8471702, 8473512, 8474027, 8474037, 8474161, 8474683, 8475752, 8475763, 8476404, 8476407, 8476461, 8476872, 8476906, 8477290, 8477462, 8477948, 8477979, 8478017, 8478067, 8478439, 8478500, 8479026, 8479312, 8479382, 8479394, 8480028, 8480279, 8480797, 8481178, Samuel Morin, Chris Stewart, Nate Thompson, Brian Elliott, Matt Niskanen, Claude Giroux, Justin Braun, James van Riemsdyk, Jakub Voracek, Derek Grant, Tyler Pitlick, Kevin Hayes, Andy Andreoff, Andy Welinski, Sean Couturier, Scott Laughton, Shayne Gostisbehere, Michael Raffl, Robert Hagg, Travis Sanheim, Nicolas Aube-Kubel, Mark Friedman, Oskar Lindblom, Travis Konecny, Ivan Provorov, Philippe Myers, Alex Lyon, Connor Bunnaman, Carter Hart, Morgan Frost, Kirill Ustimenko, Joel Farabee, Egor Zamula, /api/v1/people/8477502, /api/v1/people/8473485, /api/v1/people/8470775, /api/v1/people/8470880, /api/v1/people/8471702, /api/v1/people/8473512, /api/v1/people/8474027, /api/v1/people/8474037, /api/v1/people/8474161, /api/v1/people/8474683, /api/v1/people/8475752, /api/v1/people/8475763, /api/v1/people/8476404, /api/v1/people/8476407, /api/v1/people/8476461, /api/v1/people/8476872, /api/v1/people/8476906, /api/v1/people/8477290, /api/v1/people/8477462, /api/v1/people/8477948, /api/v1/people/8477979, /api/v1/people/8478017, /api/v1/people/8478067, /api/v1/people/8478439, /api/v1/people/8478500, /api/v1/people/8479026, /api/v1/people/8479312, /api/v1/people/8479382, /api/v1/people/8479394, /api/v1/people/8480028, /api/v1/people/8480279, /api/v1/people/8480797, /api/v1/people/8481178, D, R, C, G, D, C, D, L, R, C, C, C, C, D, C, C, D, L, D, D, R, D, L, R, D, D, G, C, G, C, G, L, D, Defenseman, Right Wing, Center, Goalie, Defenseman, Center, Defenseman, Left Wing, Right Wing, Center, Center, Center, Center, Defenseman, Center, Center, Defenseman, Left Wing, Defenseman, Defenseman, Right Wing, Defenseman, Left Wing, Right Wing, Defenseman, Defenseman, Goalie, Center, Goalie, Center, Goalie, Left Wing, Defenseman, Defenseman, Forward, Forward, Goalie, Defenseman, Forward, Defenseman, Forward, Forward, Forward, Forward, Forward, Forward, Defenseman, Forward, Forward, Defenseman, Forward, Defenseman, Defenseman, Forward, Defenseman, Forward, Forward, Defenseman, Defenseman, Goalie, Forward, Goalie, Forward, Goalie, Forward, Defenseman, D, RW, C, G, D, C, D, LW, RW, C, C, C, C, D, C, C, D, LW, D, D, RW, D, LW, RW, D, D, G, C, G, C, G, LW, D
-## 5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                27, 18, 12, 71, 87, 3, 58, 72, 4, 8, 16, 17, 30, 53, 2, 59, 35, 43, 42, 19, 28, 37, 57, 6, 13, 46, 50, 8475760, 8478866, 8466139, 8471215, 8471675, 8471677, 8471724, 8471887, 8474602, 8475208, 8475722, 8475810, 8476899, 8476927, 8477244, 8477404, 8477465, 8477839, 8477953, 8477955, 8477969, 8478043, 8478074, 8478507, 8479293, 8479944, 8480945, Nick Bjugstad, Dominik Simon, Patrick Marleau, Evgeni Malkin, Sidney Crosby, Jack Johnson, Kris Letang, Patric Hornqvist, Justin Schultz, Brian Dumoulin, Jason Zucker, Bryan Rust, Matt Murray, Teddy Blueger, Chad Ruhwedel, Jake Guentzel, Tristan Jarry, Conor Sheary, Kasperi Kapanen, Jared McCann, Marcus Pettersson, Sam Lafferty, Anthony Angello, John Marino, Brandon Tanev, Zach Aston-Reese, Juuso Riikola, /api/v1/people/8475760, /api/v1/people/8478866, /api/v1/people/8466139, /api/v1/people/8471215, /api/v1/people/8471675, /api/v1/people/8471677, /api/v1/people/8471724, /api/v1/people/8471887, /api/v1/people/8474602, /api/v1/people/8475208, /api/v1/people/8475722, /api/v1/people/8475810, /api/v1/people/8476899, /api/v1/people/8476927, /api/v1/people/8477244, /api/v1/people/8477404, /api/v1/people/8477465, /api/v1/people/8477839, /api/v1/people/8477953, /api/v1/people/8477955, /api/v1/people/8477969, /api/v1/people/8478043, /api/v1/people/8478074, /api/v1/people/8478507, /api/v1/people/8479293, /api/v1/people/8479944, /api/v1/people/8480945, C, C, C, C, C, D, D, R, D, D, L, R, G, C, D, L, G, L, R, C, D, C, C, D, L, C, D, Center, Center, Center, Center, Center, Defenseman, Defenseman, Right Wing, Defenseman, Defenseman, Left Wing, Right Wing, Goalie, Center, Defenseman, Left Wing, Goalie, Left Wing, Right Wing, Center, Defenseman, Center, Center, Defenseman, Left Wing, Center, Defenseman, Forward, Forward, Forward, Forward, Forward, Defenseman, Defenseman, Forward, Defenseman, Defenseman, Forward, Forward, Goalie, Forward, Defenseman, Forward, Goalie, Forward, Forward, Forward, Defenseman, Forward, Forward, Defenseman, Forward, Forward, Defenseman, C, C, C, C, C, D, D, RW, D, D, LW, RW, G, C, D, LW, G, LW, RW, C, D, C, C, D, LW, C, D
-## 6                                                                                         86, 33, 37, 41, 46, 40, 63, 27, 13, 14, 20, 52, 35, 47, 48, 75, 21, 88, 10, 28, 67, 80, 25, 79, 19, 74, 73, 82, 58, 68, 83, 26, 8476191, 8465009, 8470638, 8470860, 8471276, 8471695, 8473419, 8475186, 8475745, 8475780, 8475807, 8476374, 8476509, 8476792, 8476891, 8477365, 8477941, 8477956, 8478075, 8478131, 8478415, 8478435, 8478443, 8478468, 8478485, 8478498, 8479325, 8479365, 8480001, 8480021, 8480901, 8480944, Kevan Miller, Zdeno Chara, Patrice Bergeron, Jaroslav Halak, David Krejci, Tuukka Rask, Brad Marchand, John Moore, Charlie Coyle, Chris Wagner, Joakim Nordstrom, Sean Kuraly, Maxime Lagace, Torey Krug, Matt Grzelcyk, Connor Clifton, Nick Ritchie, David Pastrnak, Anders Bjork, Ondrej Kase, Jakub Zboril, Dan Vladar, Brandon Carlo, Jeremy Lauzon, Zach Senyshyn, Jake DeBrusk, Charlie McAvoy, Trent Frederic, Urho Vaakanainen, Jack Studnicka, Karson Kuhlman, Par Lindholm, /api/v1/people/8476191, /api/v1/people/8465009, /api/v1/people/8470638, /api/v1/people/8470860, /api/v1/people/8471276, /api/v1/people/8471695, /api/v1/people/8473419, /api/v1/people/8475186, /api/v1/people/8475745, /api/v1/people/8475780, /api/v1/people/8475807, /api/v1/people/8476374, /api/v1/people/8476509, /api/v1/people/8476792, /api/v1/people/8476891, /api/v1/people/8477365, /api/v1/people/8477941, /api/v1/people/8477956, /api/v1/people/8478075, /api/v1/people/8478131, /api/v1/people/8478415, /api/v1/people/8478435, /api/v1/people/8478443, /api/v1/people/8478468, /api/v1/people/8478485, /api/v1/people/8478498, /api/v1/people/8479325, /api/v1/people/8479365, /api/v1/people/8480001, /api/v1/people/8480021, /api/v1/people/8480901, /api/v1/people/8480944, D, D, C, G, C, G, L, D, C, R, C, C, G, D, D, D, L, R, L, R, D, G, D, D, R, L, D, C, D, C, C, C, Defenseman, Defenseman, Center, Goalie, Center, Goalie, Left Wing, Defenseman, Center, Right Wing, Center, Center, Goalie, Defenseman, Defenseman, Defenseman, Left Wing, Right Wing, Left Wing, Right Wing, Defenseman, Goalie, Defenseman, Defenseman, Right Wing, Left Wing, Defenseman, Center, Defenseman, Center, Center, Center, Defenseman, Defenseman, Forward, Goalie, Forward, Goalie, Forward, Defenseman, Forward, Forward, Forward, Forward, Goalie, Defenseman, Defenseman, Defenseman, Forward, Forward, Forward, Forward, Defenseman, Goalie, Defenseman, Defenseman, Forward, Forward, Defenseman, Forward, Defenseman, Forward, Forward, Forward, D, D, C, G, C, G, LW, D, C, RW, C, C, G, D, D, D, LW, RW, LW, RW, D, G, D, D, RW, LW, D, C, D, C, C, C
-##              roster.link
-## 1 /api/v1/teams/1/roster
-## 2 /api/v1/teams/2/roster
-## 3 /api/v1/teams/3/roster
-## 4 /api/v1/teams/4/roster
-## 5 /api/v1/teams/5/roster
-## 6 /api/v1/teams/6/roster
-</code></pre>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="co"># getStats(stats = &quot;statsSingleSeasonPlayoffs&quot;) %&gt;% head()</span></span></code></pre></div>
 <h2 id="a-wrapper-function-for-all-the-functions-above">A wrapper function for all the functions above</h2>
 <p>Endpoints:</p>
 <ul>
@@ -1412,274 +1284,35 @@ library(tidyverse)
 </ul></li>
 </ul>
 <p>See more details in the documentation of <a href="https://gitlab.com/dword4/nhlapi/-/blob/master/records-api.md">NHL records</a> and <a href="https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md">NHL stats</a>.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="co"># add a </span></span>
-<span id="cb27-2"><a href="#cb27-2"></a>nhlFun &lt;-<span class="st"> </span><span class="cf">function</span>(endpoints, ...){</span>
-<span id="cb27-3"><a href="#cb27-3"></a>  <span class="cf">if</span> (endpoints <span class="op">==</span><span class="st"> &quot;franchise&quot;</span>) {</span>
-<span id="cb27-4"><a href="#cb27-4"></a>    <span class="kw">getFran</span>()</span>
-<span id="cb27-5"><a href="#cb27-5"></a>  } <span class="cf">else</span> <span class="cf">if</span> (endpoints <span class="op">==</span><span class="st"> &quot;team total&quot;</span>) {</span>
-<span id="cb27-6"><a href="#cb27-6"></a>    <span class="kw">getFranTeamTot</span>()</span>
-<span id="cb27-7"><a href="#cb27-7"></a>  } <span class="cf">else</span> <span class="cf">if</span> (endpoints <span class="op">==</span><span class="st"> &quot;season record&quot;</span>){</span>
-<span id="cb27-8"><a href="#cb27-8"></a>    <span class="kw">getFranSeaRec</span>(...)</span>
-<span id="cb27-9"><a href="#cb27-9"></a>  } <span class="cf">else</span> <span class="cf">if</span> (endpoints <span class="op">==</span><span class="st"> &quot;goalie record&quot;</span>){</span>
-<span id="cb27-10"><a href="#cb27-10"></a>    <span class="kw">getFranGoaRec</span>(...)</span>
-<span id="cb27-11"><a href="#cb27-11"></a>  } <span class="cf">else</span> <span class="cf">if</span> (endpoints <span class="op">==</span><span class="st"> &quot;skater record&quot;</span>){</span>
-<span id="cb27-12"><a href="#cb27-12"></a>    <span class="kw">getFranSkaRec</span>(...)</span>
-<span id="cb27-13"><a href="#cb27-13"></a>  } <span class="cf">else</span> <span class="cf">if</span> (endpoints <span class="op">==</span><span class="st"> &quot;stats&quot;</span>){</span>
-<span id="cb27-14"><a href="#cb27-14"></a>    <span class="kw">getStats</span>(...)</span>
-<span id="cb27-15"><a href="#cb27-15"></a>  } <span class="cf">else</span> {</span>
-<span id="cb27-16"><a href="#cb27-16"></a>    <span class="kw">stop</span>(<span class="st">&quot;Please enter a valid endpoint&quot;</span>)</span>
-<span id="cb27-17"><a href="#cb27-17"></a>  }</span>
-<span id="cb27-18"><a href="#cb27-18"></a>}</span>
-<span id="cb27-19"><a href="#cb27-19"></a><span class="kw">nhlFun</span>(<span class="dt">endpoints =</span> <span class="st">&quot;team total&quot;</span>)</span></code></pre></div>
-<pre><code>## No encoding supplied: defaulting to UTF-8.
-
-##    id activeFranchise firstSeasonId franchiseId gameTypeId
-## 1   1               1      19821983          23          2
-## 2   2               1      19821983          23          3
-## 3   3               1      19721973          22          2
-## 4   4               1      19721973          22          3
-## 5   5               1      19261927          10          2
-## 6   6               1      19261927          10          3
-## 7   7               1      19671968          16          3
-## 8   8               1      19671968          16          2
-## 9   9               1      19671968          17          2
-## 10 10               1      19671968          17          3
-## 11 11               1      19241925           6          2
-## 12 12               1      19241925           6          3
-## 13 13               1      19701971          19          2
-## 14 14               1      19701971          19          3
-## 15 15               1      19171918           1          3
-## 16 16               1      19171918           1          2
-## 17 17               1      19921993          30          2
-## 18 18               1      19921993          30          3
-## 19 19               1      19271928           5          2
-## 20 20               1      19271928           5          3
-## 21 21               1      19992000          35          2
-## 22 22               1      19992000          35          3
-## 23 23               1      19971998          26          3
-## 24 24               1      19971998          26          2
-## 25 25               1      19931994          33          2
-## 26 26               1      19931994          33          3
-## 27 27               1      19921993          31          2
-## 28 28               1      19921993          31          3
-## 29 29               1      19741975          24          2
-## 30 30               1      19741975          24          3
-## 31 31               1      19261927          11          3
-## 32 32               1      19261927          11          2
-## 33 33               1      19321933          12          2
-##    gamesPlayed goalsAgainst goalsFor homeLosses
-## 1         2937         8708     8647        507
-## 2          257          634      697         53
-## 3         3732        11779    11889        674
-## 4          289          845      925         48
-## 5         6504        19863    19864       1132
-## 6          518         1447     1404        104
-## 7          449         1332     1335         97
-## 8         4115        12054    13527        572
-## 9         4115        13893    13678        679
-## 10         385         1110     1174         83
-## 11        6570        19001    20944        953
-## 12         664         1875     1923        149
-## 13        3889        11767    12333        623
-## 14         256          765      763         54
-## 15         759         1927     2271        131
-## 16        6731        18092    21632        870
-## 17        2139         6390     6093        403
-## 18         151          372      357         35
-## 19        6460        19805    19793       1075
-## 20         538         1477     1380        117
-## 21         902         3014     2465        204
-## 22           4           17        6          2
-## 23         101          252      241         21
-## 24        1756         5004     4735        320
-## 25        2053         5969     5476        385
-## 26          48          128      115         13
-## 27        2138         6499     6035        407
-## 28         151          402      410         37
-## 29        3577        11390    11325        612
-## 30         290          821      826         75
-## 31         548         1669     1566        104
-## 32        6504        19501    19376       1117
-## 33        6237        18710    19423        929
-##    homeOvertimeLosses homeTies homeWins lastSeasonId losses
-## 1                  82       96      783           NA   1181
-## 2                   0       NA       74           NA    120
-## 3                  81      170      942           NA   1570
-## 4                   1       NA       89           NA    130
-## 5                  73      448     1600           NA   2693
-## 6                   0        1      137           NA    266
-## 7                   0       NA      135           NA    218
-## 8                  89      193     1204           NA   1429
-## 9                  58      205     1116           NA   1718
-## 10                  0       NA      112           NA    178
-## 11                 89      376     1867           NA   2387
-## 12                  2        3      191           NA    332
-## 13                 80      197     1045           NA   1530
-## 14                  0       NA       73           NA    132
-## 15                  0        3      254           NA    317
-## 16                 91      381     2025           NA   2281
-## 17                 89       60      519           NA    912
-## 18                  0       NA       37           NA     79
-## 19                 82      388     1684           NA   2682
-## 20                  0        2      148           NA    279
-## 21                 38       26      183     20102011    437
-## 22                  0       NA        0     20102011      4
-## 23                  0       NA       29           NA     48
-## 24                 72       52      433           NA    713
-## 25                112       65      465           NA    856
-## 26                  0       NA       12           NA     29
-## 27                 67       56      538           NA    930
-## 28                  0       NA       42           NA     67
-## 29                 80      153      942           NA   1452
-## 30                  1       NA       74           NA    152
-## 31                  0        1      166           NA    275
-## 32                 82      410     1642           NA   2736
-## 33                 94      368     1729           NA   2419
-##    overtimeLosses penaltyMinutes pointPctg points
-## 1             162          44397    0.5330   3131
-## 2               0           4266    0.0039      2
-## 3             159          57422    0.5115   3818
-## 4               0           5498    0.0138      8
-## 5             147          85564    0.5125   6667
-## 6               0           8181    0.0000      0
-## 7               0           9104    0.0045      4
-## 8             175          75761    0.5759   4740
-## 9             148          65826    0.5180   4263
-## 10              0           6056    0.0156     12
-## 11            184          88037    0.5625   7391
-## 12              0          10505    0.0301     40
-## 13            160          60329    0.5334   4149
-## 14              0           4682    0.0000      0
-## 15              0          12047    0.0000      0
-## 16            164          87019    0.5868   7899
-## 17            164          29175    0.5084   2175
-## 18              0           2102    0.0000      0
-## 19            167          91941    0.5121   6616
-## 20              0           8491    0.0112     12
-## 21             78          13727    0.4473    807
-## 22              0            115    0.0000      0
-## 23              0           1198    0.0792     16
-## 24            166          19015    0.5222   1834
-## 25            203          28603    0.4990   2049
-## 26              0            669    0.0000      0
-## 27            147          30489    0.5044   2157
-## 28              0           2110    0.0728     22
-## 29            158          56928    0.5296   3789
-## 30              1           5100    0.0655     38
-## 31              0           8855    0.0000      0
-## 32            166          91917    0.5040   6556
-## 33            173          83995    0.5363   6690
-##    roadLosses roadOvertimeLosses roadTies roadWins
-## 1         674                 80      123      592
-## 2          67                  0       NA       63
-## 3         896                 78      177      714
-## 4          82                  0       NA       70
-## 5        1561                 74      360     1256
-## 6         162                  0        7      107
-## 7         121                  0       NA       96
-## 8         857                 86      264      850
-## 9        1039                 90      178      750
-## 10         95                  1       NA       95
-## 11       1434                 95      415     1341
-## 12        183                  0        3      135
-## 13        907                 80      212      745
-## 14         78                  0       NA       51
-## 15        186                  0        5      180
-## 16       1411                 73      456     1424
-## 17        509                 75       55      429
-## 18         44                  0       NA       35
-## 19       1607                 85      385     1154
-## 20        162                  0        1      108
-## 21        233                 40       19      159
-## 22          2                  0       NA        0
-## 23         27                  1       NA       24
-## 24        393                 94       34      358
-## 25        471                 91       77      387
-## 26         16                  0       NA        7
-## 27        523                 80       56      411
-## 28         30                  0       NA       42
-## 29        840                 78      150      722
-## 30         77                  1       NA       63
-## 31        171                  0        4      102
-## 32       1619                 84      404     1146
-## 33       1490                 79      405     1143
-##    shootoutLosses shootoutWins shutouts teamId
-## 1              79           78      193      1
-## 2               0            0       25      1
-## 3              67           82      167      2
-## 4               0            0       12      2
-## 5              66           78      403      3
-## 6               0            0       44      3
-## 7               0            0       33      4
-## 8              88           50      245      4
-## 9              53           80      184      5
-## 10              0            0       30      5
-## 11             80           64      500      6
-## 12              0            0       49      6
-## 13             71           77      194      7
-## 14              0            0       18      7
-## 15              0            0       67      8
-## 16             63           68      542      8
-## 17             78           56      135      9
-## 18              0            0       12      9
-## 19             77           58      419     10
-## 20              0            0       49     10
-## 21             29           37       41     11
-## 22              0            0        0     11
-## 23              0            0       10     12
-## 24             59           46       93     12
-## 25             95           70      112     13
-## 26              0            0        3     13
-## 27             57           67      118     14
-## 28              0            1       11     14
-## 29             69           65      174     15
-## 30              1            0       19     15
-## 31              0            0       32     16
-## 32             68           73      435     16
-## 33             73           69      421     17
-##               teamName ties triCode wins
-## 1    New Jersey Devils  219     NJD 1375
-## 2    New Jersey Devils   NA     NJD  137
-## 3   New York Islanders  347     NYI 1656
-## 4   New York Islanders   NA     NYI  159
-## 5     New York Rangers  808     NYR 2856
-## 6     New York Rangers    8     NYR  244
-## 7  Philadelphia Flyers   NA     PHI  231
-## 8  Philadelphia Flyers  457     PHI 2054
-## 9  Pittsburgh Penguins  383     PIT 1866
-## 10 Pittsburgh Penguins   NA     PIT  207
-## 11       Boston Bruins  791     BOS 3208
-## 12       Boston Bruins    6     BOS  326
-## 13      Buffalo Sabres  409     BUF 1790
-## 14      Buffalo Sabres   NA     BUF  124
-## 15  Montréal Canadiens    8     MTL  434
-## 16  Montréal Canadiens  837     MTL 3449
-## 17     Ottawa Senators  115     OTT  948
-## 18     Ottawa Senators   NA     OTT   72
-## 19 Toronto Maple Leafs  773     TOR 2838
-## 20 Toronto Maple Leafs    3     TOR  256
-## 21   Atlanta Thrashers   45     ATL  342
-## 22   Atlanta Thrashers   NA     ATL    0
-## 23 Carolina Hurricanes   NA     CAR   53
-## 24 Carolina Hurricanes   86     CAR  791
-## 25    Florida Panthers  142     FLA  852
-## 26    Florida Panthers   NA     FLA   19
-## 27 Tampa Bay Lightning  112     TBL  949
-## 28 Tampa Bay Lightning   NA     TBL   84
-## 29 Washington Capitals  303     WSH 1664
-## 30 Washington Capitals   NA     WSH  137
-## 31  Chicago Blackhawks    5     CHI  268
-## 32  Chicago Blackhawks  814     CHI 2788
-## 33   Detroit Red Wings  773     DET 2872
-##  [ reached &#39;max&#39; / getOption(&quot;max.print&quot;) -- omitted 72 rows ]
-</code></pre>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="kw">nhlFun</span>(<span class="dt">endpoints =</span> <span class="st">&quot;skater record&quot;</span>, <span class="st">&quot;20&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># add a </span></span>
+<span id="cb26-2"><a href="#cb26-2"></a>nhlFun &lt;-<span class="st"> </span><span class="cf">function</span>(endpoints, ...){</span>
+<span id="cb26-3"><a href="#cb26-3"></a>  <span class="cf">if</span> (endpoints <span class="op">==</span><span class="st"> &quot;franchise&quot;</span>) {</span>
+<span id="cb26-4"><a href="#cb26-4"></a>    <span class="kw">getFran</span>()</span>
+<span id="cb26-5"><a href="#cb26-5"></a>  } <span class="cf">else</span> <span class="cf">if</span> (endpoints <span class="op">==</span><span class="st"> &quot;team total&quot;</span>) {</span>
+<span id="cb26-6"><a href="#cb26-6"></a>    <span class="kw">getFranTeamTot</span>()</span>
+<span id="cb26-7"><a href="#cb26-7"></a>  } <span class="cf">else</span> <span class="cf">if</span> (endpoints <span class="op">==</span><span class="st"> &quot;season record&quot;</span>){</span>
+<span id="cb26-8"><a href="#cb26-8"></a>    <span class="kw">getFranSeaRec</span>(...)</span>
+<span id="cb26-9"><a href="#cb26-9"></a>  } <span class="cf">else</span> <span class="cf">if</span> (endpoints <span class="op">==</span><span class="st"> &quot;goalie record&quot;</span>){</span>
+<span id="cb26-10"><a href="#cb26-10"></a>    <span class="kw">getFranGoaRec</span>(...)</span>
+<span id="cb26-11"><a href="#cb26-11"></a>  } <span class="cf">else</span> <span class="cf">if</span> (endpoints <span class="op">==</span><span class="st"> &quot;skater record&quot;</span>){</span>
+<span id="cb26-12"><a href="#cb26-12"></a>    <span class="kw">getFranSkaRec</span>(...)</span>
+<span id="cb26-13"><a href="#cb26-13"></a>  } <span class="cf">else</span> <span class="cf">if</span> (endpoints <span class="op">==</span><span class="st"> &quot;stats&quot;</span>){</span>
+<span id="cb26-14"><a href="#cb26-14"></a>    <span class="kw">getStats</span>(...)</span>
+<span id="cb26-15"><a href="#cb26-15"></a>  } <span class="cf">else</span> {</span>
+<span id="cb26-16"><a href="#cb26-16"></a>    <span class="kw">stop</span>(<span class="st">&quot;Please enter a valid endpoint&quot;</span>)</span>
+<span id="cb26-17"><a href="#cb26-17"></a>  }</span>
+<span id="cb26-18"><a href="#cb26-18"></a>}</span>
+<span id="cb26-19"><a href="#cb26-19"></a><span class="kw">nhlFun</span>(<span class="dt">endpoints =</span> <span class="st">&quot;skater record&quot;</span>, <span class="st">&quot;20&quot;</span>)</span></code></pre></div>
 <pre><code>## No encoding supplied: defaulting to UTF-8.
 
 ## NULL
 </code></pre>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="kw">nhlFun</span>(<span class="dt">endpoints =</span> <span class="st">&quot;stats&quot;</span>, <span class="dt">expand =</span> <span class="st">&quot;person.team&quot;</span>)</span></code></pre></div>
-<pre><code>##    id                  name             link abbreviation
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="kw">nhlFun</span>(<span class="dt">endpoints =</span> <span class="st">&quot;stats&quot;</span>, <span class="dt">expand =</span> <span class="st">&quot;person.team&quot;</span>)</span></code></pre></div>
+<pre><code>## $copyright
+## [1] &quot;NHL and the NHL Shield are registered trademarks of the National Hockey League. NHL and NHL team marks are the property of the NHL and its teams. © NHL 2020. All Rights Reserved.&quot;
+## 
+## $teams
+##    id                  name             link abbreviation
 ## 1   1     New Jersey Devils  /api/v1/teams/1          NJD
 ## 2   2    New York Islanders  /api/v1/teams/2          NYI
 ## 3   3      New York Rangers  /api/v1/teams/3          NYR
@@ -2000,35 +1633,69 @@ library(tidyverse)
 ## 30            Coyotes /api/v1/franchises/28
 ## 31     Golden Knights /api/v1/franchises/38
 </code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="co"># nhlFun(endpoints = &quot;team total&quot;)</span></span></code></pre></div>
 <h2 id="exploratory-data-analysis">Exploratory Data Analysis</h2>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="co"># perhaps use the wrapper function here</span></span>
-<span id="cb33-2"><a href="#cb33-2"></a>franTot &lt;-<span class="st"> </span><span class="kw">getFranTeamTot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="co"># perhaps use the wrapper function here</span></span>
+<span id="cb31-2"><a href="#cb31-2"></a>franTot &lt;-<span class="st"> </span><span class="kw">getFranTeamTot</span>()</span></code></pre></div>
 <pre><code>## No encoding supplied: defaulting to UTF-8.
+</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="kw">str</span>(franTot)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    105 obs. of  30 variables:
+##  $ id                : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ activeFranchise   : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ firstSeasonId     : int  19821983 19821983 19721973 19721973 19261927 19261927 19671968 19671968 19671968 19671968 ...
+##  $ franchiseId       : int  23 23 22 22 10 10 16 16 17 17 ...
+##  $ gameTypeId        : int  2 3 2 3 2 3 3 2 2 3 ...
+##  $ gamesPlayed       : int  2937 257 3732 290 6504 518 449 4115 4115 385 ...
+##  $ goalsAgainst      : int  8708 634 11779 847 19863 1447 1332 12054 13893 1110 ...
+##  $ goalsFor          : int  8647 697 11889 926 19864 1404 1335 13527 13678 1174 ...
+##  $ homeLosses        : int  507 53 674 48 1132 104 97 572 679 83 ...
+##  $ homeOvertimeLosses: int  82 0 81 1 73 0 0 89 58 0 ...
+##  $ homeTies          : int  96 NA 170 NA 448 1 NA 193 205 NA ...
+##  $ homeWins          : int  783 74 942 89 1600 137 135 1204 1116 112 ...
+##  $ lastSeasonId      : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ losses            : int  1181 120 1570 131 2693 266 218 1429 1718 178 ...
+##  $ overtimeLosses    : int  162 0 159 0 147 0 0 175 148 0 ...
+##  $ penaltyMinutes    : int  44397 4266 57422 5511 85564 8181 9104 75761 65826 6056 ...
+##  $ pointPctg         : num  0.533 0.0039 0.5115 0.0138 0.5125 ...
+##  $ points            : int  3131 2 3818 8 6667 0 4 4740 4263 12 ...
+##  $ roadLosses        : int  674 67 896 83 1561 162 121 857 1039 95 ...
+##  $ roadOvertimeLosses: int  80 0 78 0 74 0 0 86 90 1 ...
+##  $ roadTies          : int  123 NA 177 NA 360 7 NA 264 178 NA ...
+##  $ roadWins          : int  592 63 714 70 1256 107 96 850 750 95 ...
+##  $ shootoutLosses    : int  79 0 67 0 66 0 0 88 53 0 ...
+##  $ shootoutWins      : int  78 0 82 0 78 0 0 50 80 0 ...
+##  $ shutouts          : int  193 25 167 12 403 44 33 245 184 30 ...
+##  $ teamId            : int  1 1 2 2 3 3 4 4 5 5 ...
+##  $ teamName          : chr  &quot;New Jersey Devils&quot; &quot;New Jersey Devils&quot; &quot;New York Islanders&quot; &quot;New York Islanders&quot; ...
+##  $ ties              : int  219 NA 347 NA 808 8 NA 457 383 NA ...
+##  $ triCode           : chr  &quot;NJD&quot; &quot;NJD&quot; &quot;NYI&quot; &quot;NYI&quot; ...
+##  $ wins              : int  1375 137 1656 159 2856 244 231 2054 1866 207 ...
 </code></pre>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>franTot &lt;-<span class="st"> </span>franTot <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;activeFranchise&quot;</span>, <span class="st">&quot;firstSeasonId&quot;</span>, <span class="st">&quot;gameTypeId&quot;</span>, <span class="st">&quot;lastSeasonId&quot;</span>))</span>
 <span id="cb35-2"><a href="#cb35-2"></a>franStats &lt;-<span class="st"> </span><span class="kw">getStats</span>(<span class="dt">expand =</span> <span class="st">&quot;person.names&quot;</span>) </span>
-<span id="cb35-3"><a href="#cb35-3"></a>franStats &lt;-<span class="st"> </span>franStats <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(<span class="st">&quot;locationName&quot;</span>, <span class="st">&quot;firstYearOfPlay&quot;</span>, <span class="st">&quot;franchiseId&quot;</span>, <span class="st">&quot;venue.city&quot;</span>, <span class="st">&quot;venue.timeZone.id&quot;</span>, <span class="st">&quot;venue.timeZone.tz&quot;</span>, <span class="st">&quot;division.name&quot;</span>, <span class="st">&quot;conference.name&quot;</span>))</span>
+<span id="cb35-3"><a href="#cb35-3"></a>franStats &lt;-<span class="st"> </span>franStats<span class="op">$</span>teams <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">c</span>(<span class="st">&quot;locationName&quot;</span>, <span class="st">&quot;firstYearOfPlay&quot;</span>, <span class="st">&quot;franchiseId&quot;</span>, <span class="st">&quot;venue.city&quot;</span>, <span class="st">&quot;venue.timeZone.id&quot;</span>, <span class="st">&quot;venue.timeZone.tz&quot;</span>, <span class="st">&quot;division.name&quot;</span>, <span class="st">&quot;conference.name&quot;</span>))</span>
 <span id="cb35-4"><a href="#cb35-4"></a>combined &lt;-<span class="st"> </span><span class="kw">full_join</span>(franTot, franStats, <span class="dt">by =</span> <span class="st">&quot;franchiseId&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">winPercent =</span> wins <span class="op">/</span><span class="st"> </span>gamesPlayed, <span class="dt">homeWinPercent =</span> homeWins <span class="op">/</span><span class="st"> </span>wins)</span>
 <span id="cb35-5"><a href="#cb35-5"></a><span class="kw">head</span>(combined)</span></code></pre></div>
 <pre><code>##   franchiseId gamesPlayed goalsAgainst goalsFor homeLosses
 ## 1          23        2937         8708     8647        507
 ## 2          23         257          634      697         53
 ## 3          22        3732        11779    11889        674
-## 4          22         289          845      925         48
+## 4          22         290          847      926         48
 ## 5          10        6504        19863    19864       1132
 ## 6          10         518         1447     1404        104
 ##   homeOvertimeLosses homeTies homeWins losses
 ## 1                 82       96      783   1181
 ## 2                  0       NA       74    120
 ## 3                 81      170      942   1570
-## 4                  1       NA       89    130
+## 4                  1       NA       89    131
 ## 5                 73      448     1600   2693
 ## 6                  0        1      137    266
 ##   overtimeLosses penaltyMinutes pointPctg points roadLosses
 ## 1            162          44397    0.5330   3131        674
 ## 2              0           4266    0.0039      2         67
 ## 3            159          57422    0.5115   3818        896
-## 4              0           5498    0.0138      8         82
+## 4              0           5511    0.0138      8         83
 ## 5            147          85564    0.5125   6667       1561
 ## 6              0           8181    0.0000      0        162
 ##   roadOvertimeLosses roadTies roadWins shootoutLosses
@@ -2063,17 +1730,17 @@ library(tidyverse)
 ## 1         Eastern  0.4681648      0.5694545
 ## 2         Eastern  0.5330739      0.5401460
 ## 3         Eastern  0.4437299      0.5688406
-## 4         Eastern  0.5501730      0.5597484
+## 4         Eastern  0.5482759      0.5597484
 ## 5         Eastern  0.4391144      0.5602241
 ## 6         Eastern  0.4710425      0.5614754
 </code></pre>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="kw">ggplot</span>(combined, <span class="kw">aes</span>(<span class="dt">x =</span> homeWins, <span class="dt">y =</span> homeLosses)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> division.name))</span></code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a><span class="kw">ggplot</span>(combined, <span class="kw">aes</span> (<span class="dt">x =</span> winPercent)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y =</span> ..density..))</span></code></pre></div>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with
 ## `binwidth`.
 </code></pre>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
 
 </body>
 </html>
