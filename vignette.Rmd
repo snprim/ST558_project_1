@@ -258,13 +258,21 @@ head(combined)
 subset <- combined %>% select(starts_with("home"), starts_with("road"), "division.name", -"homeWinPercent") %>% gather(-"division.name", key = "type", value = "game") %>% group_by(division.name, type) %>% summarise(sum = sum(game, na.rm = TRUE))
 ```
 
+### Summaries
+```{r}
+# summaries
+apply(combined[,c(2, 5:11, 13:17)], FUN = summary, MARGIN = 2)
+# contingency table
+table(combined$division.name, combined$firstYearOfPlay)
+table(combined$conference.name, combined$firstYearOfPlay)
+```
+
+
 ### Visualize Data
 
 Now we have the data, we can make some plots to visualize the data.  
 
 ```{r}
-# contingency table
-table(combined$division.name, combined$firstYearOfPlay)
 # scatter plot of homeWins and roadWins
 ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = division.name))
 # histogram of winPercent
@@ -275,8 +283,9 @@ ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geo
 # ggplot(combined, aes(x = gamesPlayed)) + geom_bar(aes(x = division.name))
 ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name))
 
-roster <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.roster")
-teamStats <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.stats")
+ggplot(combined, aes(x = penaltyMinutes)) + geom_freqpoly()
+# roster <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.roster")
+# teamStats <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.stats")
 
 ```
 

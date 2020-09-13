@@ -9,6 +9,7 @@ Vignette
     above](#a-wrapper-function-for-all-the-functions-above)
   - [Exploratory Data Analysis](#exploratory-data-analysis)
       - [Retrieve Information](#retrieve-information)
+      - [Summaries](#summaries)
       - [Visualize Data](#visualize-data)
 
 In this vignette, we want to show how to access APIs to retrieve data.
@@ -1679,9 +1680,64 @@ subset <- combined %>% select(starts_with("home"), starts_with("road"), "divisio
 
     ## `summarise()` regrouping output by 'division.name' (override with `.groups` argument)
 
-### Visualize Data
+### Summaries
 
-Now we have the data, we can make some plots to visualize the data.
+``` r
+# summaries
+apply(combined[,c(2, 5:11, 13:17)], FUN = summary, MARGIN = 2)
+```
+
+    ## $gamesPlayed
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##       2      77     290    1188    1675    6731 
+    ## 
+    ## $homeLosses
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##     0.0    17.0    68.0   205.1   297.0  1132.0 
+    ## 
+    ## $homeOvertimeLosses
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+    ##    0.00    0.00    7.00   35.70   73.75  112.00      39 
+    ## 
+    ## $homeTies
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+    ##     0.0     3.0    45.0    84.6   103.2   448.0      37 
+    ## 
+    ## $homeWins
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##     0.0    16.0    78.0   311.8   433.0  2025.0 
+    ## 
+    ## $losses
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##     1.0    43.0   144.0   493.2   709.0  2736.0 
+    ## 
+    ## $overtimeLosses
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+    ##    0.00    0.00   11.50   73.18  158.00  203.00      39 
+    ## 
+    ## $penaltyMinutes
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##      12    1042    5118   17576   27013   91941 
+    ## 
+    ## $points
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+    ##       0       0      39    1162    1838    7899       1 
+    ## 
+    ## $roadLosses
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##     1.0    27.0    83.0   288.1   392.0  1619.0 
+    ## 
+    ## $roadOvertimeLosses
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+    ##    0.00    0.00    6.50   37.74   78.75   95.00      39 
+    ## 
+    ## $roadTies
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+    ##    0.00    3.00   33.50   84.62  126.25  456.00      37 
+    ## 
+    ## $roadWins
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##     0.0    12.0    63.0   227.5   316.0  1424.0
 
 ``` r
 # contingency table
@@ -1702,11 +1758,28 @@ table(combined$division.name, combined$firstYearOfPlay)
     ##   Pacific         4    0    2    0    2    0    0    2
 
 ``` r
+table(combined$conference.name, combined$firstYearOfPlay)
+```
+
+    ##          
+    ##           1909 1917 1924 1926 1967 1970 1972 1974 1979 1980
+    ##   Eastern    2    6    2    8    4    2    2    2    4    0
+    ##   Western    0    0    0    2    8    2    0    0   12    4
+    ##          
+    ##           1982 1990 1991 1993 1997 2011 2016
+    ##   Eastern    5    2    2    2    2    0    0
+    ##   Western    0    2    0    2    4    4    2
+
+### Visualize Data
+
+Now we have the data, we can make some plots to visualize the data.
+
+``` r
 # scatter plot of homeWins and roadWins
 ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
 
 ``` r
 # histogram of winPercent
@@ -1716,14 +1789,14 @@ ggplot(combined, aes(x = winPercent)) + geom_histogram(aes(y = ..density..))
     ## `stat_bin()` using `bins = 30`. Pick better value with
     ## `binwidth`.
 
-![](README_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-29-2.png)<!-- -->
 
 ``` r
 # boxplots of gamesPlayed by division
 ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geom_jitter(aes(color = venue.timeZone.tz))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-14-3.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-29-3.png)<!-- -->
 
 ``` r
 # barplot of gamePlayed
@@ -1731,9 +1804,18 @@ ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geo
 ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-14-4.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-29-4.png)<!-- -->
 
 ``` r
-roster <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.roster")
-teamStats <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.stats")
+ggplot(combined, aes(x = penaltyMinutes)) + geom_freqpoly()
+```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with
+    ## `binwidth`.
+
+![](README_files/figure-gfm/unnamed-chunk-29-5.png)<!-- -->
+
+``` r
+# roster <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.roster")
+# teamStats <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.stats")
 ```
