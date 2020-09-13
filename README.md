@@ -8,6 +8,8 @@ Vignette
   - [A wrapper function for all the functions
     above](#a-wrapper-function-for-all-the-functions-above)
   - [Exploratory Data Analysis](#exploratory-data-analysis)
+      - [Retrieve Information](#retrieve-information)
+      - [Visualize Data](#visualize-data)
 
 In this vignette, we want to show how to access APIs to retrieve data.
 We use two NHL repositories as examples: [NHL
@@ -1588,6 +1590,8 @@ nhlFun(endpoints = "stats", expand = "person.team")
 
 ## Exploratory Data Analysis
 
+### Retrieve Information
+
 Now we demonstrate how to use functions above to do exploratory data
 analysis. We will first retrieve data from two endpoints: **team total**
 and **person.names**, remove some columns we don’t need, and combine the
@@ -1675,6 +1679,8 @@ subset <- combined %>% select(starts_with("home"), starts_with("road"), "divisio
 
     ## `summarise()` regrouping output by 'division.name' (override with `.groups` argument)
 
+### Visualize Data
+
 Now we have the data, we can make some plots to visualize the data.
 
 ``` r
@@ -1700,7 +1706,7 @@ table(combined$division.name, combined$firstYearOfPlay)
 ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-106-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ``` r
 # histogram of winPercent
@@ -1710,14 +1716,14 @@ ggplot(combined, aes(x = winPercent)) + geom_histogram(aes(y = ..density..))
     ## `stat_bin()` using `bins = 30`. Pick better value with
     ## `binwidth`.
 
-![](README_files/figure-gfm/unnamed-chunk-106-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
 
 ``` r
 # boxplots of gamesPlayed by division
 ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geom_jitter(aes(color = venue.timeZone.tz))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-106-3.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-14-3.png)<!-- -->
 
 ``` r
 # barplot of gamePlayed
@@ -1725,7 +1731,7 @@ ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geo
 ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-106-4.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-14-4.png)<!-- -->
 
 ``` r
 roster <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.roster")

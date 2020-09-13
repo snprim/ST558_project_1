@@ -240,6 +240,8 @@ nhlFun(endpoints = "stats", expand = "person.team")
 
 ## Exploratory Data Analysis  
 
+### Retrieve Information
+
 Now we demonstrate how to use functions above to do exploratory data analysis. We will first retrieve data from two endpoints: **team total** and **person.names**, remove some columns we don't need, and combine the two objects. Then we'll add two new variables: `winPercent`: the proportion of wins among all games played and `homeWinPercent`: the proportion of wins of home games among all wins.  
 
 ```{r}
@@ -255,6 +257,8 @@ head(combined)
 # create a subset for numbers of games lost or won
 subset <- combined %>% select(starts_with("home"), starts_with("road"), "division.name", -"homeWinPercent") %>% gather(-"division.name", key = "type", value = "game") %>% group_by(division.name, type) %>% summarise(sum = sum(game, na.rm = TRUE))
 ```
+
+### Visualize Data
 
 Now we have the data, we can make some plots to visualize the data.  
 
