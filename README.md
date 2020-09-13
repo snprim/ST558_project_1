@@ -46,25 +46,26 @@ getFran <- function(){
   fran <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(fran$data)
 }
-getFran() %>% head()
+getFran() %>% tbl_df()
 ```
 
     ## No encoding supplied: defaulting to UTF-8.
 
-    ##   id firstSeasonId lastSeasonId mostRecentTeamId
-    ## 1  1      19171918           NA                8
-    ## 2  2      19171918     19171918               41
-    ## 3  3      19171918     19341935               45
-    ## 4  4      19191920     19241925               37
-    ## 5  5      19171918           NA               10
-    ## 6  6      19241925           NA                6
-    ##   teamCommonName teamPlaceName
-    ## 1      Canadiens      Montréal
-    ## 2      Wanderers      Montreal
-    ## 3         Eagles     St. Louis
-    ## 4         Tigers      Hamilton
-    ## 5    Maple Leafs       Toronto
-    ## 6         Bruins        Boston
+    ## # A tibble: 38 x 6
+    ##       id firstSeasonId lastSeasonId mostRecentTeamId
+    ##    <int>         <int>        <int>            <int>
+    ##  1     1      19171918           NA                8
+    ##  2     2      19171918     19171918               41
+    ##  3     3      19171918     19341935               45
+    ##  4     4      19191920     19241925               37
+    ##  5     5      19171918           NA               10
+    ##  6     6      19241925           NA                6
+    ##  7     7      19241925     19371938               43
+    ##  8     8      19251926     19411942               51
+    ##  9     9      19251926     19301931               39
+    ## 10    10      19261927           NA                3
+    ## # ... with 28 more rows, and 2 more variables:
+    ## #   teamCommonName <chr>, teamPlaceName <chr>
 
 This is a function to retrieve stats about all teams.  
 /franchise-team-totals (Returns Total stats for every franchise (ex
@@ -1779,24 +1780,24 @@ Now we have the data, we can make some plots to visualize the data.
 ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
 
 ``` r
 # histogram of winPercent
-ggplot(combined, aes(x = winPercent)) + geom_histogram(aes(y = ..density..))
+ggplot(combined, aes(x = winPercent)) + geom_histogram(aes(y = ..density..)) + geom_density(kernel = "gaussian", lwd = 2, color = "red")
 ```
 
     ## `stat_bin()` using `bins = 30`. Pick better value with
     ## `binwidth`.
 
-![](README_files/figure-gfm/unnamed-chunk-29-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-35-2.png)<!-- -->
 
 ``` r
 # boxplots of gamesPlayed by division
 ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geom_jitter(aes(color = venue.timeZone.tz))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-29-3.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-35-3.png)<!-- -->
 
 ``` r
 # barplot of gamePlayed
@@ -1804,7 +1805,7 @@ ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geo
 ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-29-4.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-35-4.png)<!-- -->
 
 ``` r
 ggplot(combined, aes(x = penaltyMinutes)) + geom_freqpoly()
@@ -1813,7 +1814,15 @@ ggplot(combined, aes(x = penaltyMinutes)) + geom_freqpoly()
     ## `stat_bin()` using `bins = 30`. Pick better value with
     ## `binwidth`.
 
-![](README_files/figure-gfm/unnamed-chunk-29-5.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-35-5.png)<!-- -->
+
+``` r
+ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = division.name), position = "jitter") +geom_smooth(method = lm, color = "blue")
+```
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](README_files/figure-gfm/unnamed-chunk-35-6.png)<!-- -->
 
 ``` r
 # roster <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.roster")

@@ -35,7 +35,7 @@ getFran <- function(){
   fran <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(fran$data)
 }
-getFran() %>% head()
+getFran() %>% tbl_df()
 
 ```
 This is a function to retrieve stats about all teams.  
@@ -46,7 +46,7 @@ getFranTeamTot <- function() {
   franTeamTot <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franTeamTot$data)
 }
-getFranTeamTot() %>% head()
+getFranTeamTot() %>% tbl_df()
 ```
 To allow for convenient access of team information in the following function, we first construct a subset of data, so users can use team names or franchise ID to look up information.  
 ```{r}
@@ -67,7 +67,7 @@ getFranSeaRec <- function(team) {
   franSeaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franSeaRec$data)
 }
-getFranSeaRec(20) %>% head()
+getFranSeaRec(20) %>% tbl_df()
 getFranSeaRec("Vancouver Canucks") %>% head()
 ```
 This function retrieves goalie records, and again a `franchiseId` or `teamName` is required.  
@@ -84,7 +84,7 @@ getFranGoaRec <- function(team) {
   franGoaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franGoaRec$data)
 }
-getFranGoaRec(20) %>% head()
+getFranGoaRec(20) %>% tbl_df()
 getFranGoaRec("Vancouver Canucks") %>% head()
 ```
 This function retrieves information about skater records, and a `franchiseId` or `teamName` is required.  
@@ -101,8 +101,8 @@ getFranSkaRec <- function(team) {
   franSkaRec <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   return(franSkaRec$data)
 }
-getFranSkaRec(20) %>% head()
-getFranSkaRec("Vancouver Canucks") %>% head()
+getFranSkaRec(20) %>% tbl_df()
+getFranSkaRec("Vancouver Canucks") %>% tbl_df()
 ```
 
 ### NHL stats API  
@@ -189,7 +189,7 @@ getStats <- function(expand = "", teamID = "", stats = ""){
 # getStats(teamID = 20, expand = "person.names")
 # getStats(teamID = 20, expand = "team.schedule.next")
 # getStats(expand = "team.roster&season=20142015") %>% head()
-getStats(teamID = 53, expand = "team.roster")
+getStats(teamID = 53, expand = "team.roster") %>% tbl_df()
 # getStats(stats = "statsSingleSeasonPlayoffs") %>% head()
 
 ```
@@ -233,8 +233,8 @@ nhlFun <- function(endpoints, ...){
     stop("Please enter a valid endpoint")
   }
 }
-nhlFun(endpoints = "skater record", 20)
-nhlFun(endpoints = "stats", expand = "person.team")
+nhlFun(endpoints = "skater record", 20) %>% tbl_df()
+nhlFun(endpoints = "stats", expand = "person.team") %>% tbl_df()
 # nhlFun(endpoints = "team total")
 ```
 
@@ -276,7 +276,7 @@ Now we have the data, we can make some plots to visualize the data.
 # scatter plot of homeWins and roadWins
 ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = division.name))
 # histogram of winPercent
-ggplot(combined, aes(x = winPercent)) + geom_histogram(aes(y = ..density..))
+ggplot(combined, aes(x = winPercent)) + geom_histogram(aes(y = ..density..)) + geom_density(kernel = "gaussian", lwd = 2, color = "red")
 # boxplots of gamesPlayed by division
 ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geom_jitter(aes(color = venue.timeZone.tz))
 # barplot of gamePlayed
@@ -284,6 +284,9 @@ ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geo
 ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name))
 
 ggplot(combined, aes(x = penaltyMinutes)) + geom_freqpoly()
+
+ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = division.name), position = "jitter") +geom_smooth(method = lm, color = "blue")
+
 # roster <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.roster")
 # teamStats <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.stats")
 
