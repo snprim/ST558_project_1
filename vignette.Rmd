@@ -68,7 +68,7 @@ getFranSeaRec <- function(team) {
   return(franSeaRec$data)
 }
 getFranSeaRec(20) %>% tbl_df()
-getFranSeaRec("Vancouver Canucks") %>% head()
+getFranSeaRec("Vancouver Canucks") %>% tbl_df()
 ```
 This function retrieves goalie records, and again a `franchiseId` or `teamName` is required.  
 /franchise-goalie-records?cayenneExp=franchiseId=ID (Goalie records for the specified
@@ -85,7 +85,7 @@ getFranGoaRec <- function(team) {
   return(franGoaRec$data)
 }
 getFranGoaRec(20) %>% tbl_df()
-getFranGoaRec("Vancouver Canucks") %>% head()
+getFranGoaRec("Vancouver Canucks") %>% tbl_df()
 ```
 This function retrieves information about skater records, and a `franchiseId` or `teamName` is required.  
 /franchise-skater-records?cayenneExp=franchiseId=ID (Skater records, same interaction as
@@ -188,8 +188,8 @@ getStats <- function(expand = "", teamID = "", stats = ""){
 # getStats(teamID = 20, expand = "team.stats")
 # getStats(teamID = 20, expand = "person.names")
 # getStats(teamID = 20, expand = "team.schedule.next")
-# getStats(expand = "team.roster&season=20142015") %>% head()
-getStats(teamID = 53, expand = "team.roster") %>% tbl_df()
+getStats(expand = "team.roster&season=20142015") %>% tbl_df()
+getStats(teamID = 53, expand = "team.roster") 
 # getStats(stats = "statsSingleSeasonPlayoffs") %>% head()
 
 ```
