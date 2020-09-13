@@ -147,8 +147,7 @@ test6 <- as.data.frame(test6[[1]]$games)
 # test8 <- test8$teams
 # test9 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?stats=statsSingleSeasonPlayoffs") %>% content("text") %>% fromJSON(flatten = TRUE)
 # test9 <- test9$teams
-# need to figure out if all other modifiers use stats$teams
-# need to change nextGameSchedule and previousGameSchedule
+# need to change nextGameSchedule and previousGameSchedule in case no info 
 # make a table for id and franchiseId?
 ```
 
@@ -179,12 +178,16 @@ getStats <- function(expand = "", teamID = "", stats = ""){
   } else if (expand == "team.stats"){
     stats <- stats$teams$teamStats[[1]]$splits[[1]]
   } else {
-    stats <- stats$teams
+    stats <- as.data.frame(stats$teams)
   }
-  return(as.data.frame(stats))
+  if (is.null(stats)) {
+    stop("No information is available")
+  } 
+  return(stats)
 }
-# it seems that we need to go into one more level to get person and roster info
-getStats(teamID = 20, expand = "team.stats")
+# getStats(teamID = 20, expand = "team.stats")
+# getStats(teamID = 20, expand = "person.names")
+# getStats(teamID = 20, expand = "team.schedule.next")
 # getStats(expand = "team.roster&season=20142015") %>% head()
 getStats(teamID = 53, expand = "team.roster")
 # getStats(stats = "statsSingleSeasonPlayoffs") %>% head()
@@ -237,6 +240,8 @@ nhlFun(endpoints = "stats", expand = "person.team")
 
 ## Exploratory Data Analysis  
 
+Now we demonstrate how to use functions above to do exploratory data analysis. We will first retrieve data from two endpoints: **team total** and **person.names**, remove some columns we don't need, and combine the two objects. Then we'll add two new variables: `winPercent`: the proportion of wins among all games played and `homeWinPercent`: the proportion of wins of home games among all wins.  
+
 ```{r}
 # perhaps use the wrapper function here
 franTot <- nhlFun(endpoint = "team total")
@@ -246,13 +251,28 @@ franStats <- franStats %>% select(c("locationName", "firstYearOfPlay", "franchis
 # create two variables: winPercent and homeWinPercent 
 combined <- full_join(franTot, franStats, by = "franchiseId") %>% mutate(winPercent = wins / gamesPlayed, homeWinPercent = homeWins / wins)
 head(combined)
-# plots 
-ggplot(combined, aes(x = homeWins, y = homeLosses)) + geom_point(aes(color = division.name))
+
+# create a subset for numbers of games lost or won
+subset <- combined %>% select(starts_with("home"), starts_with("road"), "division.name", -"homeWinPercent") %>% gather(-"division.name", key = "type", value = "game") %>% group_by(division.name, type) %>% summarise(sum = sum(game, na.rm = TRUE))
+```
+
+Now we have the data, we can make some plots to visualize the data.  
+
+```{r}
+# contingency table
+table(combined$division.name, combined$firstYearOfPlay)
+# scatter plot of homeWins and roadWins
+ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = division.name))
+# histogram of winPercent
 ggplot(combined, aes(x = winPercent)) + geom_histogram(aes(y = ..density..))
-ggplot(combined, aes(x = division.name, y = winPercent)) + geom_boxplot() + geom_jitter(aes(color = venue.timeZone.tz))
-ggplot(combined, aes(x = gamesPlayed)) + geom_bar(aes(x = division.name))
+# boxplots of gamesPlayed by division
+ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geom_jitter(aes(color = venue.timeZone.tz))
+# barplot of gamePlayed
+# ggplot(combined, aes(x = gamesPlayed)) + geom_bar(aes(x = division.name))
+ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name))
 
 roster <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.roster")
 teamStats <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.stats")
+
 ```
 

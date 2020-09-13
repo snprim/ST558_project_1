@@ -639,62 +639,21 @@ getStats <- function(expand = "", teamID = "", stats = ""){
   } else if (expand == "team.stats"){
     stats <- stats$teams$teamStats[[1]]$splits[[1]]
   } else {
-    stats <- stats$teams
+    stats <- as.data.frame(stats$teams)
   }
-  return(as.data.frame(stats))
+  if (is.null(stats)) {
+    stop("No information is available")
+  } 
+  return(stats)
 }
-# it seems that we need to go into one more level to get person and roster info
-getStats(teamID = 20, expand = "team.stats")
-```
-
-    ##   stat.gamesPlayed stat.wins stat.losses stat.ot stat.pts
-    ## 1               70        36          27       7       79
-    ## 2               NA      15th        17th    21st     16th
-    ##   stat.ptPctg stat.goalsPerGame stat.goalsAgainstPerGame
-    ## 1        56.4             2.914                    3.057
-    ## 2        18th              20th                     16th
-    ##   stat.evGGARatio stat.powerPlayPercentage
-    ## 1          0.9178                     21.2
-    ## 2            24th                     12th
-    ##   stat.powerPlayGoals stat.powerPlayGoalsAgainst
-    ## 1                  41                         35
-    ## 2                19th                        8th
-    ##   stat.powerPlayOpportunities stat.penaltyKillPercentage
-    ## 1                         193                       82.1
-    ## 2                        24th                        8th
-    ##   stat.shotsPerGame stat.shotsAllowed stat.winScoreFirst
-    ## 1              31.6           32.4429              0.667
-    ## 2              15th              24th               26th
-    ##   stat.winOppScoreFirst stat.winLeadFirstPer
-    ## 1                   0.4                0.857
-    ## 2                   3rd                  5th
-    ##   stat.winLeadSecondPer stat.winOutshootOpp
-    ## 1                 0.852                 0.5
-    ## 2                  17th                12th
-    ##   stat.winOutshotByOpp stat.faceOffsTaken stat.faceOffsWon
-    ## 1                0.485               4120             2022
-    ## 2                 12th                5th             15th
-    ##   stat.faceOffsLost stat.faceOffWinPercentage
-    ## 1              2098                      49.1
-    ## 2              26th                      22nd
-    ##   stat.shootingPctg stat.savePctg
-    ## 1               9.2         0.906
-    ## 2                NA            NA
-    ##   stat.penaltyKillOpportunities stat.savePctRank
-    ## 1                          <NA>             <NA>
-    ## 2                           9th             13th
-    ##   stat.shootingPctRank team.id      team.name
-    ## 1                 <NA>      20 Calgary Flames
-    ## 2                 20th      20 Calgary Flames
-    ##          team.link
-    ## 1 /api/v1/teams/20
-    ## 2 /api/v1/teams/20
-
-``` r
+# getStats(teamID = 20, expand = "team.stats")
+# getStats(teamID = 20, expand = "person.names")
+# getStats(teamID = 20, expand = "team.schedule.next")
 # getStats(expand = "team.roster&season=20142015") %>% head()
 getStats(teamID = 53, expand = "team.roster")
 ```
 
+    ## [[1]]
     ##    jerseyNumber person.id      person.fullName
     ## 1            15   8470755      Brad Richardson
     ## 2            34   8471262       Carl Soderberg
@@ -1629,6 +1588,13 @@ nhlFun(endpoints = "stats", expand = "person.team")
 
 ## Exploratory Data Analysis
 
+Now we demonstrate how to use functions above to do exploratory data
+analysis. We will first retrieve data from two endpoints: **team total**
+and **person.names**, remove some columns we don’t need, and combine the
+two objects. Then we’ll add two new variables: `winPercent`: the
+proportion of wins among all games played and `homeWinPercent`: the
+proportion of wins of home games among all wins.
+
 ``` r
 # perhaps use the wrapper function here
 franTot <- nhlFun(endpoint = "team total")
@@ -1703,32 +1669,63 @@ head(combined)
     ## 6         Eastern  0.4710425      0.5614754
 
 ``` r
-# plots 
-ggplot(combined, aes(x = homeWins, y = homeLosses)) + geom_point(aes(color = division.name))
+# create a subset for numbers of games lost or won
+subset <- combined %>% select(starts_with("home"), starts_with("road"), "division.name", -"homeWinPercent") %>% gather(-"division.name", key = "type", value = "game") %>% group_by(division.name, type) %>% summarise(sum = sum(game, na.rm = TRUE))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-73-1.png)<!-- -->
+    ## `summarise()` regrouping output by 'division.name' (override with `.groups` argument)
+
+Now we have the data, we can make some plots to visualize the data.
 
 ``` r
+# contingency table
+table(combined$division.name, combined$firstYearOfPlay)
+```
+
+    ##               
+    ##                1909 1917 1924 1926 1967 1970 1972 1974 1979
+    ##   Atlantic        2    6    2    6    0    2    0    0    0
+    ##   Central         0    0    0    2    6    0    0    0    4
+    ##   Metropolitan    0    0    0    2    4    0    2    2    4
+    ##   Pacific         0    0    0    0    2    2    0    0    8
+    ##               
+    ##                1980 1982 1990 1991 1993 1997 2011 2016
+    ##   Atlantic        0    0    2    2    2    0    0    0
+    ##   Central         0    0    0    0    0    4    4    0
+    ##   Metropolitan    0    5    0    0    0    2    0    0
+    ##   Pacific         4    0    2    0    2    0    0    2
+
+``` r
+# scatter plot of homeWins and roadWins
+ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = division.name))
+```
+
+![](README_files/figure-gfm/unnamed-chunk-106-1.png)<!-- -->
+
+``` r
+# histogram of winPercent
 ggplot(combined, aes(x = winPercent)) + geom_histogram(aes(y = ..density..))
 ```
 
     ## `stat_bin()` using `bins = 30`. Pick better value with
     ## `binwidth`.
 
-![](README_files/figure-gfm/unnamed-chunk-73-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-106-2.png)<!-- -->
 
 ``` r
-ggplot(combined, aes(x = division.name, y = winPercent)) + geom_boxplot() + geom_jitter(aes(color = venue.timeZone.tz))
+# boxplots of gamesPlayed by division
+ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geom_jitter(aes(color = venue.timeZone.tz))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-73-3.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-106-3.png)<!-- -->
 
 ``` r
-ggplot(combined, aes(x = gamesPlayed)) + geom_bar(aes(x = division.name))
+# barplot of gamePlayed
+# ggplot(combined, aes(x = gamesPlayed)) + geom_bar(aes(x = division.name))
+ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-73-4.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-106-4.png)<!-- -->
 
 ``` r
 roster <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.roster")
