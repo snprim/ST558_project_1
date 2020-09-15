@@ -5,10 +5,10 @@ output:
     toc: true
 ---
 
-```{r, echo = FALSE}
-# rmarkdown::render("vignette.Rmd", output_format = "github_document", output_file = "README.md")
+```{r, echo = FALSE, eval = FALSE}
+rmarkdown::render("vignette.Rmd", output_format = "github_document", output_file = "README.md")
 ```
-In this vignette, we want to show how to access APIs to retrieve data. We use two NHL repositories as examples: [NHL records](https://gitlab.com/dword4/nhlapi/-/tree/master) and [NHL stats](https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md).  
+This vignette demonstrates how to access APIs to retrieve data. We use two NHL repositories as examples: [NHL records](https://gitlab.com/dword4/nhlapi/-/tree/master) and [NHL stats](https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md).  
 
 ## Required Packages  
 
@@ -120,80 +120,58 @@ For this function, eight modifiers can be chosen, and thus an argument (`expand`
 
 Examples of arguments:  
 
+  * `ID = 20`  
   * `expand = "person.names"`  
   * `teamId = "4, 5, 29"`  
   * `stats = "statsSingleSeasonPlayoffs"`  
 
+Note: If you would like information for more than one team, enter `teamId`. If you want specific information, such as roster, enter `ID` and select one team at a time.  
+
 For more information about these modifiers, see [the documentation](https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md).
-
-
-```{r, echo = FALSE, eval = FALSE}
-# figuring out NHL stats
-# test2 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?expand=team.roster") %>% content("text") %>% fromJSON(flatten = TRUE)
-# test2$teams$roster.roster
-# test3 <- GET("https://statsapi.web.nhl.com/api/v1/teams/20?expand=person.names") %>% content("text") %>% fromJSON(flatten = TRUE)
-# test3 <-as.data.frame(test3$teams)
-test4 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?expand=team.schedule.next") %>% content("text") %>% fromJSON(flatten = TRUE)
-test4 <- test4$teams$nextGameSchedule.dates
-test4<- as.data.frame(test4[[1]]$games)
-# test5 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?expand=team.stats") %>% content("text") %>% fromJSON(flatten = TRUE)
-# test5 <- test5$teams$teamStats[[1]]$splits[[1]]
-test6 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?expand=team.schedule.previous") %>% content("text") %>% fromJSON(flatten = TRUE)
-test6 <- test6$teams$previousGameSchedule.dates
-test6 <- as.data.frame(test6[[1]]$games)
-# test7 <- GET("https://statsapi.web.nhl.com/api/v1/teams/20?expand=team.roster&season=20142015") %>% content("text") %>% fromJSON(flatten = TRUE)
-# test7 <- test7$teams
-# test8 <- GET("https://statsapi.web.nhl.com/api/v1/teams?teamId=1,3,5") %>% content("text") %>% fromJSON(flatten = TRUE)
-# test8 <- test8$teams
-# test9 <- GET("https://statsapi.web.nhl.com/api/v1/teams/54?stats=statsSingleSeasonPlayoffs") %>% content("text") %>% fromJSON(flatten = TRUE)
-# test9 <- test9$teams
-# need to change nextGameSchedule and previousGameSchedule in case no info 
-# make a table for id and franchiseId?
-```
-
 
 ```{r}
 baseurl_stats <- "https://statsapi.web.nhl.com/api/v1/teams"
-getStats <- function(expand = "", teamID = "", stats = ""){
-  if (teamID!=""){
-    if (length(teamID)==1){
-      baseurl_stats <- paste0("https://statsapi.web.nhl.com/api/v1/teams/", teamID)
-    }
-    else{
-      fullurl <- paste0("https://statsapi.web.nhl.com/api/v1/teams?teamID=", teamID)
-    }
+getStats <- function(ID = "", expand = "", teamID = "", stats = ""){
+  if (ID != ""){
+    baseurl_stats <- paste0("https://statsapi.web.nhl.com/api/v1/teams/", ID)
   }
+  if (teamID != ""){
+    fullurl <- paste0("https://statsapi.web.nhl.com/api/v1/teams?teamId=", teamID)
+  }
+  
   if (expand != ""){
     fullurl <- paste0(baseurl_stats, "?expand=", expand)
   } else if (stats != ""){
     fullurl <- paste0(baseurl_stats, "?stats=", stats)
   }
   stats <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
-  if (expand == "team.roster"){
-    stats <- stats$teams$roster.roster
+  if (str_detect(expand, "team.roster")){
+    stats <- stats$teams$roster.roster[[1]]
   } else if (expand == "team.schedule.next"){
     stats <- stats$teams$nextGameSchedule.dates
   } else if (expand == "team.schedule.previous"){
     stats <- stats$teams$previousGameSchedule.dates
   } else if (expand == "team.stats"){
     stats <- stats$teams$teamStats[[1]]$splits[[1]]
+    #stats <- stats$teams
   } else {
-    stats <- as.data.frame(stats$teams)
+    stats <- stats$teams
   }
   if (is.null(stats)) {
     stop("No information is available")
   } 
-  return(stats)
+  return(as.data.frame(stats))
 }
-# getStats(teamID = 20, expand = "team.stats")
-# getStats(teamID = 20, expand = "person.names")
-# getStats(teamID = 20, expand = "team.schedule.next")
-getStats(expand = "team.roster&season=20142015") %>% tbl_df()
-getStats(teamID = 53, expand = "team.roster") 
-# getStats(stats = "statsSingleSeasonPlayoffs") %>% head()
+# getStats(ID = 20, expand = "team.stats")
+# getStats(ID = 20, expand = "person.names")
+getStats(ID = 54, expand = "team.schedule.next") %>% tbl_df()
+getStats(ID = 20, expand = "team.roster&season=20102011") %>% tbl_df()
+# getStats(ID = 53, expand = "team.roster") 
+# getStats(teamID = "4,5,29")
+# getStats(ID = 54, stats = "statsSingleSeasonPlayoffs") %>% tbl_df()
 
 ```
-## A wrapper function for all the functions above  
+### A wrapper function for all the functions above  
 
 Endpoints:  
 
