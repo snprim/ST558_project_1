@@ -25,7 +25,8 @@ library(tidyverse)
 ```{r}
 baseurl_records <- "https://records.nhl.com/site/api"
 ```
-Here is a function to get basic information about all teams.  
+`getFran` retrieves basic information about all teams.  
+
 /franchise (Returns id, ﬁrstSeasonId and lastSeasonId and name of every team in the history
 of the NHL)  
 
@@ -38,8 +39,10 @@ getFran <- function(){
 getFran() %>% tbl_df()
 
 ```
-This is a function to retrieve stats about all teams.  
+`getFranTeamTot` retrieves stats about all teams.  
+
 /franchise-team-totals (Returns Total stats for every franchise (ex roadTies, roadWins, etc))  
+
 ```{r}
 getFranTeamTot <- function() {
   fullurl <- paste0(baseurl_records, "/", "franchise-team-totals")
@@ -48,14 +51,17 @@ getFranTeamTot <- function() {
 }
 getFranTeamTot() %>% tbl_df()
 ```
-To allow for convenient access of team information in the following function, we first construct a subset of data, so users can use team names or franchise ID to look up information.  
+To allow for convenient access of team information in the following functions, we first construct a subset of data, so users can use team names or franchise ID to look up information.  
+
 ```{r}
 index <- getFranTeamTot() %>% select(c("franchiseId", "teamName")) %>% unique()
 ```
 
-This function retrieves season records from one specific team, and therefore you need to provide the `franchiseId` or `teamName` as an argument. The ID can be found using `getFran` or `getFranTeamTot`.  
+`getFranSeaRec` retrieves season records from one specific team, and therefore you need to provide the `franchiseId` or `teamName` as an argument. `franchiseId` can be found using `getFran` or `getFranTeamTot`.  
+
 /site/api/franchise-season-records?cayenneExp=franchiseId=ID (Drill-down into season
 records for a specific franchise)  
+
 ```{r}
 getFranSeaRec <- function(team) {
   if (is.character(team)) {
@@ -164,7 +170,7 @@ getStats <- function(ID = "", expand = "", teamID = "", stats = ""){
 }
 # getStats(ID = 20, expand = "team.stats")
 # getStats(ID = 20, expand = "person.names")
-getStats(ID = 54, expand = "team.schedule.next") %>% tbl_df()
+getStats(ID = 24, expand = "team.schedule.previous") %>% tbl_df()
 getStats(ID = 20, expand = "team.roster&season=20102011") %>% tbl_df()
 # getStats(ID = 53, expand = "team.roster") 
 # getStats(teamID = "4,5,29")
@@ -225,11 +231,11 @@ Now we demonstrate how to use functions above to do exploratory data analysis. W
 ```{r}
 # perhaps use the wrapper function here
 franTot <- nhlFun(endpoint = "team total")
-franTot <- franTot %>% select(-c("id", "activeFranchise", "firstSeasonId", "gameTypeId", "lastSeasonId"))
+franTot <- franTot %>% select(-c("id", "activeFranchise", "firstSeasonId", "lastSeasonId"))
 franStats <- nhlFun(endpoint = "stats", expand = "person.names") 
 franStats <- franStats %>% select(c("locationName", "firstYearOfPlay", "franchiseId", "venue.city", "venue.timeZone.id", "venue.timeZone.tz", "division.name", "conference.name"))
 # create two variables: winPercent and homeWinPercent 
-combined <- full_join(franTot, franStats, by = "franchiseId") %>% mutate(winPercent = wins / gamesPlayed, homeWinPercent = homeWins / wins)
+combined <- inner_join(franTot, franStats, by = "franchiseId") %>% mutate(winPercent = wins / gamesPlayed, homeWinPercent = homeWins / wins)
 head(combined)
 
 # create a subset for numbers of games lost or won
@@ -239,7 +245,7 @@ subset <- combined %>% select(starts_with("home"), starts_with("road"), "divisio
 ### Summaries
 ```{r}
 # summaries
-apply(combined[,c(2, 5:11, 13:17)], FUN = summary, MARGIN = 2)
+apply(combined[,c(3, 6:12, 14:18)], FUN = summary, MARGIN = 2)
 # contingency table
 table(combined$division.name, combined$firstYearOfPlay)
 table(combined$conference.name, combined$firstYearOfPlay)
@@ -250,9 +256,12 @@ table(combined$conference.name, combined$firstYearOfPlay)
 
 Now we have the data, we can make some plots to visualize the data.  
 
+In these two scatter plots, we can see that the numbers of wins at home and on the road are proportional. 
 ```{r}
 # scatter plot of homeWins and roadWins
-ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = division.name))
+ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = division.name), position = "jitter") +geom_smooth(method = lm, color = "blue")
+
+ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = as.factor(gameTypeId)), position = "jitter") + scale_color_discrete(name = "Game Type", labels = c("regular season", "playoffs"))
 # histogram of winPercent
 ggplot(combined, aes(x = winPercent)) + geom_histogram(aes(y = ..density..)) + geom_density(kernel = "gaussian", lwd = 2, color = "red")
 # boxplots of gamesPlayed by division
@@ -261,12 +270,9 @@ ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geo
 # ggplot(combined, aes(x = gamesPlayed)) + geom_bar(aes(x = division.name))
 ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name))
 
+ggplot(combined, aes(x = division.name, y = winPercent, fill = as.factor(gameTypeId))) + geom_bar(position = "dodge", stat = "identity") + scale_fill_discrete(name = "Game Type", labels = c("regular season", "playoffs"))
+# frequency plot for penalty minutes
 ggplot(combined, aes(x = penaltyMinutes)) + geom_freqpoly()
-
-ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = division.name), position = "jitter") +geom_smooth(method = lm, color = "blue")
-
-# roster <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.roster")
-# teamStats <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.stats")
 
 ```
 

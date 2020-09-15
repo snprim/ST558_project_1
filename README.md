@@ -36,7 +36,8 @@ To be able to access data from APIs, you should install and load the
 baseurl_records <- "https://records.nhl.com/site/api"
 ```
 
-Here is a function to get basic information about all teams.  
+`getFran` retrieves basic information about all teams.
+
 /franchise (Returns id, ﬁrstSeasonId and lastSeasonId and name of every
 team in the history of the NHL)
 
@@ -51,7 +52,8 @@ getFran() %>% tbl_df()
 
     ## No encoding supplied: defaulting to UTF-8.
 
-This is a function to retrieve stats about all teams.  
+`getFranTeamTot` retrieves stats about all teams.
+
 /franchise-team-totals (Returns Total stats for every franchise (ex
 roadTies, roadWins, etc))
 
@@ -67,7 +69,7 @@ getFranTeamTot() %>% tbl_df()
     ## No encoding supplied: defaulting to UTF-8.
 
 To allow for convenient access of team information in the following
-function, we first construct a subset of data, so users can use team
+functions, we first construct a subset of data, so users can use team
 names or franchise ID to look up information.
 
 ``` r
@@ -76,9 +78,11 @@ index <- getFranTeamTot() %>% select(c("franchiseId", "teamName")) %>% unique()
 
     ## No encoding supplied: defaulting to UTF-8.
 
-This function retrieves season records from one specific team, and
+`getFranSeaRec` retrieves season records from one specific team, and
 therefore you need to provide the `franchiseId` or `teamName` as an
-argument. The ID can be found using `getFran` or `getFranTeamTot`.  
+argument. `franchiseId` can be found using `getFran` or
+`getFranTeamTot`.
+
 /site/api/franchise-season-records?cayenneExp=franchiseId=ID (Drill-down
 into season records for a specific franchise)
 
@@ -227,7 +231,7 @@ getStats <- function(ID = "", expand = "", teamID = "", stats = ""){
 }
 # getStats(ID = 20, expand = "team.stats")
 # getStats(ID = 20, expand = "person.names")
-getStats(ID = 54, expand = "team.schedule.next") %>% tbl_df()
+getStats(ID = 24, expand = "team.schedule.previous") %>% tbl_df()
 getStats(ID = 20, expand = "team.roster&season=20102011") %>% tbl_df()
 # getStats(ID = 53, expand = "team.roster") 
 # getStats(teamID = "4,5,29")
@@ -306,11 +310,11 @@ franTot <- nhlFun(endpoint = "team total")
     ## No encoding supplied: defaulting to UTF-8.
 
 ``` r
-franTot <- franTot %>% select(-c("id", "activeFranchise", "firstSeasonId", "gameTypeId", "lastSeasonId"))
+franTot <- franTot %>% select(-c("id", "activeFranchise", "firstSeasonId", "lastSeasonId"))
 franStats <- nhlFun(endpoint = "stats", expand = "person.names") 
 franStats <- franStats %>% select(c("locationName", "firstYearOfPlay", "franchiseId", "venue.city", "venue.timeZone.id", "venue.timeZone.tz", "division.name", "conference.name"))
 # create two variables: winPercent and homeWinPercent 
-combined <- full_join(franTot, franStats, by = "franchiseId") %>% mutate(winPercent = wins / gamesPlayed, homeWinPercent = homeWins / wins)
+combined <- inner_join(franTot, franStats, by = "franchiseId") %>% mutate(winPercent = wins / gamesPlayed, homeWinPercent = homeWins / wins)
 head(combined)
 
 # create a subset for numbers of games lost or won
@@ -323,60 +327,60 @@ subset <- combined %>% select(starts_with("home"), starts_with("road"), "divisio
 
 ``` r
 # summaries
-apply(combined[,c(2, 5:11, 13:17)], FUN = summary, MARGIN = 2)
+apply(combined[,c(3, 6:12, 14:18)], FUN = summary, MARGIN = 2)
 ```
 
     ## $gamesPlayed
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##       2      77     290    1188    1675    6731 
+    ##     2.0   152.5   480.0  1395.0  2054.0  6731.0 
     ## 
     ## $homeLosses
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##     0.0    17.0    68.0   205.1   297.0  1132.0 
+    ##     0.0    33.0   104.0   239.7   363.0  1132.0 
     ## 
     ## $homeOvertimeLosses
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-    ##    0.00    0.00    7.00   35.70   73.75  112.00      39 
+    ##    0.00    0.00    7.00   35.70   73.75  112.00      21 
     ## 
     ## $homeTies
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-    ##     0.0     3.0    45.0    84.6   103.2   448.0      37 
+    ##     0.0    11.0    58.0   107.5   166.5   448.0      36 
     ## 
     ## $homeWins
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##     0.0    16.0    78.0   311.8   433.0  2025.0 
+    ##     0.0    33.5   112.0   367.8   520.0  2025.0 
     ## 
     ## $losses
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##     1.0    43.0   144.0   493.2   709.0  2736.0 
+    ##     1.0    70.5   236.0   575.5   830.0  2736.0 
     ## 
     ## $overtimeLosses
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-    ##    0.00    0.00   11.50   73.18  158.00  203.00      39 
+    ##    0.00    0.00   11.50   73.18  158.00  203.00      21 
     ## 
     ## $penaltyMinutes
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##      12    1042    5118   17576   27013   91941 
+    ##      12    1722    7217   20812   29416   91941 
     ## 
     ## $points
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-    ##       0       0      39    1162    1838    7899       1 
+    ##     0.0     0.0    58.5  1372.6  2170.5  7899.0       1 
     ## 
     ## $roadLosses
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##     1.0    27.0    83.0   288.1   392.0  1619.0 
+    ##     1.0    38.0   128.0   335.8   467.0  1619.0 
     ## 
     ## $roadOvertimeLosses
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-    ##    0.00    0.00    6.50   37.74   78.75   95.00      39 
+    ##    0.00    0.00    6.50   37.74   78.75   95.00      21 
     ## 
     ## $roadTies
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-    ##    0.00    3.00   33.50   84.62  126.25  456.00      37 
+    ##     0.0     7.0    55.0   108.8   174.0   456.0      36 
     ## 
     ## $roadWins
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##     0.0    12.0    63.0   227.5   316.0  1424.0
+    ##     0.0    26.5    95.0   269.4   416.5  1424.0
 
 ``` r
 # contingency table
@@ -413,12 +417,23 @@ table(combined$conference.name, combined$firstYearOfPlay)
 
 Now we have the data, we can make some plots to visualize the data.
 
+In these two scatter plots, we can see that the numbers of wins at home
+and on the road are proportional.
+
 ``` r
 # scatter plot of homeWins and roadWins
-ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = division.name))
+ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = division.name), position = "jitter") +geom_smooth(method = lm, color = "blue")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-122-1.png)<!-- -->
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](README_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+
+``` r
+ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = as.factor(gameTypeId)), position = "jitter") + scale_color_discrete(name = "Game Type", labels = c("regular season", "playoffs"))
+```
+
+![](README_files/figure-gfm/unnamed-chunk-21-2.png)<!-- -->
 
 ``` r
 # histogram of winPercent
@@ -427,14 +442,14 @@ ggplot(combined, aes(x = winPercent)) + geom_histogram(aes(y = ..density..)) + g
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](README_files/figure-gfm/unnamed-chunk-122-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-21-3.png)<!-- -->
 
 ``` r
 # boxplots of gamesPlayed by division
 ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geom_jitter(aes(color = venue.timeZone.tz))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-122-3.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-21-4.png)<!-- -->
 
 ``` r
 # barplot of gamePlayed
@@ -442,25 +457,19 @@ ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geo
 ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-122-4.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-21-5.png)<!-- -->
 
 ``` r
+ggplot(combined, aes(x = division.name, y = winPercent, fill = as.factor(gameTypeId))) + geom_bar(position = "dodge", stat = "identity") + scale_fill_discrete(name = "Game Type", labels = c("regular season", "playoffs"))
+```
+
+![](README_files/figure-gfm/unnamed-chunk-21-6.png)<!-- -->
+
+``` r
+# frequency plot for penalty minutes
 ggplot(combined, aes(x = penaltyMinutes)) + geom_freqpoly()
 ```
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](README_files/figure-gfm/unnamed-chunk-122-5.png)<!-- -->
-
-``` r
-ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = division.name), position = "jitter") +geom_smooth(method = lm, color = "blue")
-```
-
-    ## `geom_smooth()` using formula 'y ~ x'
-
-![](README_files/figure-gfm/unnamed-chunk-122-6.png)<!-- -->
-
-``` r
-# roster <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.roster")
-# teamStats <- nhlFun(endpoint = "stats", teamID = 20, expand = "team.stats")
-```
+![](README_files/figure-gfm/unnamed-chunk-21-7.png)<!-- -->
