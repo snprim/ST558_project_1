@@ -266,13 +266,15 @@ table(combined$division.name, combined$gameTypeId)
 
 Now we have the data and summaries, we can make some plots to visualize the data.  
 
-In the first scatter plot, we can see that as a lot of teams play low number of games, and a few teams play a lot more number of games. The winning percentage increases slightly as the number of games played increases, but the slope is small and the difference might not be significant. The colors of dots represent different divisions, and it does not appear that there are different patterns for different divisions.
+In the first scatter plot, we can see that as a lot of teams play low number of games, and a few teams play a lot more number of games. The winning percentage increases slightly as the number of games played increases, but the slope is small and the difference might not be significant. The colors of dots represent different divisions, and it does not appear that there are different patterns for different divisions.The second plot looks at each division separately; again the patterns do not seem to differ.  
 
-The second plot is similar, but the y-axis shows the winning percentage of home games, and the colors represent different types of games (regular season vs. playoffs). It does not appear that the number of games played and the winning percentage of home games are correlated, as the slope is close to zero.  
+The third plot is similar, but the y-axis shows the winning percentage of home games, and the colors represent different types of games (regular season vs. playoffs). It does not appear that the number of games played and the winning percentage of home games are correlated, as the slope is close to zero.  
 
 ```{r}
 # scatter plot of homeWins and roadWins
 ggplot(combined, aes(x = gamesPlayed, y = winPercent)) + geom_point(aes(color = division.name), position = "jitter") + geom_smooth(method = lm, color = "blue") + scale_color_discrete()
+
+ggplot(combined, aes(x = gamesPlayed, y = winPercent)) + geom_point(position = "jitter") + geom_smooth(method = lm, color = "blue") + facet_wrap(~ division.name)
 
 ggplot(combined, aes(x = gamesPlayed, y = homeWinPercent)) + geom_point(aes(color = as.factor(gameTypeId)), position = "jitter") + geom_smooth(method = lm, color = "blue") + scale_color_discrete(name = "Game Type", labels = c("regular season", "playoffs"))
 ```
@@ -281,7 +283,7 @@ The histogram shows that the center of winning percentages of all teams is aroun
 
 ```{r}
 # histogram of winPercent
-ggplot(combined, aes(x = winPercent)) + geom_histogram(aes(y = ..density..)) + geom_density(kernel = "gaussian", lwd = 2, color = "red")
+ggplot(combined, aes(x = winPercent)) + geom_histogram(bins = 30, aes(y = ..density..)) + geom_density(kernel = "gaussian", color = "red", alpha = 0.5, fill = "green")
 ```
 
 Next we look at the total numbers of games played for each division. The boxplots show that, on average, the Central division play the most games, and the Pacific division play the fewest. However, the variation is large, and therefore the differences might not be significant.  

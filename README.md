@@ -442,9 +442,10 @@ winning percentage increases slightly as the number of games played
 increases, but the slope is small and the difference might not be
 significant. The colors of dots represent different divisions, and it
 does not appear that there are different patterns for different
-divisions.
+divisions.The second plot looks at each division separately; again the
+patterns do not seem to differ.
 
-The second plot is similar, but the y-axis shows the winning percentage
+The third plot is similar, but the y-axis shows the winning percentage
 of home games, and the colors represent different types of games
 (regular season vs. playoffs). It does not appear that the number of
 games played and the winning percentage of home games are correlated, as
@@ -457,7 +458,15 @@ ggplot(combined, aes(x = gamesPlayed, y = winPercent)) + geom_point(aes(color = 
 
     ## `geom_smooth()` using formula 'y ~ x'
 
-![](README_files/figure-gfm/unnamed-chunk-40-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->
+
+``` r
+ggplot(combined, aes(x = gamesPlayed, y = winPercent)) + geom_point(position = "jitter") + geom_smooth(method = lm, color = "blue") + facet_wrap(~ division.name)
+```
+
+    ## `geom_smooth()` using formula 'y ~ x'
+
+![](README_files/figure-gfm/unnamed-chunk-34-2.png)<!-- -->
 
 ``` r
 ggplot(combined, aes(x = gamesPlayed, y = homeWinPercent)) + geom_point(aes(color = as.factor(gameTypeId)), position = "jitter") + geom_smooth(method = lm, color = "blue") + scale_color_discrete(name = "Game Type", labels = c("regular season", "playoffs"))
@@ -469,7 +478,7 @@ ggplot(combined, aes(x = gamesPlayed, y = homeWinPercent)) + geom_point(aes(colo
 
     ## Warning: Removed 51 rows containing missing values (geom_point).
 
-![](README_files/figure-gfm/unnamed-chunk-40-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-34-3.png)<!-- -->
 
 The histogram shows that the center of winning percentages of all teams
 is around 0.5, and the distribution is left-skewed. Therefore most of
@@ -478,12 +487,10 @@ few teams that have much lower winning percentage.
 
 ``` r
 # histogram of winPercent
-ggplot(combined, aes(x = winPercent)) + geom_histogram(aes(y = ..density..)) + geom_density(kernel = "gaussian", lwd = 2, color = "red")
+ggplot(combined, aes(x = winPercent)) + geom_histogram(bins = 30, aes(y = ..density..)) + geom_density(kernel = "gaussian", color = "red", alpha = 0.5, fill = "green")
 ```
 
-    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
-
-![](README_files/figure-gfm/unnamed-chunk-41-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
 
 Next we look at the total numbers of games played for each division. The
 boxplots show that, on average, the Central division play the most
@@ -495,7 +502,7 @@ is large, and therefore the differences might not be significant.
 ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geom_jitter(aes(color = venue.timeZone.tz))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-42-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-36-1.png)<!-- -->
 
 Now we look at two barplots. The first one shows wins, losses, and ties
 of each division. We see that the Atlantic division play the largest
@@ -511,13 +518,13 @@ significant.
 ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-43-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
 
 ``` r
 ggplot(combined, aes(x = division.name, y = winPercent, fill = as.factor(gameTypeId))) + geom_bar(position = "dodge", stat = "identity") + scale_fill_discrete(name = "Game Type", labels = c("regular season", "playoffs"))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-43-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-37-2.png)<!-- -->
 
 Lastly, we look at a frequency plot of penalty minutes. It clearly shows
 that the distribution is right-skewed. 20 teams have no penalty minutes,
@@ -530,4 +537,4 @@ ggplot(combined, aes(x = penaltyMinutes)) + geom_freqpoly()
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](README_files/figure-gfm/unnamed-chunk-44-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
