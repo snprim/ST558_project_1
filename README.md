@@ -108,8 +108,9 @@ getFranSeaRec("Vancouver Canucks") %>% tbl_df()
 
     ## No encoding supplied: defaulting to UTF-8.
 
-This function retrieves goalie records, and again a `franchiseId` or
-`teamName` is required.  
+`getFranGoaRec` retrieves goalie records, and again a `franchiseId` or
+`teamName` is required.
+
 /franchise-goalie-records?cayenneExp=franchiseId=ID (Goalie records for
 the specified franchise)
 
@@ -135,8 +136,9 @@ getFranGoaRec("Vancouver Canucks") %>% tbl_df()
 
     ## No encoding supplied: defaulting to UTF-8.
 
-This function retrieves information about skater records, and a
-`franchiseId` or `teamName` is required.  
+`getFranSkaRec` retrieves information about skater records, and a
+`franchiseId` or `teamName` is required.
+
 /franchise-skater-records?cayenneExp=franchiseId=ID (Skater records,
 same interaction as goalie endpoint)
 
@@ -300,7 +302,10 @@ analysis. We will first retrieve data from two endpoints: **team total**
 and **person.names**, remove some columns we don’t need, and combine the
 two objects. Then we’ll add two new variables: `winPercent`: the
 proportion of wins among all games played and `homeWinPercent`: the
-proportion of wins of home games among all wins.
+proportion of wins of home games among all wins. We also create a subset
+to include fewer columns and transform the data from wide to long. This
+subset shows the numbers of wins, losses, and ties in various situations
+for each division.
 
 ``` r
 # perhaps use the wrapper function here
@@ -314,7 +319,7 @@ franTot <- franTot %>% select(-c("id", "activeFranchise", "firstSeasonId", "last
 franStats <- nhlFun(endpoint = "stats", expand = "person.names") 
 franStats <- franStats %>% select(c("locationName", "firstYearOfPlay", "franchiseId", "venue.city", "venue.timeZone.id", "venue.timeZone.tz", "division.name", "conference.name"))
 # create two variables: winPercent and homeWinPercent 
-combined <- inner_join(franTot, franStats, by = "franchiseId") %>% mutate(winPercent = wins / gamesPlayed, homeWinPercent = homeWins / wins)
+combined <- inner_join(franTot, franStats, by = "franchiseId") %>% mutate(winPercent = wins / gamesPlayed, homeWinPercent = homeWins / (homeWins + homeLosses + homeOvertimeLosses + homeTies))
 head(combined)
 
 # create a subset for numbers of games lost or won
@@ -324,6 +329,21 @@ subset <- combined %>% select(starts_with("home"), starts_with("road"), "divisio
     ## `summarise()` regrouping output by 'division.name' (override with `.groups` argument)
 
 ### Summaries
+
+Now we have the data, we can see some summary statistics for continuous
+variables. For penalty minutes, it is interesting to see that, for all
+the variables listed, the medians are much smaller than the means,
+suggesting that the distributions are right skewed. Perhaps a few teams
+have larger than average values, pulling the means upwards. A plot on
+penalty minutes shows the right-skewedness.
+
+Two contingency tables show the counts of two categorical variables. The
+first contingency table shows that 1926, 1967, and 1979 added the most
+number of teams. The second contingency table show that the same numbers
+of teams play in the regular seasons and playoffs in the Atlantic,
+Central, and Pacific seasons. Somehow one team in the Metropolitan
+division did not show up in the playoffs, whether the data is missing or
+the team really did not make it into the playoffs.
 
 ``` r
 # summaries
@@ -340,7 +360,7 @@ apply(combined[,c(3, 6:12, 14:18)], FUN = summary, MARGIN = 2)
     ## 
     ## $homeOvertimeLosses
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-    ##    0.00    0.00    7.00   35.70   73.75  112.00      21 
+    ##    0.00    0.00    7.50   35.83   73.75  112.00      21 
     ## 
     ## $homeTies
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
@@ -372,7 +392,7 @@ apply(combined[,c(3, 6:12, 14:18)], FUN = summary, MARGIN = 2)
     ## 
     ## $roadOvertimeLosses
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-    ##    0.00    0.00    6.50   37.74   78.75   95.00      21 
+    ##    0.00    0.00    7.00   37.92   78.75   95.00      21 
     ## 
     ## $roadTies
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
@@ -401,39 +421,60 @@ table(combined$division.name, combined$firstYearOfPlay)
     ##   Pacific         0    0    2
 
 ``` r
-table(combined$conference.name, combined$firstYearOfPlay)
+table(combined$division.name, combined$gameTypeId)
 ```
 
-    ##          
-    ##           1909 1917 1924 1926 1967 1970 1972 1974 1979 1980 1982 1990 1991 1993 1997
-    ##   Eastern    2    6    2    8    4    2    2    2    4    0    5    2    2    2    2
-    ##   Western    0    0    0    2    8    2    0    0   12    4    0    2    0    2    4
-    ##          
-    ##           2011 2016
-    ##   Eastern    0    0
-    ##   Western    4    2
+    ##               
+    ##                 2  3
+    ##   Atlantic     12 12
+    ##   Central      10 10
+    ##   Metropolitan 11 10
+    ##   Pacific      11 11
 
 ### Visualize Data
 
-Now we have the data, we can make some plots to visualize the data.
+Now we have the data and summaries, we can make some plots to visualize
+the data.
 
-In these two scatter plots, we can see that the numbers of wins at home
-and on the road are proportional.
+In the first scatter plot, we can see that as a lot of teams play low
+number of games, and a few teams play a lot more number of games. The
+winning percentage increases slightly as the number of games played
+increases, but the slope is small and the difference might not be
+significant. The colors of dots represent different divisions, and it
+does not appear that there are different patterns for different
+divisions.
+
+The second plot is similar, but the y-axis shows the winning percentage
+of home games, and the colors represent different types of games
+(regular season vs. playoffs). It does not appear that the number of
+games played and the winning percentage of home games are correlated, as
+the slope is close to zero.
 
 ``` r
 # scatter plot of homeWins and roadWins
-ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = division.name), position = "jitter") +geom_smooth(method = lm, color = "blue")
+ggplot(combined, aes(x = gamesPlayed, y = winPercent)) + geom_point(aes(color = division.name), position = "jitter") + geom_smooth(method = lm, color = "blue") + scale_color_discrete()
 ```
 
     ## `geom_smooth()` using formula 'y ~ x'
 
-![](README_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-40-1.png)<!-- -->
 
 ``` r
-ggplot(combined, aes(x = homeWins, y = roadWins)) + geom_point(aes(color = as.factor(gameTypeId)), position = "jitter") + scale_color_discrete(name = "Game Type", labels = c("regular season", "playoffs"))
+ggplot(combined, aes(x = gamesPlayed, y = homeWinPercent)) + geom_point(aes(color = as.factor(gameTypeId)), position = "jitter") + geom_smooth(method = lm, color = "blue") + scale_color_discrete(name = "Game Type", labels = c("regular season", "playoffs"))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-21-2.png)<!-- -->
+    ## `geom_smooth()` using formula 'y ~ x'
+
+    ## Warning: Removed 51 rows containing non-finite values (stat_smooth).
+
+    ## Warning: Removed 51 rows containing missing values (geom_point).
+
+![](README_files/figure-gfm/unnamed-chunk-40-2.png)<!-- -->
+
+The histogram shows that the center of winning percentages of all teams
+is around 0.5, and the distribution is left-skewed. Therefore most of
+the teams have winning percentages between 0.3 and 0.6, but there are a
+few teams that have much lower winning percentage.
 
 ``` r
 # histogram of winPercent
@@ -442,28 +483,45 @@ ggplot(combined, aes(x = winPercent)) + geom_histogram(aes(y = ..density..)) + g
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](README_files/figure-gfm/unnamed-chunk-21-3.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-41-1.png)<!-- -->
+
+Next we look at the total numbers of games played for each division. The
+boxplots show that, on average, the Central division play the most
+games, and the Pacific division play the fewest. However, the variation
+is large, and therefore the differences might not be significant.
 
 ``` r
 # boxplots of gamesPlayed by division
 ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geom_jitter(aes(color = venue.timeZone.tz))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-21-4.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-42-1.png)<!-- -->
+
+Now we look at two barplots. The first one shows wins, losses, and ties
+of each division. We see that the Atlantic division play the largest
+number of games and the Pacific division play the smallest number of
+games. Overall, most results are from wins and losses, and ties and
+overtime occupy a small number for all divisions. The second barplots
+show that all divisions have higher winning percentage in playoffs than
+in regular season. The differences among divisions might not be
+significant.
 
 ``` r
 # barplot of gamePlayed
-# ggplot(combined, aes(x = gamesPlayed)) + geom_bar(aes(x = division.name))
 ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-21-5.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-43-1.png)<!-- -->
 
 ``` r
 ggplot(combined, aes(x = division.name, y = winPercent, fill = as.factor(gameTypeId))) + geom_bar(position = "dodge", stat = "identity") + scale_fill_discrete(name = "Game Type", labels = c("regular season", "playoffs"))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-21-6.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-43-2.png)<!-- -->
+
+Lastly, we look at a frequency plot of penalty minutes. It clearly shows
+that the distribution is right-skewed. 20 teams have no penalty minutes,
+and a few teams have penalty minutes of more than 50,000.
 
 ``` r
 # frequency plot for penalty minutes
@@ -472,4 +530,4 @@ ggplot(combined, aes(x = penaltyMinutes)) + geom_freqpoly()
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](README_files/figure-gfm/unnamed-chunk-21-7.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-44-1.png)<!-- -->
