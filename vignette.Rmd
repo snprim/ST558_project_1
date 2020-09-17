@@ -249,7 +249,7 @@ nhlFun(endpoints = "stats", ID = 2, expand = "team.schedule.next") %>% tbl_df()
 
 Now we demonstrate how to use functions above to do exploratory data analysis. We will first retrieve data from two endpoints: **team total** and **person.names**, remove some columns we don't need, and combine the two objects. Then we'll add two new variables: `winPercent`: the proportion of wins among all games played and `homeWinPercent`: the proportion of wins of home games among all wins. We also create a subset to include fewer columns and transform the data from wide to long. This subset shows the numbers of wins, losses, and ties in various situations for each division.  
 
-```{r}
+```{r, message = FALSE}
 # perhaps use the wrapper function here
 franTot <- nhlFun(endpoint = "team total")
 franTot <- franTot %>% select(-c("id", "activeFranchise", "firstSeasonId", "lastSeasonId"))
@@ -269,7 +269,7 @@ Now we have the data, we can see some summary statistics for continuous variable
 
 Two contingency tables show the counts of two categorical variables. The first contingency table shows that 1926, 1967, and 1979 added the most number of teams. The second contingency table show that the same numbers of teams play in the regular seasons and playoffs in the Atlantic, Central, and Pacific seasons. Somehow one team in the Metropolitan division did not show up in the playoffs, whether the data is missing or the team really did not make it into the playoffs.  
 
-```{r}
+```{r, message = FALSE}
 # summaries
 apply(combined[,c(3, 6:12, 14:18)], FUN = summary, MARGIN = 2)
 # contingency table
@@ -286,7 +286,7 @@ In the first scatter plot, we can see that as a lot of teams play low number of 
 
 The third plot is similar, but the y-axis shows the winning percentage of home games, and the colors represent different types of games (regular season vs. playoffs). It does not appear that the number of games played and the winning percentage of home games are correlated, as the slope is close to zero.  
 
-```{r}
+```{r, message = FALSE}
 # scatter plot of homeWins and roadWins
 ggplot(combined, aes(x = gamesPlayed, y = winPercent)) + geom_point(aes(color = division.name), position = "jitter") + geom_smooth(method = lm, color = "blue") + scale_color_discrete()
 
@@ -304,14 +304,14 @@ ggplot(combined, aes(x = winPercent)) + geom_histogram(bins = 30, aes(y = ..dens
 
 Next we look at the total numbers of games played for each division. The boxplots show that, on average, the Central division play the most games, and the Pacific division play the fewest. However, the variation is large, and therefore the differences might not be significant.  
 
-```{r}
+```{r, message = FALSE}
 # boxplots of gamesPlayed by division
 ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geom_jitter(aes(color = venue.timeZone.tz))
 ```
 
 Now we look at two barplots. The first one shows wins, losses, and ties of each division. We see that the Atlantic division play the largest number of games and the Pacific division play the smallest number of games. Overall, most results are from wins and losses, and ties and overtime occupy a small number for all divisions. The second barplots show that all divisions have higher winning percentage in playoffs than in regular season. The differences among divisions might not be significant.  
 
-```{r}
+```{r, message = FALSE}
 # barplot of gamePlayed
 ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name))
 
@@ -320,7 +320,7 @@ ggplot(combined, aes(x = division.name, y = winPercent, fill = as.factor(gameTyp
 
 Lastly, we look at a frequency plot of penalty minutes. It clearly shows that the distribution is right-skewed. 20 teams have no penalty minutes, and a few teams have penalty minutes of more than 50,000.  
 
-```{r}
+```{r, message = FALSE}
 # frequency plot for penalty minutes
 ggplot(combined, aes(x = penaltyMinutes)) + geom_freqpoly()
 ```

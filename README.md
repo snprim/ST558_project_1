@@ -296,11 +296,6 @@ for each division.
 ``` r
 # perhaps use the wrapper function here
 franTot <- nhlFun(endpoint = "team total")
-```
-
-    ## No encoding supplied: defaulting to UTF-8.
-
-``` r
 franTot <- franTot %>% select(-c("id", "activeFranchise", "firstSeasonId", "lastSeasonId"))
 franStats <- nhlFun(endpoint = "stats", expand = "person.names") 
 franStats <- franStats %>% select(c("locationName", "firstYearOfPlay", "franchiseId", "venue.city", "venue.timeZone.id", "venue.timeZone.tz", "division.name", "conference.name"))
@@ -311,8 +306,6 @@ head(combined)
 # create a subset for numbers of games lost or won
 subset <- combined %>% select(starts_with("home"), starts_with("road"), "division.name", -"homeWinPercent") %>% gather(-"division.name", key = "type", value = "game") %>% group_by(division.name, type) %>% summarise(sum = sum(game, na.rm = TRUE))
 ```
-
-    ## `summarise()` regrouping output by 'division.name' (override with `.groups` argument)
 
 ### Summaries
 
@@ -442,23 +435,17 @@ the slope is close to zero.
 ggplot(combined, aes(x = gamesPlayed, y = winPercent)) + geom_point(aes(color = division.name), position = "jitter") + geom_smooth(method = lm, color = "blue") + scale_color_discrete()
 ```
 
-    ## `geom_smooth()` using formula 'y ~ x'
-
 ![](README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ``` r
 ggplot(combined, aes(x = gamesPlayed, y = winPercent)) + geom_point(position = "jitter") + geom_smooth(method = lm, color = "blue") + facet_wrap(~ division.name)
 ```
 
-    ## `geom_smooth()` using formula 'y ~ x'
-
 ![](README_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->
 
 ``` r
 ggplot(combined, aes(x = gamesPlayed, y = homeWinPercent)) + geom_point(aes(color = as.factor(gameTypeId)), position = "jitter") + geom_smooth(method = lm, color = "blue") + scale_color_discrete(name = "Game Type", labels = c("regular season", "playoffs"))
 ```
-
-    ## `geom_smooth()` using formula 'y ~ x'
 
     ## Warning: Removed 51 rows containing non-finite values (stat_smooth).
 
@@ -520,7 +507,5 @@ and a few teams have penalty minutes of more than 50,000.
 # frequency plot for penalty minutes
 ggplot(combined, aes(x = penaltyMinutes)) + geom_freqpoly()
 ```
-
-    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
 ![](README_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
