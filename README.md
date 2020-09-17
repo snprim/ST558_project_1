@@ -22,11 +22,11 @@ stats](https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md).
 To be able to access data from APIs, you should install and load the
 `httr`, `jsonlite`, and `tidyverse` packages.
 
-    ```r
-    library(httr)
-    library(jsonlite)
-    library(tidyverse)
-    ```
+``` r
+library(httr)
+library(jsonlite)
+library(tidyverse)
+```
 
 ## Functions
 
@@ -50,8 +50,6 @@ getFran <- function(){
 getFran() %>% tbl_df()
 ```
 
-    ## No encoding supplied: defaulting to UTF-8.
-
 `getFranTeamTot` retrieves stats about all teams.
 
 /franchise-team-totals (Returns Total stats for every franchise (ex
@@ -66,14 +64,12 @@ getFranTeamTot <- function() {
 getFranTeamTot() %>% tbl_df()
 ```
 
-    ## No encoding supplied: defaulting to UTF-8.
-
 To allow for convenient access of team information in the following
 functions, we first construct a subset of data, so users can use team
 names or franchise ID to look up information.
 
 ``` r
-index <- getFranTeamTot() %>% select(c("franchiseId", "teamName")) %>% unique()
+index <- getFranTeamTot() %>% select(c("franchiseId", "teamName", "teamId")) %>% unique()
 ```
 
     ## No encoding supplied: defaulting to UTF-8.
@@ -98,15 +94,8 @@ getFranSeaRec <- function(team) {
   return(franSeaRec$data)
 }
 getFranSeaRec(20) %>% tbl_df()
-```
-
-    ## No encoding supplied: defaulting to UTF-8.
-
-``` r
 getFranSeaRec("Vancouver Canucks") %>% tbl_df()
 ```
-
-    ## No encoding supplied: defaulting to UTF-8.
 
 `getFranGoaRec` retrieves goalie records, and again a `franchiseId` or
 `teamName` is required.
@@ -126,15 +115,8 @@ getFranGoaRec <- function(team) {
   return(franGoaRec$data)
 }
 getFranGoaRec(20) %>% tbl_df()
-```
-
-    ## No encoding supplied: defaulting to UTF-8.
-
-``` r
 getFranGoaRec("Vancouver Canucks") %>% tbl_df()
 ```
-
-    ## No encoding supplied: defaulting to UTF-8.
 
 `getFranSkaRec` retrieves information about skater records, and a
 `franchiseId` or `teamName` is required.
@@ -154,15 +136,8 @@ getFranSkaRec <- function(team) {
   return(franSkaRec$data)
 }
 getFranSkaRec(20) %>% tbl_df()
-```
-
-    ## No encoding supplied: defaulting to UTF-8.
-
-``` r
 getFranSkaRec("Vancouver Canucks") %>% tbl_df()
 ```
-
-    ## No encoding supplied: defaulting to UTF-8.
 
 ### NHL stats API
 
@@ -186,14 +161,16 @@ modifiers:
 
 Examples of arguments:
 
-  - `ID = 20`  
+  - `ID = 20`
+  - `ID = "Calgary Flames"`  
   - `expand = "person.names"`  
   - `teamId = "4, 5, 29"`  
   - `stats = "statsSingleSeasonPlayoffs"`
 
 Note: If you would like information for more than one team, enter
 `teamId`. If you want specific information, such as roster, enter `ID`
-and select one team at a time.
+and select one team at a time. For the `ID` argument, you can enter
+either the `teamId` or `teamName`.
 
 For more information about these modifiers, see [the
 documentation](https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md).
@@ -202,6 +179,9 @@ documentation](https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md).
 baseurl_stats <- "https://statsapi.web.nhl.com/api/v1/teams"
 getStats <- function(ID = "", expand = "", teamID = "", stats = ""){
   if (ID != ""){
+      if (is.character(ID)) {
+        ID <- index$teamId[index$teamName == ID]
+      }
     baseurl_stats <- paste0("https://statsapi.web.nhl.com/api/v1/teams/", ID)
   }
   if (teamID != ""){
@@ -215,14 +195,25 @@ getStats <- function(ID = "", expand = "", teamID = "", stats = ""){
   }
   stats <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   if (str_detect(expand, "team.roster")){
-    stats <- stats$teams$roster.roster[[1]]
+    stats_new <- stats$teams$roster.roster[[1]]
+    stats <- cbind(stats$teams[,c(1,2,10)], stats_new)
   } else if (expand == "team.schedule.next"){
-    stats <- stats$teams$nextGameSchedule.dates
+    if (is.null(stats$teams$nextGameSchedule.dates)){
+      stop("No information is available")
+    } else {
+    stats_new <- stats$teams$nextGameSchedule.dates
+    stats <- cbind(stats$teams[1,c(1,2,10)], stats_new)
+    }
   } else if (expand == "team.schedule.previous"){
-    stats <- stats$teams$previousGameSchedule.dates
+    if (is.null(stats$teams$previousGameSchedule.dates)){
+      stop("No information is available")
+    } else {
+    stats_new <- stats$teams$previousGameSchedule.dates
+    stats <- cbind(stats$teams[,c(1,2,10)], stats_new)
+    }
   } else if (expand == "team.stats"){
-    stats <- stats$teams$teamStats[[1]]$splits[[1]]
-    #stats <- stats$teams
+    stats_new <- stats$teams$teamStats[[1]]$splits[[1]]
+    stats <- cbind(stats$teams[1,c(1,2,11)], stats_new)
   } else {
     stats <- stats$teams
   }
@@ -232,11 +223,11 @@ getStats <- function(ID = "", expand = "", teamID = "", stats = ""){
   return(as.data.frame(stats))
 }
 # getStats(ID = 20, expand = "team.stats")
-# getStats(ID = 20, expand = "person.names")
-getStats(ID = 24, expand = "team.schedule.previous") %>% tbl_df()
-getStats(ID = 20, expand = "team.roster&season=20102011") %>% tbl_df()
+# getStats(ID = "Calgary Flames", expand = "person.names")
+getStats(ID = 2, expand = "team.schedule.next") %>% tbl_df()
+# getStats(ID = 20, expand = "team.roster&season=20102011") %>% tbl_df()
 # getStats(ID = 53, expand = "team.roster") 
-# getStats(teamID = "4,5,29")
+getStats(teamID = "4,5,29") %>% tbl_df()
 # getStats(ID = 54, stats = "statsSingleSeasonPlayoffs") %>% tbl_df()
 ```
 
@@ -283,14 +274,9 @@ nhlFun <- function(endpoints, ...){
     stop("Please enter a valid endpoint")
   }
 }
-nhlFun(endpoints = "skater record", 20) %>% tbl_df()
-```
-
-    ## No encoding supplied: defaulting to UTF-8.
-
-``` r
-nhlFun(endpoints = "stats", expand = "person.team") %>% tbl_df()
-# nhlFun(endpoints = "team total")
+# nhlFun(endpoints = "skater record", 20) %>% tbl_df()
+nhlFun(endpoints = "stats", ID = "Calgary Flames", expand = "person.team") %>% tbl_df()
+nhlFun(endpoints = "stats", ID = 2, expand = "team.schedule.next") %>% tbl_df()
 ```
 
 ## Exploratory Data Analysis
@@ -352,7 +338,7 @@ apply(combined[,c(3, 6:12, 14:18)], FUN = summary, MARGIN = 2)
 
     ## $gamesPlayed
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##     2.0   152.5   480.0  1395.0  2054.0  6731.0 
+    ##       2     153     480    1395    2054    6731 
     ## 
     ## $homeLosses
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
@@ -360,7 +346,7 @@ apply(combined[,c(3, 6:12, 14:18)], FUN = summary, MARGIN = 2)
     ## 
     ## $homeOvertimeLosses
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-    ##    0.00    0.00    7.50   35.83   73.75  112.00      21 
+    ##    0.00    0.00    7.50   35.85   73.75  112.00      21 
     ## 
     ## $homeTies
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
@@ -372,7 +358,7 @@ apply(combined[,c(3, 6:12, 14:18)], FUN = summary, MARGIN = 2)
     ## 
     ## $losses
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##     1.0    70.5   236.0   575.5   830.0  2736.0 
+    ##     1.0    71.0   236.0   575.5   830.0  2736.0 
     ## 
     ## $overtimeLosses
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
@@ -458,7 +444,7 @@ ggplot(combined, aes(x = gamesPlayed, y = winPercent)) + geom_point(aes(color = 
 
     ## `geom_smooth()` using formula 'y ~ x'
 
-![](README_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ``` r
 ggplot(combined, aes(x = gamesPlayed, y = winPercent)) + geom_point(position = "jitter") + geom_smooth(method = lm, color = "blue") + facet_wrap(~ division.name)
@@ -466,7 +452,7 @@ ggplot(combined, aes(x = gamesPlayed, y = winPercent)) + geom_point(position = "
 
     ## `geom_smooth()` using formula 'y ~ x'
 
-![](README_files/figure-gfm/unnamed-chunk-34-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->
 
 ``` r
 ggplot(combined, aes(x = gamesPlayed, y = homeWinPercent)) + geom_point(aes(color = as.factor(gameTypeId)), position = "jitter") + geom_smooth(method = lm, color = "blue") + scale_color_discrete(name = "Game Type", labels = c("regular season", "playoffs"))
@@ -478,7 +464,7 @@ ggplot(combined, aes(x = gamesPlayed, y = homeWinPercent)) + geom_point(aes(colo
 
     ## Warning: Removed 51 rows containing missing values (geom_point).
 
-![](README_files/figure-gfm/unnamed-chunk-34-3.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-15-3.png)<!-- -->
 
 The histogram shows that the center of winning percentages of all teams
 is around 0.5, and the distribution is left-skewed. Therefore most of
@@ -490,7 +476,7 @@ few teams that have much lower winning percentage.
 ggplot(combined, aes(x = winPercent)) + geom_histogram(bins = 30, aes(y = ..density..)) + geom_density(kernel = "gaussian", color = "red", alpha = 0.5, fill = "green")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 Next we look at the total numbers of games played for each division. The
 boxplots show that, on average, the Central division play the most
@@ -502,7 +488,7 @@ is large, and therefore the differences might not be significant.
 ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geom_jitter(aes(color = venue.timeZone.tz))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-36-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 Now we look at two barplots. The first one shows wins, losses, and ties
 of each division. We see that the Atlantic division play the largest
@@ -518,13 +504,13 @@ significant.
 ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 ``` r
 ggplot(combined, aes(x = division.name, y = winPercent, fill = as.factor(gameTypeId))) + geom_bar(position = "dodge", stat = "identity") + scale_fill_discrete(name = "Game Type", labels = c("regular season", "playoffs"))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-37-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
 
 Lastly, we look at a frequency plot of penalty minutes. It clearly shows
 that the distribution is right-skewed. 20 teams have no penalty minutes,
@@ -537,4 +523,4 @@ ggplot(combined, aes(x = penaltyMinutes)) + geom_freqpoly()
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](README_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->

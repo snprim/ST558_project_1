@@ -13,7 +13,7 @@ This vignette demonstrates how to access APIs to retrieve data. We use two NHL r
 ## Required Packages  
 
 To be able to access data from APIs, you should install and load the `httr`, `jsonlite`, and `tidyverse` packages.  
-    ```{r}
+```{r}
 library(httr)
 library(jsonlite)
 library(tidyverse)
@@ -22,7 +22,7 @@ library(tidyverse)
 ## Functions  
 
 ### NHL records API
-```{r}
+```{r, message = FALSE}
 baseurl_records <- "https://records.nhl.com/site/api"
 ```
 `getFran` retrieves basic information about all teams.  
@@ -30,7 +30,7 @@ baseurl_records <- "https://records.nhl.com/site/api"
 /franchise (Returns id, ﬁrstSeasonId and lastSeasonId and name of every team in the history
 of the NHL)  
 
-```{r}
+```{r, message = FALSE}
 getFran <- function(){
   fullurl <- paste0(baseurl_records, "/", "franchise")
   fran <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
@@ -43,7 +43,7 @@ getFran() %>% tbl_df()
 
 /franchise-team-totals (Returns Total stats for every franchise (ex roadTies, roadWins, etc))  
 
-```{r}
+```{r, message = FALSE}
 getFranTeamTot <- function() {
   fullurl <- paste0(baseurl_records, "/", "franchise-team-totals")
   franTeamTot <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
@@ -54,7 +54,7 @@ getFranTeamTot() %>% tbl_df()
 To allow for convenient access of team information in the following functions, we first construct a subset of data, so users can use team names or franchise ID to look up information.  
 
 ```{r}
-index <- getFranTeamTot() %>% select(c("franchiseId", "teamName")) %>% unique()
+index <- getFranTeamTot() %>% select(c("franchiseId", "teamName", "teamId")) %>% unique()
 ```
 
 `getFranSeaRec` retrieves season records from one specific team, and therefore you need to provide the `franchiseId` or `teamName` as an argument. `franchiseId` can be found using `getFran` or `getFranTeamTot`.  
@@ -62,7 +62,7 @@ index <- getFranTeamTot() %>% select(c("franchiseId", "teamName")) %>% unique()
 /site/api/franchise-season-records?cayenneExp=franchiseId=ID (Drill-down into season
 records for a specific franchise)  
 
-```{r}
+```{r, message = FALSE}
 getFranSeaRec <- function(team) {
   if (is.character(team)) {
     id <- index$franchiseId[index$teamName == team]
@@ -81,7 +81,7 @@ getFranSeaRec("Vancouver Canucks") %>% tbl_df()
 /franchise-goalie-records?cayenneExp=franchiseId=ID (Goalie records for the specified
 franchise)  
 
-```{r}
+```{r, message = FALSE}
 getFranGoaRec <- function(team) {
   if (is.character(team)) {
     id <- index$franchiseId[index$teamName == team]
@@ -101,7 +101,7 @@ getFranGoaRec("Vancouver Canucks") %>% tbl_df()
 /franchise-skater-records?cayenneExp=franchiseId=ID (Skater records, same interaction as
 goalie endpoint)  
 
-```{r}
+```{r, message = FALSE}
 getFranSkaRec <- function(team) {
   if (is.character(team)) {
     id <- index$franchiseId[index$teamName == team]
@@ -131,19 +131,24 @@ For this function, eight modifiers can be chosen, and thus an argument (`expand`
 
 Examples of arguments:  
 
-  * `ID = 20`  
+  * `ID = 20`
+  * `ID = "Calgary Flames"`  
   * `expand = "person.names"`  
   * `teamId = "4, 5, 29"`  
   * `stats = "statsSingleSeasonPlayoffs"`  
 
-Note: If you would like information for more than one team, enter `teamId`. If you want specific information, such as roster, enter `ID` and select one team at a time.  
+Note: If you would like information for more than one team, enter `teamId`. If you want specific information, such as roster, enter `ID` and select one team at a time. For the `ID` argument, you can enter either the `teamId` or `teamName`.  
 
 For more information about these modifiers, see [the documentation](https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md).
 
-```{r}
+
+```{r, message = FALSE}
 baseurl_stats <- "https://statsapi.web.nhl.com/api/v1/teams"
 getStats <- function(ID = "", expand = "", teamID = "", stats = ""){
   if (ID != ""){
+      if (is.character(ID)) {
+        ID <- index$teamId[index$teamName == ID]
+      }
     baseurl_stats <- paste0("https://statsapi.web.nhl.com/api/v1/teams/", ID)
   }
   if (teamID != ""){
@@ -157,14 +162,25 @@ getStats <- function(ID = "", expand = "", teamID = "", stats = ""){
   }
   stats <- GET(fullurl) %>% content("text") %>% fromJSON(flatten = TRUE)
   if (str_detect(expand, "team.roster")){
-    stats <- stats$teams$roster.roster[[1]]
+    stats_new <- stats$teams$roster.roster[[1]]
+    stats <- cbind(stats$teams[,c(1,2,10)], stats_new)
   } else if (expand == "team.schedule.next"){
-    stats <- stats$teams$nextGameSchedule.dates
+    if (is.null(stats$teams$nextGameSchedule.dates)){
+      stop("No information is available")
+    } else {
+    stats_new <- stats$teams$nextGameSchedule.dates
+    stats <- cbind(stats$teams[1,c(1,2,10)], stats_new)
+    }
   } else if (expand == "team.schedule.previous"){
-    stats <- stats$teams$previousGameSchedule.dates
+    if (is.null(stats$teams$previousGameSchedule.dates)){
+      stop("No information is available")
+    } else {
+    stats_new <- stats$teams$previousGameSchedule.dates
+    stats <- cbind(stats$teams[,c(1,2,10)], stats_new)
+    }
   } else if (expand == "team.stats"){
-    stats <- stats$teams$teamStats[[1]]$splits[[1]]
-    #stats <- stats$teams
+    stats_new <- stats$teams$teamStats[[1]]$splits[[1]]
+    stats <- cbind(stats$teams[1,c(1,2,11)], stats_new)
   } else {
     stats <- stats$teams
   }
@@ -174,11 +190,11 @@ getStats <- function(ID = "", expand = "", teamID = "", stats = ""){
   return(as.data.frame(stats))
 }
 # getStats(ID = 20, expand = "team.stats")
-# getStats(ID = 20, expand = "person.names")
-getStats(ID = 24, expand = "team.schedule.previous") %>% tbl_df()
-getStats(ID = 20, expand = "team.roster&season=20102011") %>% tbl_df()
+# getStats(ID = "Calgary Flames", expand = "person.names")
+getStats(ID = 2, expand = "team.schedule.next") %>% tbl_df()
+# getStats(ID = 20, expand = "team.roster&season=20102011") %>% tbl_df()
 # getStats(ID = 53, expand = "team.roster") 
-# getStats(teamID = "4,5,29")
+getStats(teamID = "4,5,29") %>% tbl_df()
 # getStats(ID = 54, stats = "statsSingleSeasonPlayoffs") %>% tbl_df()
 
 ```
@@ -203,7 +219,7 @@ Endpoints:
 
 See more details in the documentation of [NHL records](https://gitlab.com/dword4/nhlapi/-/blob/master/records-api.md) and [NHL stats](https://gitlab.com/dword4/nhlapi/-/blob/master/stats-api.md).
 
-```{r}
+```{r, message = FALSE}
 # add a 
 nhlFun <- function(endpoints, ...){
   if (endpoints == "franchise") {
@@ -222,9 +238,9 @@ nhlFun <- function(endpoints, ...){
     stop("Please enter a valid endpoint")
   }
 }
-nhlFun(endpoints = "skater record", 20) %>% tbl_df()
-nhlFun(endpoints = "stats", expand = "person.team") %>% tbl_df()
-# nhlFun(endpoints = "team total")
+# nhlFun(endpoints = "skater record", 20) %>% tbl_df()
+nhlFun(endpoints = "stats", ID = "Calgary Flames", expand = "person.team") %>% tbl_df()
+nhlFun(endpoints = "stats", ID = 2, expand = "team.schedule.next") %>% tbl_df()
 ```
 
 ## Exploratory Data Analysis  
