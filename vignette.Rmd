@@ -118,7 +118,7 @@ getFranSkaRec("Vancouver Canucks") %>% tbl_df()
 
 ### NHL stats API  
   
-For this function, eight modifiers can be chosen, and thus an argument (`expand`, `teamID`, or `stats`) has to be provided. Below are the eight modifiers:  
+For this function, eight modifiers can be chosen, and thus one or more arguments (`ID`, `expand`, `teamID`, `stats`, and/or `season`) has to be provided. Below are the eight modifiers:  
 
   * ?expand=team.roster Shows roster of active players for the specified team  
   * ?expand=person.names Same as above, but gives less info.  
@@ -144,7 +144,7 @@ For more information about these modifiers, see [the documentation](https://gitl
 
 ```{r, message = FALSE}
 baseurl_stats <- "https://statsapi.web.nhl.com/api/v1/teams"
-getStats <- function(ID = "", expand = "", teamID = "", stats = ""){
+getStats <- function(ID = "", expand = "", teamID = "", stats = "", season = ""){
   if (ID != ""){
       if (is.character(ID)) {
         ID <- index$teamId[index$teamName == ID]
@@ -153,10 +153,14 @@ getStats <- function(ID = "", expand = "", teamID = "", stats = ""){
   }
   if (teamID != ""){
     fullurl <- paste0("https://statsapi.web.nhl.com/api/v1/teams?teamId=", teamID)
-  }
-  
-  if (expand != ""){
+  } else if (expand != ""){
+    if (expand == "team.roster" || expand == "team.stats"){
+       if (season != ""){
+         fullurl <- paste0(baseurl_stats, "?expand=", expand, "&season=", season)
+       } 
+    } else {
     fullurl <- paste0(baseurl_stats, "?expand=", expand)
+    } 
   } else if (stats != ""){
     fullurl <- paste0(baseurl_stats, "?stats=", stats)
   }
@@ -192,7 +196,7 @@ getStats <- function(ID = "", expand = "", teamID = "", stats = ""){
 # getStats(ID = 20, expand = "team.stats")
 # getStats(ID = "Calgary Flames", expand = "person.names")
 getStats(ID = 2, expand = "team.schedule.next") %>% tbl_df()
-# getStats(ID = 20, expand = "team.roster&season=20102011") %>% tbl_df()
+getStats(ID = 20, expand = "team.stats", season= "20102011") %>% tbl_df()
 # getStats(ID = 53, expand = "team.roster") 
 getStats(teamID = "4,5,29") %>% tbl_df()
 # getStats(ID = 54, stats = "statsSingleSeasonPlayoffs") %>% tbl_df()
