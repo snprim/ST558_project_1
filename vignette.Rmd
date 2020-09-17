@@ -53,7 +53,7 @@ getFranTeamTot() %>% tbl_df()
 ```
 To allow for convenient access of team information in the following functions, we first construct a subset of data, so users can use team names or franchise ID to look up information.  
 
-```{r}
+```{r, message = FALSE}
 index <- getFranTeamTot() %>% select(c("franchiseId", "teamName", "teamId")) %>% unique()
 ```
 
