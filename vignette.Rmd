@@ -311,7 +311,7 @@ Now we look at two barplots. The first one shows wins, losses, and ties of each 
 
 ```{r, message = FALSE}
 # barplot of gamePlayed
-ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name)) + ggtitle("Barplot of wins, losses, and ties by division") + xlab("Division name") + ylab("Total games played") + scale_fill_discrete(name = "Type of wins, losses, and ties")
+ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name)) + ggtitle("Barplot of wins, losses, and ties by division") + xlab("Division name") + ylab("Total games played") + scale_fill_discrete(name = "Type of wins, losses, and ties", labels = c("home losses", "home overtime losses", "home ties", "home wins", "road losses", "road overtime losses", "road ties", "road wins"))
 
 ggplot(combined, aes(x = division.name, y = winPercent, fill = as.factor(gameTypeId))) + geom_bar(position = "dodge", stat = "identity") + scale_fill_discrete(name = "Game Type", labels = c("regular season", "playoffs")) + ggtitle("Barplot of winning percentages by division") + xlab("Division name") + ylab("Winning percentages of all games")
 ```

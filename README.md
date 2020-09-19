@@ -873,7 +873,7 @@ might not be significant.
 
 ``` r
 # barplot of gamePlayed
-ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name)) + ggtitle("Barplot of wins, losses, and ties by division") + xlab("Division name") + ylab("Total games played") + scale_fill_discrete(name = "Type of wins, losses, and ties")
+ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name)) + ggtitle("Barplot of wins, losses, and ties by division") + xlab("Division name") + ylab("Total games played") + scale_fill_discrete(name = "Type of wins, losses, and ties", labels = c("home losses", "home overtime losses", "home ties", "home wins", "road losses", "road overtime losses", "road ties", "road wins"))
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
