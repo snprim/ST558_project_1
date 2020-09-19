@@ -265,7 +265,7 @@ subset <- combined %>% select(starts_with("home"), starts_with("road"), "divisio
 
 Now we have the data, we can see some summary statistics for continuous variables. It is interesting to see that, for all the variables listed, the medians are much smaller than the means, suggesting that the distributions are right skewed. Perhaps a few teams have larger than average values, pulling the means upwards. A plot on penalty minutes shows the right-skewedness.  
 
-Two contingency tables show the counts of two categorical variables. The first contingency table shows that 1926, 1967, and 1979 added the most number of teams. The second contingency table show that the same numbers of teams play in the regular seasons and playoffs in the Atlantic, Central, and Pacific seasons. Somehow one team in the Metropolitan division did not show up in the playoffs. Perhaps the data is missing or the team really did not make it into the playoffs.  
+Two contingency tables show the counts of two categorical variables. The first contingency table shows that 1926, 1967, and 1979 added the most number of teams. The second contingency table show that the same numbers of teams played in the regular seasons and playoffs in the Atlantic, Central, and Pacific seasons. Somehow one team in the Metropolitan division did not show up in the playoffs. Perhaps the data is missing or the team really did not make it into the playoffs.  
 
 ```{r, message = FALSE}
 # summaries
@@ -280,7 +280,7 @@ table(combined$division.name, combined$gameTypeId)
 
 Now we have the data and summaries, we can make plots to visualize the data.  
 
-In the first scatter plot, we can see that as a lot of teams play low number of games, and a few teams play a lot more number of games. The winning percentage increases slightly as the number of games played increases, but the slope is small and the difference might not be significant. The colors of dots represent different divisions, and it does not appear that there are different patterns for different divisions. The second plot looks at each division separately; again the patterns for different divisions do not seem to differ. The second plot does show that no teams in the Pacific division play more than 4000 games, but all the other divisions have a few teams that play more than 4000 games.  
+In the first scatter plot, we can see that as a lot of teams played low numbers of games, and a few teams played higher numbers of games. The winning percentage increases slightly as the number of games played increases, but the slope is small and the difference might not be significant. The colors of dots represent different divisions, and it does not appear that there are different patterns for different divisions. The second plot looks at each division separately; again the patterns for different divisions do not seem to differ. The second plot also shows that no teams in the Pacific division played more than 4000 games, but a few teams in all the other divisions played more than 4000 games.  
 
 The third plot is similar, but the y-axis shows the winning percentage of home games, and the colors represent different types of games (regular season vs. playoffs). It does not appear that the number of games played and the winning percentage of home games are correlated, as the slope is close to zero.  
 
@@ -300,7 +300,7 @@ The histogram shows that the center of winning percentages of all teams is aroun
 ggplot(combined, aes(x = winPercent)) + geom_histogram(bins = 30, aes(y = ..density..)) + geom_density(kernel = "gaussian", color = "red", alpha = 0.5, fill = "green")
 ```
 
-Next we look at the total numbers of games played for each division. The boxplots show that, on average, the Central division play the most games, and the Pacific division play the fewest. However, the variation is large, and therefore the differences might not be significant.  
+Next we look at the total numbers of games played for each division. The boxplots show that, on average, the Central division played the most games, and the Pacific division played the fewest. However, the variation is large, and therefore the differences might not be significant.  
 
 ```{r, message = FALSE}
 # boxplots of gamesPlayed by division
