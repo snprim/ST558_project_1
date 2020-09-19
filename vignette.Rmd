@@ -286,40 +286,40 @@ The third plot is similar, but the y-axis shows the winning percentage of home g
 
 ```{r, message = FALSE}
 # scatter plot of homeWins and roadWins
-ggplot(combined, aes(x = gamesPlayed, y = winPercent)) + geom_point(aes(color = division.name), position = "jitter") + geom_smooth(method = lm, color = "blue") + scale_color_discrete()
+ggplot(combined, aes(x = gamesPlayed, y = winPercent)) + geom_point(aes(color = division.name), position = "jitter") + geom_smooth(method = lm, color = "blue") + scale_color_discrete(name = "Division Name") + ggtitle("Scatterplot: games played vs. winning percentages of all games") + xlab("Games Played") + ylab("Winning percentages of all games")
 
-ggplot(combined, aes(x = gamesPlayed, y = winPercent)) + geom_point(position = "jitter") + geom_smooth(method = lm, color = "blue") + facet_wrap(~ division.name)
+ggplot(combined, aes(x = gamesPlayed, y = winPercent)) + geom_point(position = "jitter") + geom_smooth(method = lm, color = "blue") + facet_wrap(~ division.name) + ggtitle("Scatterplot: game played vs. winning percentages of all games by division") + xlab("Games Played") + ylab("Winning percentages of all games")
 
-ggplot(combined, aes(x = gamesPlayed, y = homeWinPercent)) + geom_point(aes(color = as.factor(gameTypeId)), position = "jitter") + geom_smooth(method = lm, color = "blue") + scale_color_discrete(name = "Game Type", labels = c("regular season", "playoffs"))
+ggplot(combined, aes(x = gamesPlayed, y = homeWinPercent)) + geom_point(aes(color = as.factor(gameTypeId)), position = "jitter") + geom_smooth(method = lm, color = "blue") + scale_color_discrete(name = "Game Type", labels = c("regular season", "playoffs")) + ggtitle("Scatterplot: games played vs. winning percentages of home games") + xlab("Games Played") + ylab("Winning percentages of home games")
 ```
 
 The histogram shows that the center of winning percentages of all teams is around 0.5, and the distribution is left-skewed. Therefore most of the teams have winning percentages between 0.3 and 0.6, but some teams have much lower winning percentages.  
 
 ```{r}
 # histogram of winPercent
-ggplot(combined, aes(x = winPercent)) + geom_histogram(bins = 30, aes(y = ..density..)) + geom_density(kernel = "gaussian", color = "red", alpha = 0.5, fill = "green")
+ggplot(combined, aes(x = winPercent)) + geom_histogram(bins = 30, aes(y = ..density..)) + geom_density(kernel = "gaussian", color = "red", alpha = 0.5, fill = "green") + ggtitle("Histogram of winning percentages of all games") + xlab("Winning percentages of all games")
 ```
 
-Next we look at the total numbers of games played for each division. The boxplots show that, on average, the Central division played the most games, and the Pacific division played the fewest. However, the variation is large, and therefore the differences might not be significant.  
+Next we look at the total numbers of games played for each division. The boxplots show that, on average, the Central division played the most games, and the Pacific division played the fewest. However, the variation is large, and therefore the differences might not be significant. Moreover, the patterns of venues of different time zones do not seem to differ.  
 
 ```{r, message = FALSE}
 # boxplots of gamesPlayed by division
-ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geom_jitter(aes(color = venue.timeZone.tz))
+ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geom_jitter(aes(color = venue.timeZone.tz)) + ggtitle("Boxplots of games played by division") + xlab("Division name") + ylab("Games played") + scale_color_discrete(name = "Venue time zone")
 ```
 
 Now we look at two barplots. The first one shows wins, losses, and ties of each division. We see that the Atlantic division play the highest number of games and the Pacific division play the lowest number of games. Overall, most results are from wins and losses, and ties and overtime occupy a small proportion for all divisions. The second barplots show that all divisions have higher winning percentages in playoffs than in the regular season. The differences among divisions might not be significant.  
 
 ```{r, message = FALSE}
 # barplot of gamePlayed
-ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name))
+ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name)) + ggtitle("Barplot of wins, losses, and ties by division") + xlab("Division name") + ylab("Total games played") + scale_fill_discrete(name = "Game Type")
 
-ggplot(combined, aes(x = division.name, y = winPercent, fill = as.factor(gameTypeId))) + geom_bar(position = "dodge", stat = "identity") + scale_fill_discrete(name = "Game Type", labels = c("regular season", "playoffs"))
+ggplot(combined, aes(x = division.name, y = winPercent, fill = as.factor(gameTypeId))) + geom_bar(position = "dodge", stat = "identity") + scale_fill_discrete(name = "Game Type", labels = c("regular season", "playoffs")) + ggtitle("Barplot of winning percentages by division") + xlab("Division name") + ylab("Winning percentages of all games")
 ```
 
 Lastly, we look at a frequency plot of penalty minutes. The plot clearly shows that the distribution is right-skewed. 20 teams had no penalty minutes, and a few teams had penalty minutes of more than 50,000.  
 
 ```{r, message = FALSE}
 # frequency plot for penalty minutes
-ggplot(combined, aes(x = penaltyMinutes)) + geom_freqpoly()
+ggplot(combined, aes(x = penaltyMinutes)) + geom_freqpoly() + ggtitle("Frequency plot of penalty minutes") + xlab("Penalty minutes")
 ```
 
