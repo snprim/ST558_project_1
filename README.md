@@ -884,8 +884,8 @@ ggplot(combined, aes(x = division.name, y = winPercent, fill = as.factor(gameTyp
 ![](README_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
 
 Lastly, we look at a frequency plot of penalty minutes. The plot clearly
-shows that the distribution is right-skewed. 20 teams have no penalty
-minutes, and a few teams have penalty minutes of more than 50,000.
+shows that the distribution is right-skewed. 20 teams had no penalty
+minutes, and a few teams had penalty minutes of more than 50,000.
 
 ``` r
 # frequency plot for penalty minutes
