@@ -37,7 +37,7 @@ baseurl_records <- "https://records.nhl.com/site/api"
 ```
 
 The function `getFran` retrieves basic information (id, ﬁrstSeasonId and
-lastSeasonId and name of every team in the history of the NHL)about all
+lastSeasonId and name of every team in the history of the NHL) about all
 teams. No arguments are needed.
 
 ``` r
@@ -48,22 +48,6 @@ getFran <- function(){
 }
 getFran() %>% tbl_df()
 ```
-
-    ## # A tibble: 38 x 6
-    ##       id firstSeasonId lastSeasonId mostRecentTeamId
-    ##    <int>         <int>        <int>            <int>
-    ##  1     1      19171918           NA                8
-    ##  2     2      19171918     19171918               41
-    ##  3     3      19171918     19341935               45
-    ##  4     4      19191920     19241925               37
-    ##  5     5      19171918           NA               10
-    ##  6     6      19241925           NA                6
-    ##  7     7      19241925     19371938               43
-    ##  8     8      19251926     19411942               51
-    ##  9     9      19251926     19301931               39
-    ## 10    10      19261927           NA                3
-    ## # ... with 28 more rows, and 2 more variables:
-    ## #   teamCommonName <chr>, teamPlaceName <chr>
 
 The function `getFranTeamTot` retrieves stats about all teams (Total
 stats for every franchise (ex roadTies, roadWins, etc)). No arguments
@@ -77,31 +61,6 @@ getFranTeamTot <- function() {
 }
 getFranTeamTot() %>% tbl_df()
 ```
-
-    ## # A tibble: 105 x 30
-    ##       id activeFranchise firstSeasonId franchiseId
-    ##    <int>           <int>         <int>       <int>
-    ##  1     1               1      19821983          23
-    ##  2     2               1      19821983          23
-    ##  3     3               1      19721973          22
-    ##  4     4               1      19721973          22
-    ##  5     5               1      19261927          10
-    ##  6     6               1      19261927          10
-    ##  7     7               1      19671968          16
-    ##  8     8               1      19671968          16
-    ##  9     9               1      19671968          17
-    ## 10    10               1      19671968          17
-    ## # ... with 95 more rows, and 26 more variables:
-    ## #   gameTypeId <int>, gamesPlayed <int>,
-    ## #   goalsAgainst <int>, goalsFor <int>, homeLosses <int>,
-    ## #   homeOvertimeLosses <int>, homeTies <int>,
-    ## #   homeWins <int>, lastSeasonId <int>, losses <int>,
-    ## #   overtimeLosses <int>, penaltyMinutes <int>,
-    ## #   pointPctg <dbl>, points <int>, roadLosses <int>,
-    ## #   roadOvertimeLosses <int>, roadTies <int>,
-    ## #   roadWins <int>, shootoutLosses <int>,
-    ## #   shootoutWins <int>, shutouts <int>, teamId <int>,
-    ## #   teamName <chr>, ties <int>, triCode <chr>, wins <int>
 
 To allow for convenient access of team information in the following
 functions, we first construct a subset of data, so users can use team
@@ -128,77 +87,8 @@ getFranSeaRec <- function(team) {
   return(franSeaRec$data)
 }
 getFranSeaRec(20) %>% tbl_df()
-```
-
-    ## # A tibble: 1 x 57
-    ##      id fewestGoals fewestGoalsAgai~ fewestGoalsAgai~
-    ##   <int>       <int>            <int> <chr>           
-    ## 1    23         182              185 2010-11 (82)    
-    ## # ... with 53 more variables: fewestGoalsSeasons <chr>,
-    ## #   fewestLosses <int>, fewestLossesSeasons <chr>,
-    ## #   fewestPoints <int>, fewestPointsSeasons <chr>,
-    ## #   fewestTies <int>, fewestTiesSeasons <chr>,
-    ## #   fewestWins <int>, fewestWinsSeasons <chr>,
-    ## #   franchiseId <int>, franchiseName <chr>,
-    ## #   homeLossStreak <int>, homeLossStreakDates <chr>,
-    ## #   homePointStreak <int>, homePointStreakDates <chr>,
-    ## #   homeWinStreak <int>, homeWinStreakDates <chr>,
-    ## #   homeWinlessStreak <int>, homeWinlessStreakDates <chr>,
-    ## #   lossStreak <int>, lossStreakDates <chr>,
-    ## #   mostGameGoals <int>, mostGameGoalsDates <chr>,
-    ## #   mostGoals <int>, mostGoalsAgainst <int>,
-    ## #   mostGoalsAgainstSeasons <chr>, mostGoalsSeasons <chr>,
-    ## #   mostLosses <int>, mostLossesSeasons <chr>,
-    ## #   mostPenaltyMinutes <int>,
-    ## #   mostPenaltyMinutesSeasons <chr>, mostPoints <int>,
-    ## #   mostPointsSeasons <chr>, mostShutouts <int>,
-    ## #   mostShutoutsSeasons <chr>, mostTies <int>,
-    ## #   mostTiesSeasons <chr>, mostWins <int>,
-    ## #   mostWinsSeasons <chr>, pointStreak <int>,
-    ## #   pointStreakDates <chr>, roadLossStreak <int>,
-    ## #   roadLossStreakDates <chr>, roadPointStreak <int>,
-    ## #   roadPointStreakDates <chr>, roadWinStreak <int>,
-    ## #   roadWinStreakDates <chr>, roadWinlessStreak <int>,
-    ## #   roadWinlessStreakDates <chr>, winStreak <int>,
-    ## #   winStreakDates <chr>, winlessStreak <lgl>,
-    ## #   winlessStreakDates <lgl>
-
-``` r
 getFranSeaRec("Vancouver Canucks") %>% tbl_df()
 ```
-
-    ## # A tibble: 1 x 57
-    ##      id fewestGoals fewestGoalsAgai~ fewestGoalsAgai~
-    ##   <int>       <int>            <int> <chr>           
-    ## 1    23         182              185 2010-11 (82)    
-    ## # ... with 53 more variables: fewestGoalsSeasons <chr>,
-    ## #   fewestLosses <int>, fewestLossesSeasons <chr>,
-    ## #   fewestPoints <int>, fewestPointsSeasons <chr>,
-    ## #   fewestTies <int>, fewestTiesSeasons <chr>,
-    ## #   fewestWins <int>, fewestWinsSeasons <chr>,
-    ## #   franchiseId <int>, franchiseName <chr>,
-    ## #   homeLossStreak <int>, homeLossStreakDates <chr>,
-    ## #   homePointStreak <int>, homePointStreakDates <chr>,
-    ## #   homeWinStreak <int>, homeWinStreakDates <chr>,
-    ## #   homeWinlessStreak <int>, homeWinlessStreakDates <chr>,
-    ## #   lossStreak <int>, lossStreakDates <chr>,
-    ## #   mostGameGoals <int>, mostGameGoalsDates <chr>,
-    ## #   mostGoals <int>, mostGoalsAgainst <int>,
-    ## #   mostGoalsAgainstSeasons <chr>, mostGoalsSeasons <chr>,
-    ## #   mostLosses <int>, mostLossesSeasons <chr>,
-    ## #   mostPenaltyMinutes <int>,
-    ## #   mostPenaltyMinutesSeasons <chr>, mostPoints <int>,
-    ## #   mostPointsSeasons <chr>, mostShutouts <int>,
-    ## #   mostShutoutsSeasons <chr>, mostTies <int>,
-    ## #   mostTiesSeasons <chr>, mostWins <int>,
-    ## #   mostWinsSeasons <chr>, pointStreak <int>,
-    ## #   pointStreakDates <chr>, roadLossStreak <int>,
-    ## #   roadLossStreakDates <chr>, roadPointStreak <int>,
-    ## #   roadPointStreakDates <chr>, roadWinStreak <int>,
-    ## #   roadWinStreakDates <chr>, roadWinlessStreak <int>,
-    ## #   roadWinlessStreakDates <chr>, winStreak <int>,
-    ## #   winStreakDates <chr>, winlessStreak <lgl>,
-    ## #   winlessStreakDates <lgl>
 
 The function `getFranGoaRec` retrieves goalie records for a specific
 franchise, and again a `franchiseId` or `teamName` is required.
@@ -215,65 +105,8 @@ getFranGoaRec <- function(team) {
   return(franGoaRec$data)
 }
 getFranGoaRec(20) %>% tbl_df()
-```
-
-    ## # A tibble: 39 x 29
-    ##       id activePlayer firstName franchiseId franchiseName
-    ##    <int> <lgl>        <chr>           <int> <chr>        
-    ##  1   243 FALSE        Kirk               20 Vancouver Ca~
-    ##  2   297 FALSE        Roberto            20 Vancouver Ca~
-    ##  3   304 FALSE        Richard            20 Vancouver Ca~
-    ##  4   364 FALSE        Gary               20 Vancouver Ca~
-    ##  5   367 FALSE        Sean               20 Vancouver Ca~
-    ##  6   373 FALSE        Jacques            20 Vancouver Ca~
-    ##  7   406 FALSE        Bob                20 Vancouver Ca~
-    ##  8   423 FALSE        Troy               20 Vancouver Ca~
-    ##  9   424 FALSE        John               20 Vancouver Ca~
-    ## 10   500 FALSE        Bob                20 Vancouver Ca~
-    ## # ... with 29 more rows, and 24 more variables:
-    ## #   gameTypeId <int>, gamesPlayed <int>, lastName <chr>,
-    ## #   losses <int>, mostGoalsAgainstDates <chr>,
-    ## #   mostGoalsAgainstOneGame <int>, mostSavesDates <chr>,
-    ## #   mostSavesOneGame <int>, mostShotsAgainstDates <chr>,
-    ## #   mostShotsAgainstOneGame <int>,
-    ## #   mostShutoutsOneSeason <int>,
-    ## #   mostShutoutsSeasonIds <chr>, mostWinsOneSeason <int>,
-    ## #   mostWinsSeasonIds <chr>, overtimeLosses <int>,
-    ## #   playerId <int>, positionCode <chr>,
-    ## #   rookieGamesPlayed <int>, rookieShutouts <int>,
-    ## #   rookieWins <int>, seasons <int>, shutouts <int>,
-    ## #   ties <int>, wins <int>
-
-``` r
 getFranGoaRec("Vancouver Canucks") %>% tbl_df()
 ```
-
-    ## # A tibble: 39 x 29
-    ##       id activePlayer firstName franchiseId franchiseName
-    ##    <int> <lgl>        <chr>           <int> <chr>        
-    ##  1   243 FALSE        Kirk               20 Vancouver Ca~
-    ##  2   297 FALSE        Roberto            20 Vancouver Ca~
-    ##  3   304 FALSE        Richard            20 Vancouver Ca~
-    ##  4   364 FALSE        Gary               20 Vancouver Ca~
-    ##  5   367 FALSE        Sean               20 Vancouver Ca~
-    ##  6   373 FALSE        Jacques            20 Vancouver Ca~
-    ##  7   406 FALSE        Bob                20 Vancouver Ca~
-    ##  8   423 FALSE        Troy               20 Vancouver Ca~
-    ##  9   424 FALSE        John               20 Vancouver Ca~
-    ## 10   500 FALSE        Bob                20 Vancouver Ca~
-    ## # ... with 29 more rows, and 24 more variables:
-    ## #   gameTypeId <int>, gamesPlayed <int>, lastName <chr>,
-    ## #   losses <int>, mostGoalsAgainstDates <chr>,
-    ## #   mostGoalsAgainstOneGame <int>, mostSavesDates <chr>,
-    ## #   mostSavesOneGame <int>, mostShotsAgainstDates <chr>,
-    ## #   mostShotsAgainstOneGame <int>,
-    ## #   mostShutoutsOneSeason <int>,
-    ## #   mostShutoutsSeasonIds <chr>, mostWinsOneSeason <int>,
-    ## #   mostWinsSeasonIds <chr>, overtimeLosses <int>,
-    ## #   playerId <int>, positionCode <chr>,
-    ## #   rookieGamesPlayed <int>, rookieShutouts <int>,
-    ## #   rookieWins <int>, seasons <int>, shutouts <int>,
-    ## #   ties <int>, wins <int>
 
 The function `getFranSkaRec` retrieves information about skater records
 for a specific franchise, and an argument about `franchiseId` or
@@ -291,65 +124,8 @@ getFranSkaRec <- function(team) {
   return(franSkaRec$data)
 }
 getFranSkaRec(20) %>% tbl_df()
-```
-
-    ## # A tibble: 561 x 30
-    ##       id activePlayer assists firstName franchiseId
-    ##    <int> <lgl>          <int> <chr>           <int>
-    ##  1 16941 FALSE            648 Daniel             20
-    ##  2 16942 FALSE            830 Henrik             20
-    ##  3 17026 FALSE             52 Gino               20
-    ##  4 17057 FALSE            224 Pavel              20
-    ##  5 17115 FALSE             53 Donald             20
-    ##  6 17141 FALSE            410 Markus             20
-    ##  7 17178 FALSE            242 Doug               20
-    ##  8 17222 FALSE             18 Claire             20
-    ##  9 17238 FALSE              1 Jim                20
-    ## 10 17241 FALSE            190 Greg               20
-    ## # ... with 551 more rows, and 25 more variables:
-    ## #   franchiseName <chr>, gameTypeId <int>,
-    ## #   gamesPlayed <int>, goals <int>, lastName <chr>,
-    ## #   mostAssistsGameDates <chr>, mostAssistsOneGame <int>,
-    ## #   mostAssistsOneSeason <int>, mostAssistsSeasonIds <chr>,
-    ## #   mostGoalsGameDates <chr>, mostGoalsOneGame <int>,
-    ## #   mostGoalsOneSeason <int>, mostGoalsSeasonIds <chr>,
-    ## #   mostPenaltyMinutesOneSeason <int>,
-    ## #   mostPenaltyMinutesSeasonIds <chr>,
-    ## #   mostPointsGameDates <chr>, mostPointsOneGame <int>,
-    ## #   mostPointsOneSeason <int>, mostPointsSeasonIds <chr>,
-    ## #   penaltyMinutes <int>, playerId <int>, points <int>,
-    ## #   positionCode <chr>, rookiePoints <int>, seasons <int>
-
-``` r
 getFranSkaRec("Vancouver Canucks") %>% tbl_df()
 ```
-
-    ## # A tibble: 561 x 30
-    ##       id activePlayer assists firstName franchiseId
-    ##    <int> <lgl>          <int> <chr>           <int>
-    ##  1 16941 FALSE            648 Daniel             20
-    ##  2 16942 FALSE            830 Henrik             20
-    ##  3 17026 FALSE             52 Gino               20
-    ##  4 17057 FALSE            224 Pavel              20
-    ##  5 17115 FALSE             53 Donald             20
-    ##  6 17141 FALSE            410 Markus             20
-    ##  7 17178 FALSE            242 Doug               20
-    ##  8 17222 FALSE             18 Claire             20
-    ##  9 17238 FALSE              1 Jim                20
-    ## 10 17241 FALSE            190 Greg               20
-    ## # ... with 551 more rows, and 25 more variables:
-    ## #   franchiseName <chr>, gameTypeId <int>,
-    ## #   gamesPlayed <int>, goals <int>, lastName <chr>,
-    ## #   mostAssistsGameDates <chr>, mostAssistsOneGame <int>,
-    ## #   mostAssistsOneSeason <int>, mostAssistsSeasonIds <chr>,
-    ## #   mostGoalsGameDates <chr>, mostGoalsOneGame <int>,
-    ## #   mostGoalsOneSeason <int>, mostGoalsSeasonIds <chr>,
-    ## #   mostPenaltyMinutesOneSeason <int>,
-    ## #   mostPenaltyMinutesSeasonIds <chr>,
-    ## #   mostPointsGameDates <chr>, mostPointsOneGame <int>,
-    ## #   mostPointsOneSeason <int>, mostPointsSeasonIds <chr>,
-    ## #   penaltyMinutes <int>, playerId <int>, points <int>,
-    ## #   positionCode <chr>, rookiePoints <int>, seasons <int>
 
 ### NHL stats API
 
@@ -442,73 +218,15 @@ getStats <- function(ID = "", expand = "", teamID = "", stats = "", season = "")
 # getStats(ID = 20, expand = "team.stats")
 # getStats(ID = "Calgary Flames", expand = "person.names")
 getStats(ID = 14, expand = "team.schedule.next") %>% tbl_df()
-```
-
-    ## # A tibble: 1 x 11
-    ##      id name  franchiseId date  totalItems totalEvents
-    ##   <int> <chr>       <int> <chr>      <int>       <int>
-    ## 1    14 Tamp~          31 2020~          1           0
-    ## # ... with 5 more variables: totalGames <int>,
-    ## #   totalMatches <int>, games <list>, events <list>,
-    ## #   matches <list>
-
-``` r
 getStats(ID = 20, expand = "team.stats", season= "20102011") %>% tbl_df()
 ```
 
-    ## Warning in data.frame(..., check.names = FALSE): row names
-    ## were found from a short variable and have been discarded
-
-    ## # A tibble: 2 x 37
-    ##      id name  franchiseId stat.gamesPlayed stat.wins
-    ##   <int> <chr>       <int>            <int> <chr>    
-    ## 1    20 Calg~          21               82 41       
-    ## 2    20 Calg~          21               NA 18th     
-    ## # ... with 32 more variables: stat.losses <chr>,
-    ## #   stat.ot <chr>, stat.pts <chr>, stat.ptPctg <chr>,
-    ## #   stat.goalsPerGame <chr>,
-    ## #   stat.goalsAgainstPerGame <chr>, stat.evGGARatio <chr>,
-    ## #   stat.powerPlayPercentage <chr>,
-    ## #   stat.powerPlayGoals <chr>,
-    ## #   stat.powerPlayGoalsAgainst <chr>,
-    ## #   stat.powerPlayOpportunities <chr>,
-    ## #   stat.penaltyKillPercentage <chr>,
-    ## #   stat.shotsPerGame <chr>, stat.shotsAllowed <chr>,
-    ## #   stat.winScoreFirst <chr>, stat.winOppScoreFirst <chr>,
-    ## #   stat.winLeadFirstPer <chr>,
-    ## #   stat.winLeadSecondPer <chr>, stat.winOutshootOpp <chr>,
-    ## #   stat.winOutshotByOpp <chr>, stat.faceOffsTaken <chr>,
-    ## #   stat.faceOffsWon <chr>, stat.faceOffsLost <chr>,
-    ## #   stat.faceOffWinPercentage <chr>,
-    ## #   stat.shootingPctg <dbl>, stat.savePctg <dbl>,
-    ## #   stat.penaltyKillOpportunities <chr>,
-    ## #   stat.savePctRank <chr>, stat.shootingPctRank <chr>,
-    ## #   team.id <int>, team.name <chr>, team.link <chr>
+    ## Warning in data.frame(..., check.names = FALSE): row names were found from a short
+    ## variable and have been discarded
 
 ``` r
 # getStats(ID = 53, expand = "team.roster") 
 getStats(teamID = "4,5,29") %>% tbl_df()
-```
-
-    ## # A tibble: 3 x 29
-    ##      id name  link  abbreviation teamName locationName
-    ##   <int> <chr> <chr> <chr>        <chr>    <chr>       
-    ## 1     4 Phil~ /api~ PHI          Flyers   Philadelphia
-    ## 2     5 Pitt~ /api~ PIT          Penguins Pittsburgh  
-    ## 3    29 Colu~ /api~ CBJ          Blue Ja~ Columbus    
-    ## # ... with 23 more variables: firstYearOfPlay <chr>,
-    ## #   shortName <chr>, officialSiteUrl <chr>,
-    ## #   franchiseId <int>, active <lgl>, venue.id <int>,
-    ## #   venue.name <chr>, venue.link <chr>, venue.city <chr>,
-    ## #   venue.timeZone.id <chr>, venue.timeZone.offset <int>,
-    ## #   venue.timeZone.tz <chr>, division.id <int>,
-    ## #   division.name <chr>, division.nameShort <chr>,
-    ## #   division.link <chr>, division.abbreviation <chr>,
-    ## #   conference.id <int>, conference.name <chr>,
-    ## #   conference.link <chr>, franchise.franchiseId <int>,
-    ## #   franchise.teamName <chr>, franchise.link <chr>
-
-``` r
 # getStats(ID = 54, stats = "statsSingleSeasonPlayoffs") %>% tbl_df()
 ```
 
@@ -568,35 +286,8 @@ nhlFun <- function(endpoint, ...){
 }
 # nhlFun(endpoint = "skater record", 20) %>% tbl_df()
 nhlFun(endpoint = "stats", ID = "Calgary Flames", expand = "person.team") %>% tbl_df()
-```
-
-    ## # A tibble: 1 x 29
-    ##      id name  link  abbreviation teamName locationName
-    ##   <int> <chr> <chr> <chr>        <chr>    <chr>       
-    ## 1    20 Calg~ /api~ CGY          Flames   Calgary     
-    ## # ... with 23 more variables: firstYearOfPlay <chr>,
-    ## #   shortName <chr>, officialSiteUrl <chr>,
-    ## #   franchiseId <int>, active <lgl>, venue.id <int>,
-    ## #   venue.name <chr>, venue.link <chr>, venue.city <chr>,
-    ## #   venue.timeZone.id <chr>, venue.timeZone.offset <int>,
-    ## #   venue.timeZone.tz <chr>, division.id <int>,
-    ## #   division.name <chr>, division.nameShort <chr>,
-    ## #   division.link <chr>, division.abbreviation <chr>,
-    ## #   conference.id <int>, conference.name <chr>,
-    ## #   conference.link <chr>, franchise.franchiseId <int>,
-    ## #   franchise.teamName <chr>, franchise.link <chr>
-
-``` r
 nhlFun(endpoint = "stats", ID = 14, expand = "team.schedule.next") %>% tbl_df()
 ```
-
-    ## # A tibble: 1 x 11
-    ##      id name  franchiseId date  totalItems totalEvents
-    ##   <int> <chr>       <int> <chr>      <int>       <int>
-    ## 1    14 Tamp~          31 2020~          1           0
-    ## # ... with 5 more variables: totalGames <int>,
-    ## #   totalMatches <int>, games <list>, events <list>,
-    ## #   matches <list>
 
 ## Exploratory Data Analysis
 
@@ -605,9 +296,9 @@ nhlFun(endpoint = "stats", ID = 14, expand = "team.schedule.next") %>% tbl_df()
 Now we use functions above to do exploratory data analysis. We will
 first retrieve data from two endpoints: **team total** and
 **person.names**, remove some columns we don’t need, and combine the two
-data frames. Then we’ll add two new variables: `winPercent`: the
-proportion of wins among all games played and `homeWinPercent`: the
-proportion of wins of home games among all home games. We also create a
+data frames. Then we’ll add two new variables: `winPercent` (the
+proportion of wins among all games played) and `homeWinPercent` (the
+proportion of wins of home games among all home games). We also create a
 subset to include fewer columns and transform the data from wide to long
 to show the numbers of wins, losses, and ties in various situations for
 each division.
@@ -621,66 +312,7 @@ franStats <- franStats %>% select(c("locationName", "firstYearOfPlay", "franchis
 # create two variables: winPercent and homeWinPercent 
 combined <- inner_join(franTot, franStats, by = "franchiseId") %>% mutate(winPercent = wins / gamesPlayed, homeWinPercent = homeWins / (homeWins + homeLosses + homeOvertimeLosses + homeTies))
 head(combined)
-```
 
-    ##   franchiseId gameTypeId gamesPlayed goalsAgainst goalsFor
-    ## 1          23          2        2937         8708     8647
-    ## 2          23          3         257          634      697
-    ## 3          22          2        3732        11779    11889
-    ## 4          22          3         294          857      935
-    ## 5          10          2        6504        19863    19864
-    ## 6          10          3         518         1447     1404
-    ##   homeLosses homeOvertimeLosses homeTies homeWins losses
-    ## 1        507                 82       96      783   1181
-    ## 2         53                  0       NA       74    120
-    ## 3        674                 81      170      942   1570
-    ## 4         50                  3       NA       90    133
-    ## 5       1132                 73      448     1600   2693
-    ## 6        104                  0        1      137    266
-    ##   overtimeLosses penaltyMinutes pointPctg points roadLosses
-    ## 1            162          44397    0.5330   3131        674
-    ## 2              0           4266    0.0039      2         67
-    ## 3            159          57422    0.5115   3818        896
-    ## 4              0           5564    0.0136      8         83
-    ## 5            147          85564    0.5125   6667       1561
-    ## 6              0           8181    0.0000      0        162
-    ##   roadOvertimeLosses roadTies roadWins shootoutLosses
-    ## 1                 80      123      592             79
-    ## 2                  0       NA       63              0
-    ## 3                 78      177      714             67
-    ## 4                  2       NA       71              0
-    ## 5                 74      360     1256             66
-    ## 6                  0        7      107              0
-    ##   shootoutWins shutouts teamId           teamName ties
-    ## 1           78      193      1  New Jersey Devils  219
-    ## 2            0       25      1  New Jersey Devils   NA
-    ## 3           82      167      2 New York Islanders  347
-    ## 4            0       12      2 New York Islanders   NA
-    ## 5           78      403      3   New York Rangers  808
-    ## 6            0       44      3   New York Rangers    8
-    ##   triCode wins locationName firstYearOfPlay venue.city
-    ## 1     NJD 1375   New Jersey            1982     Newark
-    ## 2     NJD  137   New Jersey            1982     Newark
-    ## 3     NYI 1656     New York            1972   Brooklyn
-    ## 4     NYI  161     New York            1972   Brooklyn
-    ## 5     NYR 2856     New York            1926   New York
-    ## 6     NYR  244     New York            1926   New York
-    ##   venue.timeZone.id venue.timeZone.tz division.name
-    ## 1  America/New_York               EDT  Metropolitan
-    ## 2  America/New_York               EDT  Metropolitan
-    ## 3  America/New_York               EDT  Metropolitan
-    ## 4  America/New_York               EDT  Metropolitan
-    ## 5  America/New_York               EDT  Metropolitan
-    ## 6  America/New_York               EDT  Metropolitan
-    ##   conference.name winPercent homeWinPercent
-    ## 1         Eastern  0.4681648      0.5333787
-    ## 2         Eastern  0.5330739             NA
-    ## 3         Eastern  0.4437299      0.5045528
-    ## 4         Eastern  0.5476190             NA
-    ## 5         Eastern  0.4391144      0.4918537
-    ## 6         Eastern  0.4710425      0.5661157
-
-``` r
 # create a subset for numbers of games lost or won
 subset <- combined %>% select(starts_with("home"), starts_with("road"), "division.name", -"homeWinPercent") %>% gather(-"division.name", key = "type", value = "game") %>% group_by(division.name, type) %>% summarise(sum = sum(game, na.rm = TRUE))
 ```
@@ -765,17 +397,17 @@ table(combined$division.name, combined$firstYearOfPlay)
 ```
 
     ##               
-    ##                1909 1917 1924 1926 1967 1970 1972 1974 1979
-    ##   Atlantic        2    6    2    6    0    2    0    0    0
-    ##   Central         0    0    0    2    6    0    0    0    4
-    ##   Metropolitan    0    0    0    2    4    0    2    2    4
-    ##   Pacific         0    0    0    0    2    2    0    0    8
+    ##                1909 1917 1924 1926 1967 1970 1972 1974 1979 1980 1982 1990 1991 1993
+    ##   Atlantic        2    6    2    6    0    2    0    0    0    0    0    2    2    2
+    ##   Central         0    0    0    2    6    0    0    0    4    0    0    0    0    0
+    ##   Metropolitan    0    0    0    2    4    0    2    2    4    0    5    0    0    0
+    ##   Pacific         0    0    0    0    2    2    0    0    8    4    0    2    0    2
     ##               
-    ##                1980 1982 1990 1991 1993 1997 2011 2016
-    ##   Atlantic        0    0    2    2    2    0    0    0
-    ##   Central         0    0    0    0    0    4    4    0
-    ##   Metropolitan    0    5    0    0    0    2    0    0
-    ##   Pacific         4    0    2    0    2    0    0    2
+    ##                1997 2011 2016
+    ##   Atlantic        0    0    0
+    ##   Central         4    4    0
+    ##   Metropolitan    2    0    0
+    ##   Pacific         0    0    2
 
 ``` r
 table(combined$division.name, combined$gameTypeId)
@@ -800,7 +432,10 @@ increases, but the slope is small and the difference might not be
 significant. The colors of dots represent different divisions, and it
 does not appear that there are different patterns for different
 divisions. The second plot looks at each division separately; again the
-patterns for different divisions do not seem to differ.
+patterns for different divisions do not seem to differ. The second plot
+does show that no teams in the Pacific division play more than 4000
+games, but all the other divisions have a few teams that play more than
+4000 games.
 
 The third plot is similar, but the y-axis shows the winning percentage
 of home games, and the colors represent different types of games
@@ -813,25 +448,23 @@ the slope is close to zero.
 ggplot(combined, aes(x = gamesPlayed, y = winPercent)) + geom_point(aes(color = division.name), position = "jitter") + geom_smooth(method = lm, color = "blue") + scale_color_discrete()
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
 
 ``` r
 ggplot(combined, aes(x = gamesPlayed, y = winPercent)) + geom_point(position = "jitter") + geom_smooth(method = lm, color = "blue") + facet_wrap(~ division.name)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-29-2.png)<!-- -->
 
 ``` r
 ggplot(combined, aes(x = gamesPlayed, y = homeWinPercent)) + geom_point(aes(color = as.factor(gameTypeId)), position = "jitter") + geom_smooth(method = lm, color = "blue") + scale_color_discrete(name = "Game Type", labels = c("regular season", "playoffs"))
 ```
 
-    ## Warning: Removed 51 rows containing non-finite values
-    ## (stat_smooth).
+    ## Warning: Removed 51 rows containing non-finite values (stat_smooth).
 
-    ## Warning: Removed 51 rows containing missing values
-    ## (geom_point).
+    ## Warning: Removed 51 rows containing missing values (geom_point).
 
-![](README_files/figure-gfm/unnamed-chunk-14-3.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-29-3.png)<!-- -->
 
 The histogram shows that the center of winning percentages of all teams
 is around 0.5, and the distribution is left-skewed. Therefore most of
@@ -843,7 +476,7 @@ have much lower winning percentages.
 ggplot(combined, aes(x = winPercent)) + geom_histogram(bins = 30, aes(y = ..density..)) + geom_density(kernel = "gaussian", color = "red", alpha = 0.5, fill = "green")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
 
 Next we look at the total numbers of games played for each division. The
 boxplots show that, on average, the Central division play the most
@@ -855,7 +488,7 @@ is large, and therefore the differences might not be significant.
 ggplot(combined, aes(x = division.name, y = gamesPlayed)) + geom_boxplot() + geom_jitter(aes(color = venue.timeZone.tz))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
 
 Now we look at two barplots. The first one shows wins, losses, and ties
 of each division. We see that the Atlantic division play the highest
@@ -871,13 +504,13 @@ might not be significant.
 ggplot(subset, aes(y = sum, fill = type)) + geom_bar(position = "stack", stat = "identity", aes(x = division.name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
 
 ``` r
 ggplot(combined, aes(x = division.name, y = winPercent, fill = as.factor(gameTypeId))) + geom_bar(position = "dodge", stat = "identity") + scale_fill_discrete(name = "Game Type", labels = c("regular season", "playoffs"))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-32-2.png)<!-- -->
 
 Lastly, we look at a frequency plot of penalty minutes. The plot clearly
 shows that the distribution is right-skewed. 20 teams have no penalty
@@ -888,4 +521,4 @@ minutes, and a few teams have penalty minutes of more than 50,000.
 ggplot(combined, aes(x = penaltyMinutes)) + geom_freqpoly()
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-33-1.png)<!-- -->

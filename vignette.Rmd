@@ -25,7 +25,7 @@ library(tidyverse)
 ```{r, message = FALSE}
 baseurl_records <- "https://records.nhl.com/site/api"
 ```
-The function `getFran` retrieves basic information (id, ﬁrstSeasonId and lastSeasonId and name of every team in the history of the NHL)about all teams. No arguments are needed.  
+The function `getFran` retrieves basic information (id, ﬁrstSeasonId and lastSeasonId and name of every team in the history of the NHL) about all teams. No arguments are needed.  
 
 ```{r, message = FALSE}
 getFran <- function(){
@@ -245,7 +245,7 @@ nhlFun(endpoint = "stats", ID = 14, expand = "team.schedule.next") %>% tbl_df()
 
 ### Retrieve Information
 
-Now we use functions above to do exploratory data analysis. We will first retrieve data from two endpoints: **team total** and **person.names**, remove some columns we don't need, and combine the two data frames. Then we'll add two new variables: `winPercent`: the proportion of wins among all games played and `homeWinPercent`: the proportion of wins of home games among all home games. We also create a subset to include fewer columns and transform the data from wide to long to show the numbers of wins, losses, and ties in various situations for each division.  
+Now we use functions above to do exploratory data analysis. We will first retrieve data from two endpoints: **team total** and **person.names**, remove some columns we don't need, and combine the two data frames. Then we'll add two new variables: `winPercent` (the proportion of wins among all games played) and `homeWinPercent` (the proportion of wins of home games among all home games). We also create a subset to include fewer columns and transform the data from wide to long to show the numbers of wins, losses, and ties in various situations for each division.  
 
 ```{r, message = FALSE}
 # perhaps use the wrapper function here
@@ -280,7 +280,7 @@ table(combined$division.name, combined$gameTypeId)
 
 Now we have the data and summaries, we can make plots to visualize the data.  
 
-In the first scatter plot, we can see that as a lot of teams play low number of games, and a few teams play a lot more number of games. The winning percentage increases slightly as the number of games played increases, but the slope is small and the difference might not be significant. The colors of dots represent different divisions, and it does not appear that there are different patterns for different divisions. The second plot looks at each division separately; again the patterns for different divisions do not seem to differ.  
+In the first scatter plot, we can see that as a lot of teams play low number of games, and a few teams play a lot more number of games. The winning percentage increases slightly as the number of games played increases, but the slope is small and the difference might not be significant. The colors of dots represent different divisions, and it does not appear that there are different patterns for different divisions. The second plot looks at each division separately; again the patterns for different divisions do not seem to differ. The second plot does show that no teams in the Pacific division play more than 4000 games, but all the other divisions have a few teams that play more than 4000 games.  
 
 The third plot is similar, but the y-axis shows the winning percentage of home games, and the colors represent different types of games (regular season vs. playoffs). It does not appear that the number of games played and the winning percentage of home games are correlated, as the slope is close to zero.  
 
